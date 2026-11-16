@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Dabali · Architecture technique et propositions</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+@page { size: A4; margin: 16mm 15mm 18mm; }
+:root { --ink:#0F1B2D; --muted:#5A6577; --line:#DDE1E8; --accent:#E36A0A; --soft:#FFF1E5; --green:#0E8A5C; --greensoft:#E3F5EC; --red:#C8332B; --redsoft:#FCE7E5; --yellow:#8A5A00; --yellowsoft:#FFF4D6; --code:#F4F6F9; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Figtree", "Segoe UI", sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+h1, h2, h3 { font-family: "Bricolage Grotesque", "Segoe UI", sans-serif; line-height: 1.15; margin: 0; }
+h2 { font-size: 17pt; font-weight: 800; margin: 0 0 8px; padding-top: 4px; break-after: avoid; }
+h2 .n { color: var(--accent); margin-right: 6px; }
+h3 { font-size: 12pt; font-weight: 700; margin: 14px 0 6px; break-after: avoid; }
+p { margin: 0 0 8px; }
+ul, ol { margin: 0 0 8px; padding-left: 18px; }
+li { margin: 2px 0; }
+section { margin-bottom: 18px; }
+.break { break-before: page; }
+code, pre { font-family: "JetBrains Mono", Consolas, monospace; font-size: 8.6pt; }
+code { background: var(--code); padding: 1px 4px; border-radius: 3px; }
+pre { background: var(--code); border-radius: 6px; padding: 10px 12px; margin: 6px 0 10px; white-space: pre; line-height: 1.45; break-inside: avoid; }
+table { width: 100%; border-collapse: collapse; margin: 6px 0 12px; font-size: 9.4pt; }
+th { text-align: left; font-size: 7.8pt; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 6px 7px; border-bottom: 1.5px solid var(--ink); }
+td { padding: 6px 7px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr { break-inside: avoid; }
+td:first-child { font-weight: 600; }
+.box { border-radius: 8px; padding: 10px 12px; margin: 8px 0 12px; break-inside: avoid; }
+.box b.t { display: block; font-family: "Bricolage Grotesque", sans-serif; font-size: 11pt; margin-bottom: 3px; }
+.box--accent { background: var(--soft); }
+.box--warn { background: var(--yellowsoft); }
+.box--red { background: var(--redsoft); }
+.box--green { background: var(--greensoft); }
+.ok { color: var(--green); font-weight: 700; } .ko { color: var(--red); font-weight: 700; } .mid { color: var(--yellow); font-weight: 700; }
+
+/* Couverture */
+.cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; }
+.cover .top { display: flex; align-items: center; gap: 12px; }
+.cover .top img { height: 42px; }
+.cover .top span { font-size: 9pt; color: var(--muted); }
+.cover h1 { font-size: 40pt; font-weight: 800; letter-spacing: -.01em; }
+.cover h1 em { color: var(--accent); font-style: normal; }
+.cover .lede { font-size: 13pt; color: var(--muted); max-width: 150mm; margin-top: 12px; }
+.facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.facts div { background: #fff; padding: 10px 12px; }
+.facts small { display: block; font-size: 7.5pt; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.facts b { font-family: "Bricolage Grotesque", sans-serif; font-size: 12pt; }
+.toc { font-size: 10.5pt; }
+.toc ol { padding-left: 18px; }
+.toc li { margin: 3px 0; }
+.meta { font-size: 8.5pt; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div>
+    <div class="top"><img src="../design/logo/dabali-logo.svg" alt="Dabali"><span>Hackathon Restauration Vatel × Epitech · document d'équipe</span></div>
+    <div style="margin-top:40mm">
+      <h1>Architecture technique<br>et <em>propositions</em></h1>
+      <p class="lede">React pour le front, Django pour le back : comment organiser le code, comment faire parler l'application en dioula, en baoulé et en nouchi, et comment l'IA prend les commandes sur WhatsApp.</p>
+    </div>
+  </div>
+  <div class="toc">
+    <b>Sommaire</b>
+    <ol>
+      <li>Architecture Django : un monolithe modulaire avec une couche « services »</li>
+      <li>Architecture React : un découpage par fonctionnalité</li>
+      <li>Les voix en dioula, baoulé et nouchi</li>
+      <li>L'IA sur WhatsApp et ses fonctions</li>
+      <li>Les dépendances à installer</li>
+      <li>Pour gagner</li>
+    </ol>
+  </div>
+  <div>
+    <div class="facts">
+      <div><small>Hackathon</small><b>Samedi 21 novembre 2026 · 8h–18h</b></div>
+      <div><small>Lieu</small><b>Vatel Abidjan, Vallon-Cocody</b></div>
+      <div><small>Stack</small><b>React (Vite) + Django (DRF)</b></div>
+      <div><small>Règle</small><b>Design et architecture à l'avance, code le jour J</b></div>
+    </div>
+    <p class="meta" style="margin-top:10px">Document de travail de l'équipe, 17 novembre 2026. Les informations sur les modèles de voix et sur la règle WhatsApp ont été vérifiées en ligne le même jour. Les sources sont listées en fin de document.</p>
+  </div>
+</div>
+
+<section class="break">
+  <h2><span class="n">1</span>Architecture Django : un monolithe modulaire</h2>
+  <p><b>MVC ou pyramide ?</b> Django n'est pas vraiment du MVC, c'est du <b>MTV</b> (modèle, template, vue). Et comme React gère tout l'affichage, Django ne sert ici que d'<b>API</b>. On choisit donc :</p>
+  <ul>
+    <li><b>un monolithe modulaire</b> : une seule application Django, découpée en petites applications par métier ;</li>
+    <li><b>trois couches</b> dans chaque application, selon le guide de style Django de HackSoft.</li>
+  </ul>
+<pre>API (views + serializers DRF)        → fine : reçoit, valide, répond
+   ↓
+services.py   écritures et règles métier   ← le cœur : confirmer_commande(), valider_annulation()
+selectors.py  lectures et requêtes
+   ↓
+models.py     tables PostgreSQL</pre>
+  <div class="box box--accent"><b class="t">Pourquoi pas des microservices ?</b>En 10 heures, ce serait trop risqué. Le jury Epitech appréciera davantage un découpage propre et lisible qu'une complexité inutile.</div>
+
+  <h3>Les applications Django, une par métier</h3>
+  <table>
+    <tr><th>Application</th><th>Rôle</th></tr>
+    <tr><td><code>restaurants</code></td><td>Restaurant, tables, QR signés, équipe, connexion par code en images</td></tr>
+    <tr><td><code>menu</code></td><td>Plats, catégories, disponibilité, photo de l'ardoise transformée en menu</td></tr>
+    <tr><td><code>commandes</code></td><td>Commandes, lignes, statuts (reçue → en préparation → prête → servie)</td></tr>
+    <tr><td><code>paiements</code></td><td>Paiements, cotisation (part de chaque personne), mobile money</td></tr>
+    <tr><td><code>caisse</code></td><td>Tickets numérotés, annulations validées par la patronne, rapport Z</td></tr>
+    <tr><td><code>cuisine</code></td><td>Connexion temps réel de l'écran cuisine (WebSocket)</td></tr>
+    <tr><td><code>fidelite</code></td><td>Points, fiches clients, campagnes</td></tr>
+    <tr><td><code>whatsapp</code></td><td>Réception des messages (webhook) et envoi des réponses</td></tr>
+    <tr><td><code>ia</code></td><td>Assistant de commande, prévisions, explications</td></tr>
+    <tr><td><code>voix</code></td><td>Clips audio par langue, synthèse vocale, reconnaissance vocale</td></tr>
+  </table>
+
+  <h3>Structure d'une application</h3>
+<pre>commandes/
+  models.py        Commande, LigneCommande
+  services.py      creer_commande(), changer_statut(), annuler_ligne()
+  selectors.py     commandes_en_cours(restaurant), commande_detail(id)
+  api/
+    serializers.py
+    views.py       vues fines : valider → appeler un service → répondre
+    urls.py
+  tasks.py         tâches Celery (notifications, impressions)
+  tests/</pre>
+
+  <h3>Les briques techniques</h3>
+  <table>
+    <tr><th>Besoin</th><th>Outil</th></tr>
+    <tr><td>API</td><td>Django REST Framework</td></tr>
+    <tr><td>Temps réel</td><td><b>Django Channels + Redis</b>. Un canal par restaurant (cuisine, patronne) et un par table (suivi du client).</td></tr>
+    <tr><td>Tâches en arrière-plan</td><td><b>Celery + Redis</b> : appels à l'IA, conversion audio, envoi des messages WhatsApp, rapport Z du soir</td></tr>
+    <tr><td>Base de données</td><td>PostgreSQL</td></tr>
+    <tr><td>Connexion</td><td>Équipe : <code>djangorestframework-simplejwt</code>. Client : anonyme, grâce au QR signé (<code>django.core.signing</code>).</td></tr>
+    <tr><td>Contrat entre React et Django</td><td><b>drf-spectacular</b> génère une description OpenAPI, puis <code>openapi-typescript</code> génère les types TypeScript pour React. Le front et le back ne se trompent plus de nom de champ.</td></tr>
+  </table>
+
+  <h3>La pyramide des tests</h3>
+  <ul>
+    <li><b>Beaucoup</b> de tests sur <code>services.py</code> : c'est là que sont les règles métier.</li>
+    <li><b>Quelques</b> tests d'API.</li>
+    <li><b>Un ou deux</b> tests de bout en bout du parcours de la démo.</li>
+  </ul>
+</section>
+
+<section class="break">
+  <h2><span class="n">2</span>Architecture React : un découpage par fonctionnalité</h2>
+  <p><b>Vite + React + TypeScript</b>, et non Create React App, qui est abandonné. Une seule application, avec un espace par type d'utilisateur :</p>
+  <table>
+    <tr><th>Route</th><th>Utilisateur</th><th>Appareil</th></tr>
+    <tr><td><code>/t/:jeton</code></td><td>Client (menu, panier, cotisation, paiement, reçu, mode sans lecture)</td><td>Téléphone</td></tr>
+    <tr><td><code>/cuisine</code></td><td>Cuisine (tickets en temps réel)</td><td>Tablette</td></tr>
+    <tr><td><code>/patron</code></td><td>Patronne (aujourd'hui, livraisons, statistiques, clients, caisse, documents)</td><td>Tablette et téléphone</td></tr>
+    <tr><td><code>/wa</code></td><td>Simulateur WhatsApp pour la démo</td><td>Ordinateur</td></tr>
+  </table>
+<pre>src/
+  app/          routeur, providers, garde des rôles
+  features/     menu/  panier/  cotisation/  cuisine/  caisse/  stats/  whatsapp/  voix/
+                chacune avec ses composants, ses hooks et son fichier api.ts
+  shared/ui/    design system (repris de design/tokens.css)
+  shared/api/   client HTTP + types générés depuis Django</pre>
+
+  <table>
+    <tr><th>Besoin</th><th>Bibliothèque</th></tr>
+    <tr><td>Données du serveur (cache, reprise, hors-ligne)</td><td>TanStack Query</td></tr>
+    <tr><td>État local (panier, langue, mode sans lecture)</td><td>Zustand</td></tr>
+    <tr><td>Navigation</td><td>React Router</td></tr>
+    <tr><td>Formulaires</td><td>react-hook-form + zod</td></tr>
+    <tr><td>Style</td><td>Tailwind, avec les couleurs et typographies du design system</td></tr>
+    <tr><td>Icônes</td><td>lucide-react</td></tr>
+    <tr><td>Graphiques</td><td>Recharts</td></tr>
+    <tr><td>Cuisine sans connexion</td><td>vite-plugin-pwa</td></tr>
+    <tr><td>Audio</td><td>Howler.js</td></tr>
+  </table>
+</section>
+
+<section class="break">
+  <h2><span class="n">3</span>Les voix en dioula, baoulé et nouchi</h2>
+  <p>Ce qui existe vraiment, vérifié le 17 novembre 2026 :</p>
+  <table>
+    <tr><th>Langue</th><th>Faire parler l'appli</th><th>Comprendre ce que dit le client</th></tr>
+    <tr><td>Français</td><td><span class="ok">Oui.</span> Voix du navigateur (gratuite) ou service de synthèse vocale cloud</td><td><span class="ok">Oui.</span> Whisper (open source) ou reconnaissance vocale du navigateur</td></tr>
+    <tr><td>Dioula</td><td><span class="mid">À tester.</span> Modèle Meta MMS-TTS <code>facebook/mms-tts-dyu</code>, et des versions améliorées par la communauté (GO AI Corp, autres)</td><td><span class="mid">À tester.</span> Meta MMS-1b-all reconnaît le dioula</td></tr>
+    <tr><td>Baoulé</td><td><span class="ko">Aucun modèle trouvé</span> (<code>mms-tts-bci</code> n'existe pas)</td><td><span class="ko">Non.</span> Le baoulé n'est pas dans MMS-1b-all</td></tr>
+    <tr><td>Nouchi</td><td>C'est du français argotique : l'IA écrit en nouchi, une voix française le lit</td><td>Whisper en français comprend une bonne partie, l'IA interprète le reste</td></tr>
+  </table>
+
+  <h3>Notre solution : un système hybride, fiable le jour J</h3>
+  <ol>
+    <li><b>Pour les phrases de l'appli, de vraies voix enregistrées.</b> Ce sont les noms des plats, les chiffres, « Ça fait… », « C'est bon ? », « Merci ». Il faut 30 à 50 clips par langue, enregistrés par des locuteurs natifs. L'appli <b>assemble les morceaux</b> : « deux » + « poisson braisé » + « ça fait » + « sept mille cinq cents » + « francs ». C'est la seule solution qui fonctionne pour le baoulé, et c'est la plus touchante devant le jury.</li>
+    <li><b>Pour les phrases imprévues en dioula :</b> MMS-TTS sur le serveur Django, en Python avec <code>transformers</code>.</li>
+    <li><b>Pour comprendre le client :</b> le français et le nouchi passent par la voix. En dioula et en baoulé, le client utilise les boutons et les images, ce qui est exactement notre mode sans lecture.</li>
+  </ol>
+<pre>Application voix (Django)
+  modèle ClipAudio(langue, cle, fichier)       ex. ("dyu", "plat.poisson_braise", poisson.mp3)
+  service construire_phrase(langue, elements)  → liste ordonnée de clips à jouer
+  API  GET /api/voix/phrase?langue=dyu&amp;...      → React joue la liste avec Howler.js</pre>
+  <div class="box box--warn"><b class="t">Attention à la licence</b>Les modèles Meta MMS sont sous licence <b>CC-BY-NC</b>, donc sans usage commercial. C'est permis pour le hackathon, mais pas pour le contrat de prestation du 1er prix. En production, il faudra des voix enregistrées maison ou un partenaire local. C'est aussi un argument à donner au jury : « nous avons vérifié les licences ».</div>
+</section>
+
+<section class="break">
+  <h2><span class="n">4</span>L'IA sur WhatsApp et ses fonctions</h2>
+  <div class="box box--red"><b class="t">La règle de Meta à respecter</b>Depuis le 15 janvier 2026, les assistants IA « généralistes » sont interdits sur l'API WhatsApp Business. L'IA reste <b>autorisée pour un usage métier</b> : commandes, réservations, suivi, service client. Notre assistant parle donc <b>uniquement du restaurant</b>, et on le dit au jury.</div>
+
+  <h3>Comment se brancher à WhatsApp</h3>
+  <table>
+    <tr><th>Quand</th><th>Solution</th></tr>
+    <tr><td>Jour J</td><td><b>Bac à sable WhatsApp de Twilio</b>, prêt en 5 minutes, avec <b>ngrok</b> pour que Twilio joigne le PC. Notre simulateur sert de secours si le Wi-Fi tombe.</td></tr>
+    <tr><td>Production</td><td><b>API WhatsApp Cloud de Meta</b>, avec un compte Meta Business et un numéro vérifié</td></tr>
+  </table>
+
+  <h3>Le circuit d'un message</h3>
+<pre>Client (texte ou note vocale)
+  → webhook Django /api/whatsapp/webhook        répond « 200 » tout de suite
+  → tâche Celery :
+      note vocale ? téléchargement → ffmpeg (OGG → WAV) → Whisper / MMS → texte
+      → Claude avec ses fonctions (outils)
+      → réponse WhatsApp avec boutons « Confirmer / Modifier »
+  → commande créée → écran cuisine (Channels) → lien de paiement
+  → « Ta commande est prête ! » dès que la cuisine valide</pre>
+
+  <h3>Les fonctions de l'assistant</h3>
+  <p>Ce sont les outils que l'IA a le droit d'appeler. Ils sont codés dans <code>ia/tools.py</code> et appellent les <code>services.py</code>, jamais la base directement.</p>
+  <table>
+    <tr><th>Fonction</th><th>Ce qu'elle fait</th></tr>
+    <tr><td><code>consulter_menu(categorie?)</code></td><td>Renvoie les vrais plats et prix depuis la base. L'IA n'invente jamais un prix.</td></tr>
+    <tr><td><code>verifier_disponibilite(plat, quantite)</code></td><td>Signale si un plat est épuisé et propose autre chose</td></tr>
+    <tr><td><code>ajouter_au_panier(plat, quantite, note)</code></td><td>Gère les demandes comme « piment ++ » ou « sans oignon »</td></tr>
+    <tr><td><code>retirer_du_panier(ligne)</code>, <code>voir_panier()</code></td><td>Corrige ou relit le panier</td></tr>
+    <tr><td><code>confirmer_commande(mode, heure, adresse?)</code></td><td>Sur place, à emporter ou livraison. <b>Seulement après le « oui » du client.</b></td></tr>
+    <tr><td><code>creer_lien_paiement(commande, moyen)</code></td><td>Wave, Orange Money, MTN ou Moov, via <b>CinetPay</b> (agrégateur ivoirien avec bac à sable)</td></tr>
+    <tr><td><code>suivre_commande(commande)</code></td><td>Donne le statut en direct</td></tr>
+    <tr><td><code>appeler_un_humain(raison)</code></td><td>Passe la main à la serveuse ou à la patronne</td></tr>
+  </table>
+
+  <h3>Réglages de l'IA</h3>
+  <ul>
+    <li><b>Modèle :</b> Claude Opus 5.5 (<code>claude-opus-5-5</code>) avec <code>effort: "low"</code>, pour répondre vite.</li>
+    <li><b>Outils en mode strict</b> (<code>strict: true</code>) : les paramètres envoyés par l'IA sont toujours valides.</li>
+    <li><b>Analyseur de secours par mots-clés</b> si l'API ne répond pas : la démo ne s'arrête jamais.</li>
+  </ul>
+
+  <h3>L'IA ailleurs dans la plateforme</h3>
+  <ul>
+    <li><b>Photo de l'ardoise :</b> Claude lit l'image et produit le menu en JSON.</li>
+    <li><b>Campagnes WhatsApp :</b> l'IA rédige les messages.</li>
+    <li><b>Prévisions :</b> un modèle statistique simple (moyennes, jour de la semaine, fin de mois, match), pas une IA générative. C'est plus fiable, et l'IA sert seulement à expliquer la prévision en mots simples.</li>
+  </ul>
+</section>
+
+<section class="break">
+  <h2><span class="n">5</span>Les dépendances à installer</h2>
+  <p>La liste à avoir sous les yeux le jour J pour ne rien oublier.</p>
+  <h3>Back-end (Python)</h3>
+<pre>django  djangorestframework  djangorestframework-simplejwt  django-cors-headers
+drf-spectacular             # description OpenAPI de l'API
+channels  channels-redis  daphne     # temps réel
+celery  redis               # tâches en arrière-plan
+psycopg[binary]             # PostgreSQL
+anthropic                   # IA (Claude)
+twilio                      # WhatsApp (bac à sable)
+transformers  torch         # voix dioula (MMS-TTS, MMS-ASR)
+openai-whisper              # reconnaissance vocale en français
+python-dotenv  pillow</pre>
+  <p>Outils système : <b>PostgreSQL</b>, <b>Redis</b> (par Docker), <b>ffmpeg</b> (conversion des notes vocales), <b>ngrok</b> (webhook WhatsApp).</p>
+
+  <h3>Front-end (JavaScript)</h3>
+<pre>react  react-dom  react-router  @tanstack/react-query  zustand
+react-hook-form  zod  @hookform/resolvers
+tailwindcss  lucide-react  recharts  howler
+vite-plugin-pwa              # mode hors-ligne de la cuisine
+openapi-typescript           # types générés depuis l'API Django</pre>
+
+  <h3>Comptes à créer avant le jour J</h3>
+  <table>
+    <tr><th>Service</th><th>Pourquoi</th></tr>
+    <tr><td>Anthropic (clé API)</td><td>L'assistant de commande, la lecture de l'ardoise, les campagnes</td></tr>
+    <tr><td>Twilio</td><td>Le bac à sable WhatsApp</td></tr>
+    <tr><td>CinetPay</td><td>Le paiement mobile money en bac à sable</td></tr>
+    <tr><td>Hugging Face</td><td>Télécharger les modèles de voix MMS à l'avance (ils sont lourds)</td></tr>
+    <tr><td>ngrok</td><td>Rendre le webhook accessible depuis internet</td></tr>
+  </table>
+  <div class="box box--accent"><b class="t">À faire avant le 21 : télécharger les modèles</b>Les modèles de voix pèsent plusieurs centaines de Mo. Téléchargez-les à l'avance sur chaque PC, pour ne pas dépendre du Wi-Fi du campus le jour J.</div>
+</section>
+
+<section>
+  <h2><span class="n">6</span>Pour gagner</h2>
+  <ol>
+    <li><b>Profondeur plutôt que quantité.</b> Quatre moments « waouh » qui marchent vraiment : la commande WhatsApp à la voix, la cotisation avec le ticket imprimé, le mode sans lecture avec une vraie voix en dioula, et la prévision anti-gaspillage.</li>
+    <li><b>Une démo incassable.</b> Chaque brique a un plan B : simulateur WhatsApp, analyseur de secours, paiement simulé, vidéo de secours.</li>
+    <li><b>Montrer que le projet est sérieux.</b> La règle WhatsApp de Meta, les licences des modèles de voix, la loi ivoirienne sur les données personnelles : les pros de Vatel et d'Epitech y seront sensibles.</li>
+  </ol>
+  <div class="box box--green"><b class="t">Rappel de la règle du hackathon</b>Les organisateurs l'ont confirmé par écrit : le design et l'architecture se préparent à l'avance, mais <b>le code s'écrit le jour J</b>. Ce document fait partie de l'architecture, il est donc autorisé.</div>
+
+  <h3>Sources</h3>
+  <ul style="font-size:8.6pt">
+    <li>Modèle de synthèse vocale dioula de Meta : huggingface.co/facebook/mms-tts-dyu</li>
+    <li>Version améliorée par GO AI Corp : huggingface.co/goaicorp/dyu-mms-tts</li>
+    <li>Collection MMS-TTS et sa licence : huggingface.co/facebook/mms-tts</li>
+    <li>Reconnaissance vocale MMS : huggingface.co/facebook/mms-1b-all</li>
+    <li>Règles WhatsApp sur les chatbots en 2026 : respond.io/blog/whatsapp-chatbot-policy-2026</li>
+    <li>WhatsApp interdit les chatbots généralistes : 9to5mac.com/2025/10/20/whatsapp-bans-ai-chatbots-from-using-its-business-api</li>
+  </ul>
+</section>
+
+</body>
+</html>
