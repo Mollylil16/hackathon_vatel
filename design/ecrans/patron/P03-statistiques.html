@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P03 · Statistiques</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* --- Communs back-office patron (local, var() uniquement) --- */
+  .sidenav { gap: 2px; }
+  .sidenav__brand { display: flex; align-items: center; gap: var(--s-3); }
+  .sidenav__brand img { width: 36px; height: 36px; display: block; }
+  .sidenav__brand b { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-xl); color: var(--c-surface); letter-spacing: -.01em; line-height: 1; }
+  .sidenav__brand small { display: block; font-size: var(--fs-xs); color: var(--c-on-dark-muted); font-weight: 600; margin-top: 3px; }
+  .sidenav a { min-height: 44px; }
+  .sidenav__label { padding: var(--s-2) var(--s-3) var(--s-1); font-size: var(--fs-2xs); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-on-dark-muted); }
+  .sidenav__foot { margin-top: auto; display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3); border-top: 1px solid var(--c-ink-3); }
+  .sidenav__foot b { display: block; font-size: var(--fs-sm); color: var(--c-surface); }
+  .sidenav__foot small { font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-3); font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync .ic { width: 14px; height: 14px; color: var(--c-green-soft); }
+  .bo__main { gap: var(--s-4); }
+  .bo__head h1 { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-2xl); line-height: var(--lh-tight); }
+  .bo__head p { font-size: var(--fs-sm); color: var(--c-muted); margin-top: 2px; }
+  .bo__actions { display: flex; align-items: center; gap: var(--s-2); }
+  .kpi { padding: var(--s-3) var(--s-4); }
+  .kpi__delta { display: inline-flex; align-items: center; gap: 4px; }
+  .kpi__delta .ic { width: 14px; height: 14px; }
+  .kpi__delta--muted { color: var(--c-muted); }
+  .panel__title .ic { color: var(--c-accent-dark); }
+  .panel__title .chip { margin-left: auto; }
+  .panel__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+  .note { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-xs); color: var(--c-muted); }
+  .note .ic { width: 14px; height: 14px; }
+  .table td { padding: 9px 8px; }
+  .table tr:last-child td { border-bottom: 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .table th.num { text-align: right; }
+  .strong { font-weight: 700; }
+  .muted { color: var(--c-muted); }
+  a.btn { color: inherit; }
+  a.btn--primary { color: var(--c-accent-ink); }
+  a.btn--dark { color: var(--c-on-dark); }
+
+  /* --- Propre à P03 --- */
+.filters { display: flex; align-items: center; gap: var(--s-2); }
+  .chart > svg { display: block; width: 100%; height: auto; }
+  .chart .axis { font-family: var(--f-body); font-size: 11px; fill: var(--c-muted); }
+  .chart .lbl { font-family: var(--f-body); font-size: 12px; font-weight: 700; fill: var(--c-ink); }
+  .chart .lbl2 { font-family: var(--f-body); font-size: 12px; font-weight: 600; fill: var(--c-muted); }
+  .chart .ann { font-family: var(--f-body); font-size: 11px; font-weight: 700; fill: var(--c-red); }
+  .legend { display: flex; gap: var(--s-4); font-size: var(--fs-xs); color: var(--c-muted); font-weight: 600; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 22px; height: 0; border-top: 2px solid var(--c-accent); }
+  .sw--cmp { border-top: 2px dashed var(--c-blue); }
+  .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-3); flex: 1; min-height: 0; }
+  .g4 .panel { padding: var(--s-3); gap: var(--s-2); }
+  .g4 .panel__title { font-size: var(--fs-sm); }
+  .li { display: grid; grid-template-columns: 1fr auto; gap: 0 var(--s-2); align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--c-line); font-size: var(--fs-xs); }
+  .li:last-child { border-bottom: 0; }
+  .li b { font-size: var(--fs-xs); font-weight: 700; }
+  .li small { grid-column: 1; font-size: 11px; color: var(--c-muted); }
+  .li .v { grid-row: 1; grid-column: 2; font-weight: 800; font-variant-numeric: tabular-nums; font-size: var(--fs-sm); }
+  .good, .panel__title.good .ic { color: var(--c-green); }
+  .bad, .panel__title.bad .ic { color: var(--c-red); }
+  .panel__title.warn .ic { color: var(--c-yellow); }
+  .li .chip { height: 20px; padding: 0 6px; font-size: 10px; margin-right: 4px; }
+  .tip { display: grid; gap: 4px; padding: 6px 0; border-bottom: 1px solid var(--c-line); }
+  .tip:last-of-type { border-bottom: 0; }
+  .tip b { font-size: var(--fs-xs); }
+  .tip small { font-size: 11px; color: var(--c-muted); }
+  .tip .row { gap: var(--s-2); }
+  .tip .btn--sm { min-height: 30px; padding: 0 10px; font-size: var(--fs-xs); }
+  .tip .gain { font-weight: 800; color: var(--c-green); font-size: var(--fs-xs); }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--tablet" data-screen="P03">
+  <div class="bo">
+    <nav class="sidenav" aria-label="Navigation du back-office">
+      <div class="sidenav__brand"><img src="../../logo/dabali-mark.svg" alt=""><div><b>dabali</b><small>Le Baobab · Angré</small></div></div>
+      <a href="P01-aujourdhui.html" data-link="P01"><i data-lucide="house" class="ic"></i>Aujourd'hui</a>
+      <a href="P02-livraisons.html" data-link="P02"><i data-lucide="bike" class="ic"></i>Livraisons</a>
+      <a href="P03-statistiques.html" data-link="P03" class="on" aria-current="page"><i data-lucide="chart-line" class="ic"></i>Statistiques</a>
+      <a href="P04-clients-campagnes.html" data-link="P04"><i data-lucide="megaphone" class="ic"></i>Clients &amp; campagnes</a>
+      <a href="P06-caisse.html" data-link="P06"><i data-lucide="wallet" class="ic"></i>Caisse</a>
+      <a href="P05-recherche-documents.html" data-link="P05"><i data-lucide="search" class="ic"></i>Recherche &amp; documents</a>
+      <div class="sidenav__sync"><i data-lucide="refresh-cw" class="ic"></i>Synchronisé il y a 1 min</div>
+      <div class="sidenav__foot"><span class="avatar">TA</span><div><b>Tantie Awa</b><small>Patronne</small></div></div>
+    </nav>
+    <section class="bo__main">
+<header class="bo__head">
+        <div><h1>Statistiques</h1><p>Janvier à octobre · 2026 comparé à 2025</p></div>
+        <div class="filters">
+          <span class="seg"><span>Semaine</span><span>Mois</span><span class="on">Année</span></span>
+          <span class="btn btn--secondary btn--sm"><i data-lucide="calendar" class="ic ic--sm"></i>2026 vs 2025</span>
+          <span class="btn btn--secondary btn--sm"><i data-lucide="store" class="ic ic--sm"></i>Tous les canaux</span>
+          <span class="btn btn--primary btn--sm"><i data-lucide="download" class="ic ic--sm"></i>Bilan PDF</span>
+        </div>
+      </header>
+
+      <div class="kpis">
+        <div class="kpi"><span class="kpi__label">CA cumulé 2026</span><span class="kpi__value">114,7 M F</span><span class="kpi__delta up"><i data-lucide="trending-up" class="ic"></i>+19,9 % vs 95,7 M en 2025</span></div>
+        <div class="kpi"><span class="kpi__label">Clients uniques</span><span class="kpi__value">3 412</span><span class="kpi__delta up"><i data-lucide="trending-up" class="ic"></i>+27 % vs 2 687</span></div>
+        <div class="kpi"><span class="kpi__label">Panier moyen</span><span class="kpi__value">7 450 F</span><span class="kpi__delta up"><i data-lucide="trending-up" class="ic"></i>+4 % vs 7 160 F</span></div>
+        <div class="kpi"><span class="kpi__label">Nourriture jetée</span><span class="kpi__value">38 kg/mois</span><span class="kpi__delta up"><i data-lucide="trending-down" class="ic"></i>−41 % vs 64 kg</span></div>
+      </div>
+
+      <div class="panel chart">
+        <div class="panel__head">
+          <span class="panel__title"><i data-lucide="chart-line" class="ic"></i>Chiffre d'affaires mensuel, en millions de FCFA</span>
+          <div class="legend">
+            <span><i class="sw"></i>2026</span>
+            <span><i class="sw sw--cmp"></i>2025</span>
+            <span><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--c-red)" stroke-width="2"/></svg>Chute détectée</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 960 206" role="img" aria-label="Chiffre d'affaires mensuel 2026 contre 2025, de janvier à octobre. 2026 est au-dessus de 2025 chaque mois. Deux chutes détectées : mars (8,6 M, Ramadan) et août (10,2 M, vacances). Octobre 2026 : 13,6 M contre 10,6 M.">
+          <g stroke="var(--c-line)" stroke-width="1">
+            <line x1="48" y1="12" x2="930" y2="12"/><line x1="48" y1="54" x2="930" y2="54"/><line x1="48" y1="96" x2="930" y2="96"/><line x1="48" y1="138" x2="930" y2="138"/>
+          </g>
+          <line x1="48" y1="180" x2="930" y2="180" stroke="var(--c-subtle)" stroke-width="1"/>
+          <g class="axis" text-anchor="end"><text x="38" y="184">6 M</text><text x="38" y="142">8 M</text><text x="38" y="100">10 M</text><text x="38" y="58">12 M</text><text x="38" y="16">14 M</text></g>
+          <g class="axis" text-anchor="middle"><text x="48" y="200">janv.</text><text x="146" y="200">févr.</text><text x="244" y="200">mars</text><text x="342" y="200">avr.</text><text x="440" y="200">mai</text><text x="538" y="200">juin</text><text x="636" y="200">juil.</text><text x="734" y="200">août</text><text x="832" y="200">sept.</text><text x="930" y="200">oct.</text></g>
+          <polyline points="48.0,112.8 146.0,123.3 244.0,140.1 342.0,104.4 440.0,93.9 538.0,100.2 636.0,87.6 734.0,106.5 832.0,98.1 930.0,83.4" fill="none" stroke="var(--c-blue)" stroke-width="2" stroke-dasharray="6 5" stroke-linejoin="round"/>
+          <polyline points="48.0,79.2 146.0,93.9 244.0,125.4 342.0,56.1 440.0,45.6 538.0,70.8 636.0,30.9 734.0,91.8 832.0,37.2 930.0,20.4" fill="none" stroke="var(--c-accent)" stroke-width="2" stroke-linejoin="round"/>
+          <!-- chutes -->
+          <circle cx="244" cy="125.4" r="10" fill="none" stroke="var(--c-red)" stroke-width="2"/>
+          <text class="ann" x="244" y="160" text-anchor="middle">8,6 M · Ramadan</text>
+          <circle cx="734" cy="91.8" r="10" fill="none" stroke="var(--c-red)" stroke-width="2"/>
+          <text class="ann" x="734" y="132" text-anchor="middle">10,2 M · vacances, −22 %</text>
+          <!-- meilleur mois intermédiaire -->
+          <text class="lbl2" x="636" y="20" text-anchor="middle">13,1 M</text>
+          <!-- marqueurs de fin -->
+          <circle cx="930" cy="20.4" r="5" fill="var(--c-accent)" stroke="var(--c-surface)" stroke-width="2"/>
+          <circle cx="930" cy="83.4" r="5" fill="var(--c-blue)" stroke="var(--c-surface)" stroke-width="2"/>
+          <text class="lbl" x="918" y="16" text-anchor="end">13,6 M</text>
+          <text class="lbl2" x="918" y="72" text-anchor="end">10,6 M</text>
+        </svg>
+      </div>
+
+      <div class="g4">
+        <div class="panel">
+          <span class="panel__title good"><i data-lucide="circle-check" class="ic"></i>Ce qui a marché</span>
+          <div>
+            <div class="li"><b>Dernière louche</b><span class="v good">+1,9 M F</span><small>412 kg de nourriture sauvés</small></div>
+            <div class="li"><b>Soirées match</b><span class="v good">+34 %</span><small>comparé à un soir normal</small></div>
+            <div class="li"><b>Poisson braisé, plat n° 1</b><span class="v good">+28 %</span><small>par rapport à 2025</small></div>
+            <div class="li"><b>Paiement Wave</b><span class="v good">50 %</span><small>des ventes (31 % en 2025)</small></div>
+          </div>
+        </div>
+        <div class="panel">
+          <span class="panel__title bad"><i data-lucide="circle-x" class="ic"></i>Ce qui n'a pas marché</span>
+          <div>
+            <div class="li"><b>Desserts</b><span class="v bad">−40 %</span><small>2 % des ventes, 40 % jetés</small></div>
+            <div class="li"><b>Kédjénou le midi en semaine</b><span class="v bad">−24 %</span><small>par rapport à 2025</small></div>
+            <div class="li"><b>Commandes Glovo</b><span class="v bad">6 %</span><small>de marge nette, commission 27 %</small></div>
+            <div class="li"><b>Attente le samedi soir</b><span class="v bad">31 min</span><small>objectif : 15 min</small></div>
+          </div>
+        </div>
+        <div class="panel">
+          <span class="panel__title warn"><i data-lucide="triangle-alert" class="ic"></i>Chutes détectées</span>
+          <div>
+            <div class="li"><b><span class="chip chip--neutral">Hebdo</span>Mardis soir</b><span class="v bad">−18 %</span><small>sur les 4 dernières semaines</small></div>
+            <div class="li"><b><span class="chip chip--neutral">Mois</span>Août vs juillet</b><span class="v bad">−22 %</span><small>vacances : les bureaux sont partis</small></div>
+            <div class="li"><b><span class="chip chip--neutral">Mois</span>Mars vs février</b><span class="v bad">−15 %</span><small>Ramadan, baisse attendue</small></div>
+            <div class="li"><b><span class="chip chip--neutral">Année</span>Livraisons Yopougon</b><span class="v bad">−30 %</span><small>par rapport à 2025</small></div>
+          </div>
+        </div>
+        <div class="panel">
+          <span class="panel__title"><i data-lucide="lightbulb" class="ic"></i>Conseils pour grandir</span>
+          <div>
+            <div class="tip"><b>Menu midi bureau à 2 500 F, mardi à jeudi</b><div class="row"><span class="gain">+450 000 F / mois</span><span class="btn btn--primary btn--sm">Créer l'offre</span></div></div>
+            <div class="tip"><b>Relancer les 86 clients absents depuis 30 jours</b><div class="row"><span class="gain">+150 000 F</span><a class="btn btn--primary btn--sm" href="P04-clients-campagnes.html" data-link="P04">Lancer</a></div></div>
+            <div class="tip"><b>1 serveur de plus le samedi, 19h à 23h</b><div class="row"><span class="gain">31 → 19 min</span><span class="btn btn--secondary btn--sm">Planifier</span></div></div>
+          </div>
+          <span class="note"><i data-lucide="info" class="ic"></i>Estimations de l'IA, à valider par toi.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

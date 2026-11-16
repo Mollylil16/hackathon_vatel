@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M04 · Patronne à la voix</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .head { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-2) var(--s-4) 0; }
+  .head__t { flex: 1; display: grid; gap: 2px; }
+  .head__t .t-small { color: var(--c-on-dark-muted); }
+  .lang { background: var(--c-ink-3); color: var(--c-on-dark); height: 36px; padding: 0 var(--s-3); font-size: var(--fs-sm); }
+
+  .mic { display: grid; justify-items: center; gap: var(--s-2); padding-top: var(--s-5); }
+  .mic__btn { position: relative; width: 112px; height: 112px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink);
+    display: grid; place-items: center; box-shadow: 0 0 0 12px color-mix(in srgb, var(--c-accent) 22%, transparent), 0 0 0 26px color-mix(in srgb, var(--c-accent) 9%, transparent); }
+  .mic__btn .ic { width: 52px; height: 52px; stroke-width: 1.8; }
+  .mic__label { font-weight: 700; color: var(--c-on-dark-muted); font-size: var(--fs-sm); margin-top: var(--s-5); display: flex; align-items: center; gap: 6px; }
+
+  .ask { background: var(--c-ink-3); border-radius: var(--r-lg) var(--r-lg) var(--r-lg) var(--r-xs); padding: var(--s-3) var(--s-4); display: grid; gap: 4px; }
+  .ask .t-eyebrow { color: var(--c-on-dark-muted); display: flex; align-items: center; gap: 6px; }
+  .ask .t-eyebrow .ic { width: 14px; height: 14px; }
+  .ask q { font-family: var(--f-display); font-weight: 700; font-size: var(--fs-xl); line-height: var(--lh-tight); quotes: "« " " »"; }
+
+  .ans { background: var(--c-ink-2); border-radius: var(--r-lg); padding: var(--s-4); display: grid; gap: var(--s-3); box-shadow: inset 0 0 0 1px var(--c-ink-3); }
+  .ans__amount { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); }
+  .ans__amount b { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-4xl); line-height: 1; font-variant-numeric: tabular-nums; color: var(--c-surface); }
+  .trend { display: inline-flex; align-items: center; gap: 4px; height: 36px; padding: 0 var(--s-3); border-radius: var(--r-pill); background: var(--c-green); color: var(--c-surface); font-weight: 800; font-size: var(--fs-md); }
+  .trend .ic { width: 22px; height: 22px; stroke-width: 2.6; }
+  .times { font-weight: 800; font-size: var(--fs-lg); color: var(--c-surface); margin: 0 4px 0 2px; }
+  .ans .money { gap: var(--s-2); flex-wrap: nowrap; }
+
+  .top { display: grid; gap: var(--s-2); }
+  .bar { display: grid; grid-template-columns: 48px 1fr 40px; gap: var(--s-3); align-items: center; }
+  .bar__ic { width: 48px; height: 48px; border-radius: var(--r-md); background: var(--c-ink-3); color: var(--c-accent); display: grid; place-items: center; position: relative; }
+  .bar__ic .ic { width: 28px; height: 28px; }
+  .bar__rank { position: absolute; top: -6px; left: -6px; width: 20px; height: 20px; border-radius: var(--r-pill); background: var(--c-surface); color: var(--c-ink); font-size: var(--fs-2xs); font-weight: 800; display: grid; place-items: center; }
+  .bar__track { height: 14px; border-radius: var(--r-pill); background: var(--c-ink-3); overflow: hidden; }
+  .bar__track i { display: block; height: 100%; border-radius: var(--r-pill); background: var(--c-accent); }
+  .bar__n { font-weight: 800; font-size: var(--fs-lg); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .read { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-xs); color: var(--c-on-dark-muted); font-weight: 600; }
+  .read .ic { width: 16px; height: 16px; color: var(--c-accent); }
+  .wave { display: inline-flex; align-items: center; gap: 2px; height: 16px; margin-left: auto; }
+  .wave i { display: block; width: 3px; border-radius: 2px; background: var(--c-accent); }
+
+  .acts { display: grid; grid-template-columns: 64px 1fr; gap: var(--s-3); margin-top: auto; }
+  .btn--replay { background: var(--c-ink-3); color: var(--c-on-dark); padding: 0; }
+  .btn--xl .ic { width: 26px; height: 26px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone frame--dark" data-screen="M04">
+    <div class="statusbar"><span>23:05</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <div class="head">
+      <span class="avatar" aria-hidden="true">AK</span>
+      <div class="head__t"><span class="t-h3">Tantie Awa</span><span class="t-small">Le Baobab · samedi 21</span></div>
+      <span class="chip lang"><i data-lucide="languages" class="ic"></i>Dioula</span>
+    </div>
+
+    <div class="content" style="gap: var(--s-3); padding-top: var(--s-3); padding-bottom: var(--s-6)">
+      <div class="mic">
+        <a class="mic__btn" href="#" aria-label="Parler"><i data-lucide="mic" class="ic"></i></a>
+        <span class="mic__label"><i data-lucide="ear" class="ic ic--sm"></i>Parle, je t'écoute</span>
+      </div>
+
+      <div class="ask">
+        <span class="t-eyebrow"><i data-lucide="audio-lines" class="ic"></i>Tu as dit en dioula · traduit</span>
+        <q>Combien j'ai gagné aujourd'hui ?</q>
+      </div>
+
+      <div class="ans" aria-label="Réponse">
+        <div class="ans__amount">
+          <b>486 500 F</b>
+          <span class="trend" aria-label="En hausse de 12 pour cent"><i data-lucide="trending-up" class="ic"></i>+12 %</span>
+        </div>
+        <div class="money money--lg" aria-label="48 billets de 10 000, 1 de 5 000, 1 de 1 000 et 1 pièce de 500">
+          <span class="bill bill--10000">10 000</span><span class="times">× 48</span>
+          <span class="bill bill--5000">5 000</span>
+          <span class="bill bill--1000">1 000</span>
+          <span class="coin">500</span>
+        </div>
+        <div class="divider" style="background: var(--c-ink-3)"></div>
+        <div class="top" aria-label="Les 3 plats les plus vendus">
+          <div class="bar"><span class="bar__ic"><span class="bar__rank">1</span><i data-lucide="fish" class="ic"></i></span><span class="bar__track"><i style="width: 92%"></i></span><span class="bar__n">41</span></div>
+          <div class="bar"><span class="bar__ic"><span class="bar__rank">2</span><i data-lucide="banana" class="ic"></i></span><span class="bar__track"><i style="width: 83%"></i></span><span class="bar__n">37</span></div>
+          <div class="bar"><span class="bar__ic"><span class="bar__rank">3</span><i data-lucide="wheat" class="ic"></i></span><span class="bar__track"><i style="width: 74%"></i></span><span class="bar__n">33</span></div>
+        </div>
+        <div class="read"><i data-lucide="volume-2" class="ic"></i>Réponse lue à voix haute en dioula
+          <span class="wave" aria-hidden="true"><i style="height:6px"></i><i style="height:12px"></i><i style="height:16px"></i><i style="height:9px"></i><i style="height:14px"></i><i style="height:7px"></i><i style="height:11px"></i></span>
+        </div>
+      </div>
+
+      <div class="acts">
+        <a class="btn btn--xl btn--replay" href="#" aria-label="Réécouter la réponse"><i data-lucide="rotate-ccw" class="ic"></i></a>
+        <a class="btn btn--primary btn--xl btn--split" href="../patron/P01-aujourdhui.html" data-link="P01">
+          <span>Voir les détails</span><i data-lucide="arrow-right" class="ic"></i>
+        </a>
+      </div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

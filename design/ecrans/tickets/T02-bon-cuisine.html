@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T02 · Bon cuisine</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* Bon cuisine 58 mm : lisible à 1 m, en plein coup de feu */
+  .receipt .head { display: flex; justify-content: space-between; align-items: baseline; font-weight: 700; letter-spacing: .12em; }
+  .receipt .table { text-align: center; line-height: 1; margin: 6px 0 2px; }
+  .receipt .table small { display: block; font-size: 18px; font-weight: 700; letter-spacing: .3em; }
+  .receipt .table b { display: block; font-size: 112px; font-weight: 700; letter-spacing: -.04em; }
+  .receipt .big-r { font-size: 18px; font-weight: 700; }
+  .receipt .lbl { font-weight: 700; letter-spacing: .12em; font-size: 14px; }
+  .receipt .item { display: grid; grid-template-columns: 70px 1fr 22px; align-items: center; column-gap: 8px; margin: 8px 0; }
+  .receipt .item .q { font-size: 30px; font-weight: 700; line-height: 1; white-space: nowrap; }
+  .receipt .item .n { font-size: 21px; font-weight: 700; line-height: 1.15; }
+  .receipt .item .ic { width: 20px; height: 20px; }
+  .receipt .item .box { width: 22px; height: 22px; box-shadow: inset 0 0 0 2px var(--c-paper-ink); border-radius: 3px; }
+  .receipt .note { grid-column: 2 / 4; margin: 4px 0 0; font-size: 20px; letter-spacing: .12em; text-align: left; padding: 3px 8px; display: inline-flex; align-items: center; gap: 8px; justify-self: start; }
+  .receipt .note .ic { width: 18px; height: 18px; }
+  .receipt .bar-item .n { font-size: 18px; }
+  .receipt .bar-item .q { font-size: 24px; }
+  .receipt .small { font-size: 13px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame" style="width:384px;height:auto;background:transparent" data-screen="T02">
+    <div class="receipt">
+      <div class="head"><span>BON CUISINE</span><span>N° 0312</span></div>
+      <div class="sep"></div>
+      <div class="table"><small>TABLE</small><b>7</b></div>
+      <div class="inv">SALLE · QR · 4 COUVERTS</div>
+      <div class="r big-r"><span>RECU 19:44</span><span>PRET VISE 19:58</span></div>
+      <div class="r"><span>21/11/2026</span><span>Serveuse : FANTA</span></div>
+      <div class="dbl"></div>
+
+      <div class="lbl">CUISINE · 7 ARTICLES</div>
+      <div class="item"><span class="q">2 x</span><span class="n">POISSON BRAISE<br>+ ATTIEKE</span><span class="box" aria-label="case à cocher"></span></div>
+      <div class="item"><span class="q">1 x</span><span class="n">KEDJENOU POULET</span><span class="box" aria-label="case à cocher"></span></div>
+      <div class="item">
+        <span class="q">2 x</span><span class="n">ALLOCO POULET</span><span class="box" aria-label="case à cocher"></span>
+        <span class="note inv"><i data-lucide="flame" class="ic"></i>PIMENT ++</span>
+      </div>
+      <div class="item"><span class="q">1 x</span><span class="n">FOUTOU SAUCE<br>GRAINE</span><span class="box" aria-label="case à cocher"></span></div>
+      <div class="item"><span class="q">1 x</span><span class="n">ATTIEKE SUPPL.</span><span class="box" aria-label="case à cocher"></span></div>
+      <div class="sep"></div>
+
+      <div class="lbl">BAR · 3 ARTICLES</div>
+      <div class="item bar-item"><span class="q">3 x</span><span class="n">BISSAP GLACE 50CL</span><span class="box" aria-label="case à cocher"></span></div>
+      <div class="dbl"></div>
+
+      <div class="c" style="font-weight:700;letter-spacing:.08em">SERVIR TOUT ENSEMBLE</div>
+      <div class="c small">Envoyé depuis le QR de la table · caisse 01<br>Aussi affiché sur l'écran cuisine</div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

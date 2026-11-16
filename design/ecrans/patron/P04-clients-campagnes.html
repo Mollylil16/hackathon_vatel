@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P04 · Clients &amp; campagnes</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* --- Communs back-office patron (local, var() uniquement) --- */
+  .sidenav { gap: 2px; }
+  .sidenav__brand { display: flex; align-items: center; gap: var(--s-3); }
+  .sidenav__brand img { width: 36px; height: 36px; display: block; }
+  .sidenav__brand b { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-xl); color: var(--c-surface); letter-spacing: -.01em; line-height: 1; }
+  .sidenav__brand small { display: block; font-size: var(--fs-xs); color: var(--c-on-dark-muted); font-weight: 600; margin-top: 3px; }
+  .sidenav a { min-height: 44px; }
+  .sidenav__label { padding: var(--s-2) var(--s-3) var(--s-1); font-size: var(--fs-2xs); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-on-dark-muted); }
+  .sidenav__foot { margin-top: auto; display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3); border-top: 1px solid var(--c-ink-3); }
+  .sidenav__foot b { display: block; font-size: var(--fs-sm); color: var(--c-surface); }
+  .sidenav__foot small { font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-3); font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync .ic { width: 14px; height: 14px; color: var(--c-green-soft); }
+  .bo__main { gap: var(--s-4); }
+  .bo__head h1 { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-2xl); line-height: var(--lh-tight); }
+  .bo__head p { font-size: var(--fs-sm); color: var(--c-muted); margin-top: 2px; }
+  .bo__actions { display: flex; align-items: center; gap: var(--s-2); }
+  .kpi { padding: var(--s-3) var(--s-4); }
+  .kpi__delta { display: inline-flex; align-items: center; gap: 4px; }
+  .kpi__delta .ic { width: 14px; height: 14px; }
+  .kpi__delta--muted { color: var(--c-muted); }
+  .panel__title .ic { color: var(--c-accent-dark); }
+  .panel__title .chip { margin-left: auto; }
+  .panel__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+  .note { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-xs); color: var(--c-muted); }
+  .note .ic { width: 14px; height: 14px; }
+  .table td { padding: 9px 8px; }
+  .table tr:last-child td { border-bottom: 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .table th.num { text-align: right; }
+  .strong { font-weight: 700; }
+  .muted { color: var(--c-muted); }
+  a.btn { color: inherit; }
+  a.btn--primary { color: var(--c-accent-ink); }
+  a.btn--dark { color: var(--c-on-dark); }
+
+  /* --- Propre à P04 --- */
+.segs { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--s-3); }
+  .sg { background: var(--c-surface); border-radius: var(--r-md); box-shadow: var(--sh-1); padding: var(--s-3) var(--s-4); display: grid; gap: 2px; position: relative; border: 2px solid transparent; }
+  .sg .v { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-2xl); font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .sg .l { font-weight: 700; font-size: var(--fs-sm); display: flex; align-items: center; gap: 6px; }
+  .sg .l .ic { width: 16px; height: 16px; color: var(--c-muted); }
+  .sg small { font-size: var(--fs-xs); color: var(--c-muted); }
+  .sg--on { border-color: var(--c-accent); background: var(--c-accent-soft); }
+  .sg--on .l .ic { color: var(--c-accent-dark); }
+  .sg__check { position: absolute; top: 10px; right: 10px; height: 22px; font-size: 11px; }
+  .p04 > .panel { overflow: hidden; }
+  .p04 .table { font-size: 13px; }
+  .p04 .table td, .p04 .table th { white-space: nowrap; padding-left: 6px; padding-right: 6px; }
+  .p04 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); flex: 1; min-height: 0; }
+  .who { display: flex; align-items: center; gap: var(--s-2); font-weight: 700; }
+  .flag { display: inline-flex; align-items: center; gap: 4px; font-size: var(--fs-xs); font-weight: 700; color: var(--c-red); }
+  .flag .ic { width: 13px; height: 13px; }
+  .editor { display: grid; grid-template-columns: 172px minmax(0, 1fr); gap: var(--s-3); }
+  .poster { border-radius: var(--r-md); background: linear-gradient(160deg, var(--c-warm), var(--c-accent) 80%); color: var(--c-surface); padding: var(--s-3); display: flex; flex-direction: column; gap: var(--s-2); min-height: 236px; position: relative; overflow: hidden; }
+  .poster small { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .9; }
+  .poster .h { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-lg); line-height: var(--lh-tight); }
+  .poster .photo { flex: 1; min-height: 70px; background: var(--c-warm); }
+  .poster .off { align-self: flex-start; background: var(--c-surface); color: var(--c-accent-dark); font-weight: 800; font-size: var(--fs-sm); padding: 4px 10px; border-radius: var(--r-pill); }
+  .ai-tag { position: absolute; top: 8px; right: 8px; }
+  .wa { border-radius: var(--r-md); background: var(--c-wa-bg); padding: var(--s-2); display: flex; flex-direction: column; gap: var(--s-2); }
+  .wa__head { display: flex; align-items: center; gap: var(--s-2); background: var(--c-wa-header); color: var(--c-surface); border-radius: var(--r-sm); padding: 6px 10px; font-size: var(--fs-xs); font-weight: 700; }
+  .wa__head .ic { width: 14px; height: 14px; }
+  .wa .bubble { max-width: 100%; font-size: var(--fs-xs); line-height: var(--lh-normal); color: var(--c-ink); }
+  .wa .bubble small { display: block; text-align: right; color: var(--c-muted); font-size: 10px; margin-top: 2px; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  .opt { display: grid; gap: 2px; padding: 6px 10px; border-radius: var(--r-sm); box-shadow: inset 0 0 0 1px var(--c-line); }
+  .opt span { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--c-muted); }
+  .opt b { font-size: var(--fs-sm); display: flex; align-items: center; gap: 6px; }
+  .opt b .ic { width: 15px; height: 15px; color: var(--c-muted); }
+  .res { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-3); }
+  .res div { display: grid; gap: 2px; padding: var(--s-2) var(--s-3); border-radius: var(--r-sm); background: var(--c-bg); }
+  .res span { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--c-muted); }
+  .res b { font-family: var(--f-display); font-size: var(--fs-xl); font-variant-numeric: tabular-nums; }
+  .res small { font-size: var(--fs-xs); color: var(--c-muted); }
+  .res small.up { color: var(--c-green); font-weight: 700; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--tablet" data-screen="P04">
+  <div class="bo">
+    <nav class="sidenav" aria-label="Navigation du back-office">
+      <div class="sidenav__brand"><img src="../../logo/dabali-mark.svg" alt=""><div><b>dabali</b><small>Le Baobab · Angré</small></div></div>
+      <a href="P01-aujourdhui.html" data-link="P01"><i data-lucide="house" class="ic"></i>Aujourd'hui</a>
+      <a href="P02-livraisons.html" data-link="P02"><i data-lucide="bike" class="ic"></i>Livraisons</a>
+      <a href="P03-statistiques.html" data-link="P03"><i data-lucide="chart-line" class="ic"></i>Statistiques</a>
+      <a href="P04-clients-campagnes.html" data-link="P04" class="on" aria-current="page"><i data-lucide="megaphone" class="ic"></i>Clients &amp; campagnes</a>
+      <a href="P06-caisse.html" data-link="P06"><i data-lucide="wallet" class="ic"></i>Caisse</a>
+      <a href="P05-recherche-documents.html" data-link="P05"><i data-lucide="search" class="ic"></i>Recherche &amp; documents</a>
+      <div class="sidenav__sync"><i data-lucide="refresh-cw" class="ic"></i>Synchronisé il y a 1 min</div>
+      <div class="sidenav__foot"><span class="avatar">TA</span><div><b>Tantie Awa</b><small>Patronne</small></div></div>
+    </nav>
+    <section class="bo__main">
+<header class="bo__head">
+        <div><h1>Clients &amp; campagnes</h1><p>Tes clients classés automatiquement, et des messages qui les font revenir</p></div>
+        <div class="bo__actions">
+          <span class="chip chip--green"><i data-lucide="shield-check" class="ic"></i>1 248 clients ont dit oui aux offres</span>
+        </div>
+      </header>
+
+      <div class="segs">
+        <div class="sg"><span class="v">214</span><span class="l"><i data-lucide="heart" class="ic"></i>Habitués</span><small>4 visites et plus par mois</small></div>
+        <div class="sg sg--on"><span class="chip chip--dark sg__check"><i data-lucide="check" class="ic"></i>Choisi</span><span class="v">86</span><span class="l"><i data-lucide="bell-ring" class="ic"></i>À relancer</span><small>absents depuis 30 jours</small></div>
+        <div class="sg"><span class="v">23</span><span class="l"><i data-lucide="cake" class="ic"></i>Anniversaires</span><small>ce mois-ci</small></div>
+        <div class="sg"><span class="v">312</span><span class="l"><i data-lucide="fish" class="ic"></i>Fans du poisson</span><small>braisé, 2 fois par mois</small></div>
+        <div class="sg"><span class="v">140</span><span class="l"><i data-lucide="briefcase" class="ic"></i>Clients bureau</span><small>le midi en semaine</small></div>
+      </div>
+
+      <div class="p04">
+        <div class="panel">
+          <div class="panel__head"><span class="panel__title"><i data-lucide="users" class="ic"></i>Clients fidèles</span><span class="btn btn--secondary btn--sm"><i data-lucide="filter" class="ic ic--sm"></i>Trier par dépense</span></div>
+          <table class="table">
+            <thead><tr><th>Client</th><th class="num">Visites</th><th class="num">Dépensé</th><th>Plat préféré</th><th>Vu</th></tr></thead>
+            <tbody>
+              <tr><td><span class="who"><span class="avatar avatar--sm">AD</span>Aïcha D.</span></td><td class="num">61</td><td class="num strong">412 000 F</td><td>Kédjénou</td><td>hier</td></tr>
+              <tr><td><span class="who"><span class="avatar avatar--sm avatar--green">KN</span>Koffi N.</span></td><td class="num">48</td><td class="num strong">356 500 F</td><td>Poisson</td><td>il y a 3 j</td></tr>
+              <tr><td><span class="who"><span class="avatar avatar--sm avatar--dark">YB</span>Yannick B.</span></td><td class="num">39</td><td class="num strong">118 000 F</td><td>Alloco</td><td>aujourd'hui</td></tr>
+              <tr><td><span class="who"><span class="avatar avatar--sm avatar--grey">MK</span>Mariam K.</span></td><td class="num">12</td><td class="num strong">96 000 F</td><td>Foutou</td><td><span class="flag"><i data-lucide="bell-ring" class="ic"></i>il y a 34 j</span></td></tr>
+              <tr><td><span class="who"><span class="avatar avatar--sm avatar--grey">SB</span>Seydou B.</span></td><td class="num">17</td><td class="num strong">88 500 F</td><td>Garba</td><td><span class="flag"><i data-lucide="bell-ring" class="ic"></i>il y a 41 j</span></td></tr>
+            </tbody>
+          </table>
+          <span class="note" style="margin-top:auto"><i data-lucide="lock" class="ic"></i>Seuls les clients qui ont accepté les offres sont contactés. Ils se désinscrivent en un toucher.</span>
+        </div>
+
+        <div class="panel">
+          <div class="panel__head"><span class="panel__title"><i data-lucide="megaphone" class="ic"></i>Nouvelle campagne · À relancer · 86 clients</span><span class="chip"><i data-lucide="sparkles" class="ic"></i>Visuel IA</span></div>
+          <div class="editor">
+            <div class="poster">
+              <small>Le Baobab · Angré</small>
+              <span class="h">On t'a manqué ? Ton plat t'attend.</span>
+              <div class="photo"><i data-lucide="fish" class="ic ic--xl"></i><span class="photo-label">photo du plat</span></div>
+              <span class="off">−20 % jusqu'à dim.</span>
+            </div>
+            <div class="stack" style="gap:var(--s-3)">
+              <div class="wa">
+                <div class="wa__head"><i data-lucide="message-circle" class="ic"></i>Aperçu WhatsApp · Mariam</div>
+                <div class="bubble">Coucou Mariam ! Ça fait un moment. Ton foutou sauce graine t'attend au Baobab, avec −20 % jusqu'à dimanche. On te garde une table ?<small>11:30</small></div>
+              </div>
+              <div class="opts">
+                <div class="opt"><span>Canal</span><b><i data-lucide="message-circle" class="ic"></i>WhatsApp</b></div>
+                <div class="opt"><span>Date d'envoi</span><b><i data-lucide="calendar-clock" class="ic"></i>26/11 · 11h30</b></div>
+              </div>
+              <span class="note"><i data-lucide="sparkles" class="ic"></i>Texte et visuel proposés par l'IA, prénom et plat adaptés à chacun.</span>
+              <div class="row">
+                <span class="btn btn--secondary btn--sm"><i data-lucide="refresh-cw" class="ic ic--sm"></i>Autre idée</span>
+                <span class="btn btn--primary btn--sm"><i data-lucide="send" class="ic ic--sm"></i>Programmer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__head"><span class="panel__title"><i data-lucide="chart-column" class="ic"></i>Résultat de la dernière campagne · « Soirée match des Éléphants »</span><span class="chip chip--green"><i data-lucide="circle-check" class="ic"></i>Terminée le 14/11</span></div>
+        <div class="res">
+          <div><span>Envoyés</span><b>412</b><small>clients d'accord pour les offres</small></div>
+          <div><span>Lus</span><b>371</b><small>90 % des envoyés</small></div>
+          <div><span>Venus au resto</span><b>58</b><small class="up">14 % des envoyés</small></div>
+          <div><span>CA généré</span><b>436 000 F</b><small class="up">pour 0 F de pub</small></div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C14 · WhatsApp, commande vocale</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* Simulation générique d'une messagerie : couleurs proches, aucun logo */
+  .wa-top { background: var(--c-wa-header); color: var(--c-surface); flex: none; }
+  .wa-top .statusbar { color: var(--c-surface); }
+  .wa-header { padding-top: 0; }
+  .wa-av { width: 38px; height: 38px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-surface); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; flex: none; }
+  .wa-id { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+  .wa-id b { font-size: var(--fs-md); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wa-id span { font-size: var(--fs-xs); opacity: .85; }
+  .wa-tools { display: flex; gap: var(--s-4); }
+
+  .wa-day { align-self: center; background: var(--c-surface); color: var(--c-muted); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-sm); text-transform: uppercase; letter-spacing: .04em; }
+  .wa-sys { align-self: center; max-width: 94%; white-space: nowrap; text-align: center; background: var(--c-yellow-soft); color: var(--c-ink); font-size: 11px; padding: 6px 10px; border-radius: var(--r-sm); display: inline-flex; gap: 6px; align-items: center; }
+  .wa-sys .ic { width: 13px; height: 13px; color: var(--c-yellow); }
+  .bubble { line-height: 1.4; color: var(--c-ink); }
+  .bubble--wide { max-width: 88%; }
+  .meta { display: flex; justify-content: flex-end; align-items: center; gap: 3px; font-size: 10px; color: var(--c-muted); margin-top: 2px; }
+  .meta .ic { width: 14px; height: 14px; color: var(--c-blue); }
+
+  .voice { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: var(--s-2); min-width: 236px; }
+  .voice__play { width: 34px; height: 34px; border-radius: var(--r-pill); background: var(--c-wa-header); color: var(--c-surface); display: grid; place-items: center; }
+  .voice__play .ic { width: 16px; height: 16px; fill: currentColor; }
+  .wave { display: flex; align-items: center; gap: 2px; height: 26px; }
+  .wave i { display: block; width: 3px; border-radius: 2px; background: var(--c-muted); opacity: .6; }
+  .wave i.on { background: var(--c-wa-header); opacity: 1; }
+  .voice time { font-size: 11px; color: var(--c-muted); font-variant-numeric: tabular-nums; }
+  .transcript { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--c-line); font-size: 13px; }
+  .transcript .t-eyebrow { display: flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+  .transcript .t-eyebrow .ic { width: 12px; height: 12px; }
+
+  .recap { margin: 6px 0; border-radius: var(--r-sm); background: var(--c-bg); padding: 8px 10px; display: grid; gap: 4px; font-size: 13px; }
+  .recap .row { gap: var(--s-2); }
+  .recap .row span { display: inline-flex; align-items: center; gap: 6px; }
+  .recap .ic { width: 15px; height: 15px; color: var(--c-accent-dark); }
+  .recap .note { font-size: 11px; color: var(--c-accent-dark); font-weight: 700; padding-left: 21px; margin-top: -3px; }
+  .recap .tot { border-top: 1px dashed var(--c-line); padding-top: 4px; font-weight: 800; }
+  .when { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+  .when .ic { width: 15px; height: 15px; }
+
+  .quick { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 8px -10px -8px; border-top: 1px solid var(--c-line); background: var(--c-line); border-radius: 0 0 10px 10px; overflow: hidden; }
+  .quick span { background: var(--c-surface); text-align: center; padding: 9px 0; font-weight: 700; font-size: 13px; color: var(--c-wa-header); }
+
+  .paylink { margin-top: 6px; border-radius: var(--r-sm); background: var(--c-bg); overflow: hidden; }
+  .paylink__top { display: grid; grid-template-columns: 28px 1fr; gap: var(--s-2); align-items: center; padding: 8px 10px; }
+  .pastille { width: 28px; height: 28px; border-radius: var(--r-sm); background: var(--c-wave); }
+  .paylink__top b { display: block; font-size: 13px; }
+  .paylink__top span { font-size: 11px; color: var(--c-muted); }
+  .paylink__btn { display: flex; justify-content: center; align-items: center; gap: 6px; background: var(--c-wave); color: var(--c-wave-ink); font-weight: 800; font-size: 13px; padding: 9px 0; }
+  .paylink__btn .ic { width: 15px; height: 15px; }
+  .url { color: var(--c-blue); text-decoration: underline; font-size: 12px; }
+
+  .wa-input { flex: none; display: flex; align-items: center; gap: var(--s-2); padding: 6px var(--s-2) var(--s-6); background: var(--c-wa-bg); }
+  .wa-field { flex: 1; height: 46px; border-radius: var(--r-pill); background: var(--c-surface); display: flex; align-items: center; gap: var(--s-3); padding: 0 var(--s-4); color: var(--c-subtle); font-size: var(--fs-md); }
+  .wa-field .grow { flex: 1; }
+  .wa-mic { width: 48px; height: 48px; border-radius: var(--r-pill); background: var(--c-wa-header); color: var(--c-surface); display: grid; place-items: center; flex: none; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C14">
+    <div class="wa-top">
+      <div class="statusbar"><span>19:41</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+      <div class="wa-header">
+        <i data-lucide="arrow-left" class="ic"></i>
+        <span class="wa-av" aria-hidden="true">B</span>
+        <div class="wa-id"><b>Le Baobab · Commandes</b><span>compte pro · assistant Dabali</span></div>
+        <div class="wa-tools"><i data-lucide="phone" class="ic"></i><i data-lucide="ellipsis-vertical" class="ic"></i></div>
+      </div>
+    </div>
+
+    <div class="wa-body">
+      <span class="wa-day">Aujourd'hui</span>
+      <span class="wa-sys"><i data-lucide="sparkles" class="ic"></i>Assistant automatique · écris « Fanta » pour une vraie personne</span>
+
+      <div class="bubble bubble--me bubble--wide">
+        <div class="voice">
+          <span class="voice__play"><i data-lucide="play" class="ic"></i></span>
+          <span class="wave" aria-hidden="true"><i class="on" style="height:8px"></i><i class="on" style="height:14px"></i><i class="on" style="height:20px"></i><i class="on" style="height:12px"></i><i class="on" style="height:24px"></i><i class="on" style="height:16px"></i><i style="height:10px"></i><i style="height:22px"></i><i style="height:18px"></i><i style="height:8px"></i><i style="height:14px"></i><i style="height:24px"></i><i style="height:12px"></i><i style="height:6px"></i><i style="height:16px"></i><i style="height:20px"></i><i style="height:10px"></i><i style="height:14px"></i><i style="height:8px"></i><i style="height:12px"></i><i style="height:18px"></i><i style="height:6px"></i><i style="height:10px"></i><i style="height:14px"></i></span>
+          <time>0:09</time>
+        </div>
+        <div class="transcript">
+          <span class="t-eyebrow"><i data-lucide="audio-lines" class="ic"></i>Transcription</span>
+          « Bonsoir, mettez-moi deux garbas avec beaucoup de piment et un gnamakoudji, je passe récupérer à 20h. »
+        </div>
+        <div class="meta">19:40 <i data-lucide="check-check" class="ic"></i></div>
+      </div>
+
+      <div class="bubble bubble--wide">
+        <b>C'est noté, Yannick !</b> Voici ta commande :
+        <div class="recap">
+          <div class="row"><span><i data-lucide="wheat" class="ic"></i>2 × Garba</span><span class="t-num">2 000 F</span></div>
+          <div class="note">piment ++</div>
+          <div class="row"><span><i data-lucide="cup-soda" class="ic"></i>1 × Gnamakoudji 50 cl</span><span class="t-num">500 F</span></div>
+          <div class="row tot"><span>Total</span><span class="t-num">2 500 F</span></div>
+        </div>
+        <div class="when"><i data-lucide="store" class="ic"></i><span>À emporter · retrait à <b>20h00</b></span></div>
+        <div class="row" style="margin-top:2px"><span>On confirme ?</span><span class="meta">19:40</span></div>
+      </div>
+
+      <div class="bubble bubble--me">Oui c'est bon<div class="meta">19:41 <i data-lucide="check-check" class="ic"></i></div></div>
+
+      <div class="bubble bubble--wide">
+        Super ! Paie ici et ta commande part en cuisine. Prête vers 19:58.
+        <div class="paylink">
+          <div class="paylink__top"><span class="pastille" aria-hidden="true"></span><span><b>Le Baobab · 2 500 F</b><span>Paiement Wave · commande #W-0218</span></span></div>
+          <div class="paylink__btn"><i data-lucide="lock" class="ic"></i>Payer 2 500 F avec Wave</div>
+        </div>
+        <div class="row" style="margin-top:4px"><span class="url">dabali.ci/p/baobab-7Q2</span><span class="meta">19:41</span></div>
+      </div>
+    </div>
+
+    <div class="wa-input">
+      <div class="wa-field"><i data-lucide="smile" class="ic"></i><span class="grow">Message</span><i data-lucide="paperclip" class="ic"></i><i data-lucide="camera" class="ic"></i></div>
+      <span class="wa-mic" aria-label="Envoyer une note vocale"><i data-lucide="mic" class="ic"></i></span>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

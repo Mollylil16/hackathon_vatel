@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C10 · Paiement réussi</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .hero { display: grid; justify-items: center; text-align: center; gap: var(--s-2); padding: var(--s-5) var(--s-4) var(--s-5); }
+  .hero__ic { width: 64px; height: 64px; border-radius: var(--r-pill); background: var(--c-surface); color: var(--c-green); display: grid; place-items: center; box-shadow: var(--sh-2); }
+  .hero__ic .ic { width: 36px; height: 36px; stroke-width: 2.6; }
+  .hero .t-h1 { color: var(--c-surface); }
+  .hero p { font-size: var(--fs-sm); opacity: .92; }
+
+  .mini { --z: 8px; width: 100%; font-size: 13px; padding: 18px 16px; line-height: 1.35; }
+  .mini .rname { font-weight: 700; letter-spacing: .14em; font-size: 15px; }
+  .mini .ln { display: grid; grid-template-columns: 18px 1fr auto; gap: 6px; align-items: center; }
+  .mini .tot { font-size: 16px; font-weight: 700; }
+  .mini .paid { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; }
+  .mini .ic { width: 14px; height: 14px; }
+
+  .points { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--s-3); padding: var(--s-3); border-radius: var(--r-md); background: var(--c-accent-soft); text-decoration: none; color: var(--c-ink); min-height: var(--tap); }
+  .points__ic { width: 40px; height: 40px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink); display: grid; place-items: center; }
+  .points b { font-size: var(--fs-md); display: block; }
+  .points span { font-size: var(--fs-xs); color: var(--c-accent-dark); font-weight: 600; }
+
+  .review { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: var(--s-3); padding: var(--s-3); border-radius: var(--r-md); background: var(--c-surface); box-shadow: var(--sh-1); }
+  .review__mic { width: 44px; height: 44px; border-radius: var(--r-pill); background: var(--c-ink); color: var(--c-on-dark); display: grid; place-items: center; }
+  .review b { display: block; font-size: var(--fs-sm); }
+  .review .t-caption { display: block; }
+  .bye { margin-top: auto; }
+  .acts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  .acts .btn { padding: 0 var(--s-3); font-size: var(--fs-sm); }
+  .bye { text-align: center; font-family: var(--f-display); font-weight: 700; font-size: var(--fs-lg); color: var(--c-accent-dark); }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C10">
+    <div class="card--warm" style="border-radius:0 0 var(--r-xl) var(--r-xl);flex:none">
+      <div class="statusbar"><span>21:18</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+      <div class="hero">
+        <span class="hero__ic"><i data-lucide="circle-check" class="ic"></i></span>
+        <h1 class="t-h1">Merci Yannick,<br>c'est payé !</h1>
+        <p>3 000 F payés avec Wave · 21:18 · Table 7</p>
+      </div>
+    </div>
+
+    <div class="content" style="padding-top:var(--s-4)">
+      <div class="receipt mini" aria-label="Ticket numérique de ta part">
+        <div class="c"><div class="rname">LE BAOBAB</div>TICKET N° 000487 · TABLE 7</div>
+        <div class="sep"></div>
+        <div class="ln"><i data-lucide="banana" class="ic"></i><span>1 ALLOCO POULET</span><span>2 500</span></div>
+        <div class="ln"><i data-lucide="cup-soda" class="ic"></i><span>1 BISSAP 50CL</span><span>500</span></div>
+        <div class="dbl"></div>
+        <div class="r tot"><span>TA PART</span><span>3 000 F</span></div>
+        <div class="r"><span>WAVE · 21:18</span><span class="paid">PAYE <i data-lucide="check" class="ic"></i></span></div>
+      </div>
+
+      <a href="C11-fidelite.html" data-link="C11" class="points">
+        <span class="points__ic"><i data-lucide="star" class="ic"></i></span>
+        <span><b>+30 points fidélité</b><span>Tu as maintenant 2 080 points</span></span>
+        <span class="btn btn--sm btn--ghost" style="padding:0">Ma fidélité <i data-lucide="chevron-right" class="ic ic--sm"></i></span>
+      </a>
+
+      <div class="stack">
+        <a href="../tickets/T01-ticket-client.html" data-link="T01" class="btn btn--dark btn--block"><i data-lucide="receipt" class="ic"></i>Voir le ticket complet</a>
+        <a href="C15-whatsapp-recu.html" data-link="C15" class="btn btn--secondary btn--block"><i data-lucide="message-circle" class="ic"></i>Recevoir sur WhatsApp</a>
+      </div>
+
+      <div class="review">
+        <span class="review__mic" aria-hidden="true"><i data-lucide="mic" class="ic"></i></span>
+        <span><b>Ça t'a plu ?</b><span class="t-caption">Laisse un avis vocal à Tantie Awa, 10 secondes suffisent.</span></span>
+        <span class="btn btn--sm btn--secondary">Parler</span>
+      </div>
+
+      <p class="bye">Bonne digestion, à la prochaine !</p>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

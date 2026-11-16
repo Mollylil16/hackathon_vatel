@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C15 · WhatsApp, reçu</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* Simulation générique d'une messagerie : couleurs proches, aucun logo */
+  .wa-top { background: var(--c-wa-header); color: var(--c-surface); flex: none; }
+  .wa-top .statusbar { color: var(--c-surface); }
+  .wa-header { padding-top: 0; }
+  .wa-av { width: 38px; height: 38px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-surface); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; flex: none; }
+  .wa-id { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+  .wa-id b { font-size: var(--fs-md); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wa-id span { font-size: var(--fs-xs); opacity: .85; }
+  .wa-tools { display: flex; gap: var(--s-4); }
+
+  .wa-day { align-self: center; background: var(--c-surface); color: var(--c-muted); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-sm); text-transform: uppercase; letter-spacing: .04em; }
+  .wa-sys { align-self: center; max-width: 88%; text-align: center; background: var(--c-yellow-soft); color: var(--c-ink); font-size: 11px; padding: 6px 10px; border-radius: var(--r-sm); display: inline-flex; gap: 6px; align-items: center; }
+  .wa-sys .ic { width: 13px; height: 13px; color: var(--c-yellow); }
+  .bubble { line-height: 1.4; color: var(--c-ink); }
+  .bubble--wide { max-width: 88%; }
+  .meta { display: flex; justify-content: flex-end; align-items: center; gap: 3px; font-size: 10px; color: var(--c-muted); margin-top: 2px; }
+  .meta .ic { width: 14px; height: 14px; color: var(--c-blue); }
+
+  .voice { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: var(--s-2); min-width: 236px; }
+  .voice__play { width: 34px; height: 34px; border-radius: var(--r-pill); background: var(--c-wa-header); color: var(--c-surface); display: grid; place-items: center; }
+  .voice__play .ic { width: 16px; height: 16px; fill: currentColor; }
+  .wave { display: flex; align-items: center; gap: 2px; height: 26px; }
+  .wave i { display: block; width: 3px; border-radius: 2px; background: var(--c-muted); opacity: .6; }
+  .wave i.on { background: var(--c-wa-header); opacity: 1; }
+  .voice time { font-size: 11px; color: var(--c-muted); font-variant-numeric: tabular-nums; }
+  .transcript { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--c-line); font-size: 13px; }
+  .transcript .t-eyebrow { display: flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+  .transcript .t-eyebrow .ic { width: 12px; height: 12px; }
+
+  .recap { margin: 6px 0; border-radius: var(--r-sm); background: var(--c-bg); padding: 8px 10px; display: grid; gap: 4px; font-size: 13px; }
+  .recap .row { gap: var(--s-2); }
+  .recap .row span { display: inline-flex; align-items: center; gap: 6px; }
+  .recap .ic { width: 15px; height: 15px; color: var(--c-accent-dark); }
+  .recap .note { font-size: 11px; color: var(--c-accent-dark); font-weight: 700; padding-left: 21px; margin-top: -3px; }
+  .recap .tot { border-top: 1px dashed var(--c-line); padding-top: 4px; font-weight: 800; }
+  .when { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+  .when .ic { width: 15px; height: 15px; }
+
+  .quick { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 8px -10px -8px; border-top: 1px solid var(--c-line); background: var(--c-line); border-radius: 0 0 10px 10px; overflow: hidden; }
+  .quick span { background: var(--c-surface); text-align: center; padding: 9px 0; font-weight: 700; font-size: 13px; color: var(--c-wa-header); }
+
+  .paylink { margin-top: 6px; border-radius: var(--r-sm); background: var(--c-bg); overflow: hidden; }
+  .paylink__top { display: grid; grid-template-columns: 28px 1fr; gap: var(--s-2); align-items: center; padding: 8px 10px; }
+  .pastille { width: 28px; height: 28px; border-radius: var(--r-sm); background: var(--c-wave); }
+  .paylink__top b { display: block; font-size: 13px; }
+  .paylink__top span { font-size: 11px; color: var(--c-muted); }
+  .paylink__btn { display: flex; justify-content: center; align-items: center; gap: 6px; background: var(--c-wave); color: var(--c-wave-ink); font-weight: 800; font-size: 13px; padding: 9px 0; }
+  .paylink__btn .ic { width: 15px; height: 15px; }
+  .url { color: var(--c-blue); text-decoration: underline; font-size: 12px; }
+
+  .wa-input { flex: none; display: flex; align-items: center; gap: var(--s-2); padding: 6px var(--s-2) var(--s-6); background: var(--c-wa-bg); }
+  .wa-field { flex: 1; height: 46px; border-radius: var(--r-pill); background: var(--c-surface); display: flex; align-items: center; gap: var(--s-3); padding: 0 var(--s-4); color: var(--c-subtle); font-size: var(--fs-md); }
+  .wa-field .grow { flex: 1; }
+  .wa-mic { width: 48px; height: 48px; border-radius: var(--r-pill); background: var(--c-wa-header); color: var(--c-surface); display: grid; place-items: center; flex: none; }
+  .bubble--img { padding: 4px; max-width: 74%; }
+  .bubble--img .cap { padding: 6px 6px 0; font-size: 13px; }
+  .bubble--img .meta { padding-right: 6px; }
+  .mini { --z: 6px; width: 100%; font-size: 11px; line-height: 1.35; padding: 14px 12px; border-radius: 6px; }
+  .mini .rname { font-weight: 700; letter-spacing: .14em; font-size: 13px; }
+  .mini .ln { display: grid; grid-template-columns: 14px 1fr auto; gap: 5px; align-items: center; }
+  .mini .tot { font-size: 13px; font-weight: 700; }
+  .mini .paid { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; }
+  .mini .ic { width: 12px; height: 12px; }
+  .mini .sep, .mini .dbl { margin: 6px 0; }
+  .picto { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .picto > b { font-size: var(--fs-lg); color: var(--c-muted); }
+  .picto__dish { width: 34px; height: 34px; border-radius: var(--r-sm); background: var(--c-accent-soft); color: var(--c-accent-dark); display: grid; place-items: center; }
+  .picto__ok { width: 26px; height: 26px; border-radius: var(--r-pill); background: var(--c-green); color: var(--c-surface); display: grid; place-items: center; }
+  .picto__ok .ic { width: 15px; height: 15px; stroke-width: 3; }
+  .links { padding-bottom: 0; }
+  .links__list { display: grid; margin: 6px -10px 0; border-top: 1px solid var(--c-line); }
+  .links__list span { display: flex; justify-content: center; align-items: center; gap: 6px; min-height: 40px; font-weight: 700; font-size: 13px; color: var(--c-blue); }
+  .links__list span + span { border-top: 1px solid var(--c-line); }
+  .links__list .ic { width: 16px; height: 16px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C15">
+    <div class="wa-top">
+      <div class="statusbar"><span>21:19</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+      <div class="wa-header">
+        <i data-lucide="arrow-left" class="ic"></i>
+        <span class="wa-av" aria-hidden="true">B</span>
+        <div class="wa-id"><b>Le Baobab</b><span>compte professionnel</span></div>
+        <div class="wa-tools"><i data-lucide="phone" class="ic"></i><i data-lucide="ellipsis-vertical" class="ic"></i></div>
+      </div>
+    </div>
+
+    <div class="wa-body">
+      <span class="wa-day">Aujourd'hui</span>
+
+      <div class="bubble bubble--img">
+        <div class="receipt mini" aria-label="Ticket de ta part, en image">
+          <div class="c"><div class="rname">LE BAOBAB</div>TICKET N° 000487 · TABLE 7<br>21/11/2026 · 21:18</div>
+          <div class="sep"></div>
+          <div class="ln"><i data-lucide="banana" class="ic"></i><span>1 ALLOCO POULET</span><span>2 500</span></div>
+          <div class="ln"><i data-lucide="cup-soda" class="ic"></i><span>1 BISSAP 50CL</span><span>500</span></div>
+          <div class="dbl"></div>
+          <div class="r tot"><span>TA PART</span><span>3 000 F</span></div>
+          <div class="r"><span>WAVE · 21:18</span><span class="paid">PAYE <i data-lucide="check" class="ic"></i></span></div>
+          <div class="r"><span>FIDELITE</span><span>+30 PTS</span></div>
+        </div>
+        <div class="cap">Ton ticket, Yannick. Merci et à bientôt au Baobab !</div>
+        <div class="meta">21:18</div>
+      </div>
+
+      <div class="bubble bubble--wide">
+        <div class="voice">
+          <span class="voice__play"><i data-lucide="play" class="ic"></i></span>
+          <span class="wave" aria-hidden="true"><i style="height:10px"></i><i style="height:18px"></i><i style="height:12px"></i><i style="height:24px"></i><i style="height:16px"></i><i style="height:8px"></i><i style="height:20px"></i><i style="height:14px"></i><i style="height:22px"></i><i style="height:10px"></i><i style="height:6px"></i><i style="height:16px"></i><i style="height:24px"></i><i style="height:12px"></i><i style="height:18px"></i><i style="height:8px"></i><i style="height:14px"></i><i style="height:20px"></i><i style="height:10px"></i><i style="height:6px"></i><i style="height:12px"></i><i style="height:16px"></i><i style="height:8px"></i><i style="height:12px"></i></span>
+          <time>0:12</time>
+        </div>
+        <div class="transcript">
+          <span class="t-eyebrow"><i data-lucide="volume-2" class="ic"></i>Reçu audio en dioula · ce qu'il dit</span>
+          « Merci Yannick. Tu as payé trois mille francs avec Wave. Tu gagnes 30 points. »
+        </div>
+        <div class="meta">21:18</div>
+      </div>
+
+      <div class="bubble picto" aria-label="Résumé en images : alloco et bissap égalent 2 000 plus 1 000 francs, payé">
+        <span class="picto__dish"><i data-lucide="banana" class="ic"></i></span><b>+</b><span class="picto__dish"><i data-lucide="cup-soda" class="ic"></i></span><b>=</b>
+        <span class="money"><span class="bill bill--2000">2000</span><span class="bill bill--1000">1000</span></span>
+        <span class="picto__ok"><i data-lucide="check" class="ic"></i></span>
+        <div class="meta" style="flex-basis:100%">21:18</div>
+      </div>
+
+      <div class="bubble bubble--wide links">
+        Ton avis aide Tantie Awa à faire encore mieux.
+        <div class="meta">21:19</div>
+        <div class="links__list">
+          <span><i data-lucide="mic" class="ic"></i>Avis vocal (10 s)</span>
+          <span><i data-lucide="file-text" class="ic"></i>Facture PDF</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="wa-input">
+      <div class="wa-field"><i data-lucide="smile" class="ic"></i><span class="grow">Message</span><i data-lucide="paperclip" class="ic"></i><i data-lucide="camera" class="ic"></i></div>
+      <span class="wa-mic" aria-label="Envoyer une note vocale"><i data-lucide="mic" class="ic"></i></span>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dabali · Design system</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  /* Styles propres à la page de référence (var(--…) uniquement) */
+  .ds { width: var(--tablet-w); height: auto; background: var(--c-surface); padding: var(--s-9) 56px 64px; gap: 56px; }
+  .ds-head { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: var(--s-6); padding-bottom: var(--s-7); border-bottom: 1px solid var(--c-line); }
+  .ds-head h1 { font-family: var(--f-display); font-weight: 800; font-size: 64px; line-height: 1; letter-spacing: -.02em; margin-top: var(--s-4); }
+  .ds-head p { color: var(--c-muted); font-size: var(--fs-lg); max-width: 720px; margin-top: var(--s-3); line-height: var(--lh-normal); }
+  .ds-meta { display: grid; gap: var(--s-2); justify-items: end; }
+
+  .sec { display: grid; gap: var(--s-6); }
+  .sec__h { display: flex; align-items: baseline; gap: var(--s-4); }
+  .sec__n { font-family: var(--f-mono); font-size: var(--fs-sm); color: var(--c-accent-dark); font-weight: 600; }
+  .sec__h h2 { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-3xl); line-height: 1; }
+  .sec__h p { color: var(--c-muted); font-size: var(--fs-md); margin-left: auto; max-width: 520px; text-align: right; }
+  .sub { font-weight: 700; font-size: var(--fs-lg); display: flex; align-items: center; gap: var(--s-2); }
+  .sub small { font-family: var(--f-mono); font-size: var(--fs-xs); color: var(--c-muted); font-weight: 400; }
+  .code { font-family: var(--f-mono); font-size: var(--fs-xs); color: var(--c-muted); }
+  .note { font-size: var(--fs-sm); color: var(--c-muted); line-height: var(--lh-normal); }
+  .board { background: var(--c-bg); border-radius: var(--r-lg); padding: var(--s-6); display: grid; gap: var(--s-5); }
+  .g2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-5); }
+  .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); }
+  .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-5); }
+  .spec { display: grid; gap: var(--s-2); align-content: start; }
+  .line { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+
+  /* Principes */
+  .pr { background: var(--c-bg); border-radius: var(--r-lg); padding: var(--s-5); display: grid; gap: var(--s-3); align-content: start; }
+  .pr__ic { width: 48px; height: 48px; border-radius: var(--r-md); background: var(--c-accent); color: var(--c-accent-ink); display: grid; place-items: center; }
+  .pr h3 { font-family: var(--f-display); font-weight: 700; font-size: var(--fs-xl); }
+  .pr p { font-size: var(--fs-sm); color: var(--c-muted); line-height: var(--lh-normal); }
+  .say { display: grid; gap: var(--s-2); }
+  .say div { background: var(--c-surface); border-radius: var(--r-md); padding: var(--s-2) var(--s-3); font-size: var(--fs-sm); box-shadow: var(--sh-1); }
+  .say div b { display: block; font-size: var(--fs-2xs); letter-spacing: .08em; text-transform: uppercase; color: var(--c-muted); margin-bottom: 2px; }
+
+  /* Logo */
+  .logo-card { border-radius: var(--r-lg); padding: var(--s-7) var(--s-5) var(--s-4); display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: center; gap: var(--s-5); min-height: 200px; }
+  .logo-card--light { background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-line); }
+  .logo-card--dark { background: var(--c-ink); }
+  .logo-card--soft { background: var(--c-accent-soft); }
+  .logo-card .code { justify-self: start; }
+  .logo-card--dark .code { color: var(--c-on-dark-muted); }
+  .clear { position: relative; padding: 16px; outline: 1.5px dashed var(--c-accent); outline-offset: 0; background: repeating-linear-gradient(45deg, var(--c-accent-soft) 0 6px, transparent 6px 12px); }
+  .clear img { display: block; background: var(--c-surface); }
+  .clear__x { position: absolute; top: -22px; left: 0; width: 16px; text-align: center; font-family: var(--f-mono); font-size: var(--fs-xs); color: var(--c-accent-dark); }
+  .sizes { display: flex; align-items: end; gap: var(--s-5); }
+  .sizes span { display: grid; justify-items: center; gap: var(--s-1); }
+
+  /* Couleurs */
+  .sw-group { display: grid; gap: var(--s-3); }
+  .sw-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--s-3); }
+  .sw { border-radius: var(--r-md); overflow: hidden; box-shadow: inset 0 0 0 1px var(--c-line); background: var(--c-surface); }
+  .sw__c { height: 72px; box-shadow: inset 0 0 0 1px var(--c-line); border-radius: var(--r-md) var(--r-md) 0 0; }
+  .sw__t { padding: var(--s-2) var(--s-3); display: grid; gap: 2px; }
+  .sw__t b { font-family: var(--f-mono); font-size: var(--fs-xs); font-weight: 600; }
+  .sw__t span { font-family: var(--f-mono); font-size: var(--fs-xs); color: var(--c-muted); text-transform: uppercase; }
+  .sw__t em { font-style: normal; font-size: var(--fs-2xs); color: var(--c-muted); line-height: 1.3; }
+
+  /* Typo */
+  .fam { background: var(--c-bg); border-radius: var(--r-lg); padding: var(--s-5); display: grid; gap: var(--s-2); }
+  .fam__sample { font-size: 40px; line-height: 1.1; }
+  .scale { display: grid; border-top: 1px solid var(--c-line); }
+  .scale__r { display: grid; grid-template-columns: 120px 64px 1fr 360px; gap: var(--s-4); align-items: baseline; padding: var(--s-3) 0; border-bottom: 1px solid var(--c-line); }
+  .scale__r .ex { font-weight: 700; line-height: var(--lh-tight); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Espacements, rayons, ombres */
+  .space { display: grid; grid-template-columns: 64px 48px 1fr; gap: var(--s-3); align-items: center; }
+  .space i { display: block; height: 16px; background: var(--c-accent); border-radius: 2px; }
+  .radius { display: grid; justify-items: center; gap: var(--s-2); }
+  .radius i { display: block; width: 88px; height: 88px; background: var(--c-accent-soft); box-shadow: inset 0 0 0 2px var(--c-accent); }
+  .shadow { background: var(--c-surface); border-radius: var(--r-lg); height: 120px; display: grid; place-items: center; text-align: center; }
+
+  /* Icônes */
+  .icons { display: grid; grid-template-columns: repeat(8, 1fr); gap: var(--s-2); }
+  .icon { background: var(--c-bg); border-radius: var(--r-md); padding: var(--s-3) var(--s-2); display: grid; justify-items: center; gap: var(--s-2); }
+  .icon .ic { width: 28px; height: 28px; }
+  .icon span { font-family: var(--f-mono); font-size: var(--fs-2xs); color: var(--c-muted); text-align: center; word-break: break-all; }
+
+  /* Démos de composants */
+  .demo { display: grid; gap: var(--s-2); align-content: start; }
+  .demo > .code { order: 2; }
+  .phone-strip { width: var(--phone-w); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-1); background: var(--c-bg); }
+  .secret-k { width: 96px; height: 96px; border-radius: var(--r-xl); display: grid; place-items: center; background: color-mix(in srgb, var(--tc) 16%, var(--c-surface)); color: var(--tc); border: 4px solid transparent; position: relative; }
+  .secret-k .ic { width: 48px; height: 48px; }
+  .secret-k--on { border-color: var(--c-accent); background: var(--c-accent-soft); }
+  .secret-k b { position: absolute; top: 4px; left: 4px; width: 26px; height: 26px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink); display: grid; place-items: center; font-size: var(--fs-sm); }
+  .dark-board { background: var(--c-ink); border-radius: var(--r-lg); padding: var(--s-6); display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); }
+  .ticket-k .timer { font-family: var(--f-mono); font-weight: 600; }
+  .ticket-k ul { margin: 0; padding-left: 18px; font-size: var(--fs-md); line-height: 1.5; }
+  .ticket-k .src { font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .ticket-k .note-k { align-self: flex-start; display: inline-block; background: var(--c-yellow-soft); color: var(--c-yellow); font-weight: 800; font-size: var(--fs-xs); padding: 2px 8px; border-radius: var(--r-xs); }
+  .wa { width: var(--phone-w); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-1); display: flex; flex-direction: column; }
+  .wa .wa-body { min-height: 230px; }
+  .wa-voice { display: flex; align-items: center; gap: var(--s-2); }
+  .wa-voice i.b { display: inline-block; width: 3px; border-radius: 2px; background: var(--c-wa-header); }
+  .receipt-wrap { display: grid; justify-items: center; background: var(--c-bg); border-radius: var(--r-lg); padding: var(--s-6); }
+  .receipt .big { font-size: 22px; font-weight: 700; }
+  .receipt .money .bill { background: var(--c-paper); color: var(--c-paper-ink); box-shadow: inset 0 0 0 1.5px var(--c-paper-ink); font-family: var(--f-receipt); }
+  .receipt .money .coin { background: var(--c-paper); color: var(--c-paper-ink); box-shadow: inset 0 0 0 1.5px var(--c-paper-ink); }
+  .kpi--demo { width: 260px; }
+  .dont { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+  .dont > div { border-radius: var(--r-md); padding: var(--s-3); display: grid; gap: var(--s-2); background: var(--c-surface); }
+  .dont .lbl { font-size: var(--fs-2xs); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+  .dot-only { width: 14px; height: 14px; border-radius: var(--r-pill); background: var(--c-green); display: inline-block; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame ds" data-screen="DS">
+
+    <!-- ===================== EN-TÊTE ===================== -->
+    <header class="ds-head">
+      <div>
+        <img src="logo/dabali-logo.svg" alt="Dabali" style="height: 48px; width: auto">
+        <h1>Design system</h1>
+        <p>Les briques communes de toutes les maquettes Dabali : client au maquis, cuisine, patronne sur téléphone et back-office. Source unique : <span class="t-mono">tokens.css</span> puis <span class="t-mono">components.css</span>. Aucune couleur en dur dans un écran.</p>
+      </div>
+      <div class="ds-meta">
+        <span class="chip"><i data-lucide="sparkles" class="ic"></i>Version 1 · maquettes Figma</span>
+        <span class="chip chip--neutral">Hackathon Restauration Vatel × Epitech · Abidjan</span>
+        <span class="code">Téléphone 390 × 844 · Tablette 1280 × 800 · Ticket 384</span>
+      </div>
+    </header>
+
+    <!-- ===================== 01 PRINCIPES ===================== -->
+    <section class="sec">
+      <div class="sec__h"><span class="sec__n">01</span><h2>Principes</h2><p>Quatre règles qui tranchent quand on hésite.</p></div>
+      <div class="g4">
+        <div class="pr">
+          <span class="pr__ic"><i data-lucide="heart" class="ic"></i></span>
+          <h3>Accueil chaleureux</h3>
+          <p>On reçoit comme à la maison : prénom, plat préféré, petit mot vocal de la patronne. Le dégradé terre cuite (<span class="t-mono">.card--warm</span>) est réservé à ces moments d'accueil.</p>
+        </div>
+        <div class="pr">
+          <span class="pr__ic"><i data-lucide="images" class="ic"></i></span>
+          <h3>Sans lecture</h3>
+          <p>Tout écran clé peut se comprendre sans lire : images de plats, haut-parleur sur chaque élément, prix en billets, code secret en images. Cibles de 64 px minimum dans ce mode.</p>
+        </div>
+        <div class="pr">
+          <span class="pr__ic"><i data-lucide="shield-check" class="ic"></i></span>
+          <h3>Jamais la couleur seule</h3>
+          <p>Un état a toujours une icône ou un libellé en plus de sa couleur. Les couleurs sémantiques servent aux états, jamais à décorer.</p>
+          <div class="dont">
+            <div><span class="lbl" style="color: var(--c-red)"><i data-lucide="x" class="ic ic--sm"></i>Non</span><span class="dot-only" aria-label="pastille verte seule"></span></div>
+            <div><span class="lbl" style="color: var(--c-green)"><i data-lucide="check" class="ic ic--sm"></i>Oui</span><span class="chip chip--green"><i data-lucide="check" class="ic"></i>Payé</span></div>
+          </div>
+        </div>
+        <div class="pr">
+          <span class="pr__ic"><i data-lucide="message-circle" class="ic"></i></span>
+          <h3>Ton maison</h3>
+          <p>On tutoie au maquis. Simple, chaleureux, sans jargon. Une erreur rassure et dit quoi faire.</p>
+          <div class="say">
+            <div><b>Accueil</b>« Akwaba ! C'est ta première fois chez nous ? »</div>
+            <div><b>Paiement</b>« Tu paies à la fin, comme d'habitude. »</div>
+            <div><b>Erreur</b>« Le réseau fait des siennes. On garde ta commande et on réessaie tout seul. »</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 LOGO ===================== -->
+    <section class="sec">
+      <div class="sec__h"><span class="sec__n">02</span><h2>Logo</h2><p>Un bol fumant (la calebasse) dans un carré arrondi orange, et le logotype « dabali » suivi d'un point orange.</p></div>
+      <div class="g3">
+        <div class="logo-card logo-card--light">
+          <img src="logo/dabali-logo.svg" alt="Dabali, version claire" style="width: 220px; height: auto">
+          <span class="code">logo/dabali-logo.svg · sur fond clair</span>
+        </div>
+        <div class="logo-card logo-card--dark">
+          <svg width="220" height="64" viewBox="0 0 220 64" role="img" aria-label="Dabali, version sombre">
+            <rect x="0" y="0" width="64" height="64" rx="16" style="fill: var(--c-accent)"/>
+            <path d="M12 32 H52 A20 20 0 0 1 12 32 Z" style="fill: var(--c-surface)"/>
+            <rect x="22" y="50" width="20" height="4" rx="2" style="fill: var(--c-surface)"/>
+            <path d="M24 26 c-3 -4 3 -6 0 -11 M32 26 c-3 -4 3 -6 0 -11 M40 26 c-3 -4 3 -6 0 -11" style="stroke: var(--c-surface)" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <text x="78" y="44" font-family="Bricolage Grotesque, Segoe UI, sans-serif" font-weight="800" font-size="38" letter-spacing="-0.5" style="fill: var(--c-on-dark)">dabali</text>
+            <circle cx="203" cy="40" r="4.5" style="fill: var(--c-accent)"/>
+          </svg>
+          <span class="code">sur fond sombre · logotype en --c-on-dark</span>
+        </div>
+        <div class="logo-card logo-card--soft">
+          <div class="sizes">
+            <span><img src="logo/dabali-mark.svg" alt="Marque seule, 64 px" style="width: 64px"><span class="code">64</span></span>
+            <span><img src="logo/dabali-mark.svg" alt="Marque seule, 40 px" style="width: 40px"><span class="code">40</span></span>
+            <span><img src="logo/dabali-mark.svg" alt="Marque seule, 24 px" style="width: 24px"><span class="code">24 min.</span></span>
+          </div>
+          <span class="code">logo/dabali-mark.svg · marque seule</span>
+        </div>
+      </div>
+      <div class="board" style="grid-template-columns: auto 1fr; align-items: center; gap: var(--s-8)">
+        <div class="clear" style="margin-top: 22px"><span class="clear__x">x</span><img src="logo/dabali-logo.svg" alt="Zone de protection du logo" style="width: 220px"></div>
+        <div class="spec">
+          <span class="sub">Zone de protection</span>
+          <p class="note">Garder un espace vide égal à <b>x = ¼ de la hauteur de la marque</b> (16 px pour un logo de 64 px de haut) tout autour. Ne pas déformer, ne pas recolorer la marque, ne pas poser le logo sur une photo chargée. Taille minimale : 24 px pour la marque, 96 px de large pour le logo complet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 03 COULEURS ===================== -->
+    <section class="sec">
+      <div class="sec__h"><span class="sec__n">03</span><h2>Couleurs</h2><p>Neutres à biais bleu nuit, un seul orange de marque. Les couleurs sémantiques ne servent qu'aux états.</p></div>
+      <div id="swatches" class="stack" style="gap: var(--s-6)"></div>
+    </section>
+
+    <!-- ===================== 04 TYPOGRAPHIE ===================== -->
+    <section class="sec">
+      <div class="sec__h"><span class="sec__n">04</span><h2>Typographie</h2><p>Quatre familles, chacune avec un rôle. Les chiffres sont toujours tabulaires (<span class="t-mono">.t-num</span>).</p></div>
+      <div class="g4">
+        <div class="fam"><span class="t-eyebrow">--f-display</span><span class="fam__sample" style="font-family: var(--f-display); font-weight: 800">Akwaba 486 500</span><span class="sub">Bricolage Grotesque</span><span class="note">Titres, gros montants, numéros de table. 500 · 700 · 800.</span></div>
+        <div class="fam"><span class="t-eyebrow">--f-body</span><span class="fam__sample" style="font-family: var(--f-body); font-weight: 600">Alloco poulet</span><span class="sub">Figtree</span><span class="note">Toute l'interface : textes, boutons, listes. 400 à 800.</span></div>
+        <div class="fam"><span class="t-eyebrow">--f-mono</span><span class="fam__sample" style="font-family: var(--f-mono); font-size: 34px">7F3A-91C2</span><span class="sub">JetBrains Mono</span><span class="note">Codes, minuteurs de cuisine, heures dans les historiques.</span></div>
+        <div class="fam"><span class="t-eyebrow">--f-receipt</span><span class="fam__sample" style="font-family: var(--f-receipt); font-weight: 700; font-size: 34px">TOTAL TTC</span><span class="sub">Courier Prime</span><span class="note">Tickets thermiques uniquement (client, cuisine, rapport Z).</span></div>
+      </div>
+      <div class="scale" id="scale"></div>
+    </section>
+
+    <!-- ===================== 05 ESPACEMENTS, RAYONS, OMBRES ===================== -->
+    <section class="sec">
+      <div class="sec__h"><span class="sec__n">05</span><h2>Espacements, rayons, ombres</h2><p>Base 4 px. Cible tactile 48 px, 64 px en mode sans lecture.</p></div>
+      <div class="g3">
+        <div class="board" style="gap: var(--s-3)" id="spaces"><span class="sub">Espacements</span></div>
+        <div class="board">
+          <span class="sub">Rayons</span>
+          <div class="g3" id="radii" style="gap: var(--s-4)"></div>
+        </div>
+        <div class="board">
+          <span class="sub">Ombres</span>
+          <div class="shadow" style="box-shadow: var(--sh-1)"><div><b class="t-mono">--sh-1</b><div class="note">Cartes, boutons ronds</div></div></div>
+          <div class="shadow" style="box-shadow: var(--sh-2)"><div><b class="t-mono">--sh-2</b><div class="note">Carte d'accueil, élément sélectionné</div></div></div>
+          <div class="shadow" style="box-shadow: var(--sh-3)"><div><b class="t-mono">--sh-3</b><div class="note">Feuille, fenêtre au-dessus</div></div></div>
+        </div>
+      </div>
+      <div class="board" style="grid-template-columns: auto auto 1fr; align-items: center; gap: var(--s-7)">
+        <div class="demo"><span class="btn btn--primary" style="width: 48px; padding: 0"><i data-lucide="plus" class="ic"></i></span><span class="code">--tap · 48 px</span></div>
+        <div class="demo"><span class="btn btn--primary btn--xl" style="width: 64px; padding: 0"><i data-lucide="volume-2" class="ic ic--lg"></i></span><span class="code">--tap-xl · 64 px</span></div>
+        <p class="note">Formats Figma : <span class="t-mono">--phone-w × --phone-h</span> = 390 × 844, <span class="t-mono">--tablet-w × --tablet-h</span> = 1280 × 800, <span class="t-mono">--ticket-w</span> = 384 (58 mm à 203 dpi).</p>
+      </div>
+    </section>
+
+    <!-- ===================== 06 ICÔNES ===================== -->
+    <section class="sec">
+      <div class="sec__h"><span class="sec__n">06</span><h2>Icônes</h2><p>Lucide 0.460.0 uniquement, trait 2 px. Aucun emoji, nulle part. Tailles : 16 · 20 · 28 · 44.</p></div>
+      <div id="icons" class="stack" style="gap: var(--s-5)"></div>
+    </section>
+
+    <!-- ===================== 07 COMPOSANTS ===================== -->
+    <section class="sec">
+      <div class="sec__h"><span class="sec__n">07</span><h2>Composants</h2><p>Classes de <span class="t-mono">components.css</span>, avec leurs variantes.</p></div>
+
+      <!-- Boutons -->
+      <div class="board">
+        <span class="sub">Boutons <small>.btn</small></span>
+        <div class="line">
+          <div class="demo"><a class="btn btn--primary" href="#"><i data-lucide="utensils" class="ic"></i>Voir le menu</a><span class="code">--primary</span></div>
+          <div class="demo"><a class="btn btn--dark" href="#">Envoyer en cuisine</a><span class="code">--dark</span></div>
+          <div class="demo"><a class="btn btn--secondary" href="#"><i data-lucide="phone" class="ic"></i>Appeler Fanta</a><span class="code">--secondary</span></div>
+          <div class="demo"><a class="btn btn--ghost" href="#">Plus tard</a><span class="code">--ghost</span></div>
+          <div class="demo"><a class="btn btn--success" href="#"><i data-lucide="check" class="ic"></i>C'est bon</a><span class="code">--success</span></div>
+          <div class="demo"><a class="btn btn--danger" href="#"><i data-lucide="x" class="ic"></i>Changer</a><span class="code">--danger</span></div>
+          <div class="demo"><a class="btn btn--wave" href="#">Payer avec Wave</a><span class="code">--wave</span></div>
+        </div>
+        <div class="line" style="align-items: end">
+          <div class="demo"><a class="btn btn--primary btn--sm" href="#">Publier</a><span class="code">--sm · 36</span></div>
+          <div class="demo"><a class="btn btn--primary" href="#">Réserver</a><span class="code">défaut · 48</span></div>
+          <div class="demo"><a class="btn btn--primary btn--lg" href="#">Payer ma part</a><span class="code">--lg · 56</span></div>
+          <div class="demo"><a class="btn btn--primary btn--xl" href="#"><i data-lucide="mic" class="ic ic--lg"></i>Parler</a><span class="code">--xl · 64 (sans lecture)</span></div>
+          <div class="demo" style="width: 358px"><a class="btn btn--primary btn--lg btn--block btn--split" href="#"><span>Voir ma commande · 3</span><span>12 500 F</span></a><span class="code">--block --split (barre d'action)</span></div>
+          <div class="demo"><span class="iconbtn"><i data-lucide="arrow-left" class="ic"></i></span><span class="code">.iconbtn · 40</span></div>
+        </div>
+      </div>
+
+      <!-- Chips + avatars + progression -->
+      <div class="g3">
+        <div class="board">
+          <span class="sub">Puces <small>.chip</small></span>
+          <div class="chips">
+            <span class="chip"><i data-lucide="flame" class="ic"></i>Plat du jour</span>
+            <span class="chip chip--neutral">Sur place</span>
+            <span class="chip chip--dark"><i data-lucide="tv" class="ic"></i>Match 20h30</span>
+            <span class="chip chip--green"><i data-lucide="check" class="ic"></i>Payé</span>
+            <span class="chip chip--yellow"><i data-lucide="hourglass" class="ic"></i>En cours</span>
+            <span class="chip chip--red"><i data-lucide="triangle-alert" class="ic"></i>Retard +8 min</span>
+          </div>
+          <span class="code">défaut · --neutral · --dark · --green · --yellow · --red</span>
+        </div>
+        <div class="board">
+          <span class="sub">Avatars <small>.avatar</small></span>
+          <div class="line">
+            <span class="avatar">YA</span><span class="avatar avatar--green">KO</span><span class="avatar avatar--grey">MA</span><span class="avatar avatar--dark">F</span><span class="avatar avatar--sm">AÏ</span>
+          </div>
+          <span class="code">défaut · --green · --grey · --dark · --sm (32)</span>
+        </div>
+        <div class="board">
+          <span class="sub">Progression <small>.progress</small></span>
+          <div class="stack"><div class="row"><span class="t-small">Cotisation</span><b class="t-num">15 000 / 24 000</b></div><div class="progress"><i style="width: 62.5%"></i></div></div>
+          <div class="stack"><div class="row"><span class="t-small">Vers un poisson offert</span><b class="t-num">2 080 pts</b></div><div class="progress progress--accent"><i style="width: 69%"></i></div></div>
+          <span class="code">défaut (vert) · --accent</span>
+        </div>
+      </div>
+
+      <!-- Cartes -->
+      <div class="board">
+        <span class="sub">Cartes <small>.card</small></span>
+        <div class="g4" style="grid-template-columns: repeat(5, 1fr); gap: var(--s-4)">
+          <div class="demo"><div class="card"><span class="t-h3">Ce soir</span><span class="t-small">Kédjénou, match à 20h30</span></div><span class="code">défaut</span></div>
+          <div class="demo"><div class="card card--outline"><span class="t-h3">Sur place</span><span class="t-small">Table 7</span></div><span class="code">--outline</span></div>
+          <div class="demo"><div class="card card--accent"><span class="t-h3">Comme d'habitude ?</span><span class="t-small">Alloco + bissap</span></div><span class="code">--accent</span></div>
+          <div class="demo"><div class="card card--dark"><span class="t-h3">486 500 F</span><span class="t-small" style="color: var(--c-on-dark-muted)">Aujourd'hui</span></div><span class="code">--dark</span></div>
+          <div class="demo"><div class="card card--warm"><span class="t-h3">Bonne arrivée Yannick !</span><span class="t-small" style="color: var(--c-surface)">Content de te revoir.</span></div><span class="code">--warm (accueil)</span></div>
+        </div>
+      </div>
+
+      <!-- Plat + tuile + code secret -->
+      <div class="g3" style="grid-template-columns: 1.3fr 1fr 1fr">
+        <div class="board">
+          <span class="sub">Plat de menu <small>.dish</small></span>
+          <div style="background: var(--c-surface); border-radius: var(--r-md); padding: 0 var(--s-4)">
+            <div class="dish">
+              <span class="dish__photo"><i data-lucide="fish" class="ic ic--lg"></i></span>
+              <div><div class="dish__name">Poisson braisé + attiéké</div><div class="dish__desc">Carpe braisée, attiéké, piment frais</div></div>
+              <div><div class="dish__price">5 000 F</div><span class="addbtn"><i data-lucide="plus" class="ic"></i></span></div>
+            </div>
+            <div class="dish" style="border-bottom: 0">
+              <span class="dish__photo" style="background: linear-gradient(135deg, var(--b-coin), var(--c-accent))"><i data-lucide="banana" class="ic ic--lg"></i></span>
+              <div><div class="dish__name">Alloco poulet</div><div class="dish__desc">Banane plantain frite, poulet grillé</div></div>
+              <div><div class="dish__price">2 500 F</div><span class="qty"><span><i data-lucide="minus" class="ic ic--sm"></i></span><b>2</b><span><i data-lucide="plus" class="ic ic--sm"></i></span></span></div>
+            </div>
+          </div>
+          <span class="code">.dish__photo · .addbtn · .qty</span>
+        </div>
+        <div class="board">
+          <span class="sub">Tuile sans lecture <small>.tile</small></span>
+          <div class="g2" style="gap: var(--s-3); grid-template-columns: repeat(2, minmax(0, 1fr))">
+            <div class="tile"><span class="tile__speak"><i data-lucide="volume-2" class="ic ic--sm"></i></span><span class="photo tile__photo"><i data-lucide="soup" class="ic ic--xl"></i></span><span class="money"><span class="bill bill--2000">2000</span><span class="bill bill--1000">1000</span><span class="coin">500</span></span></div>
+            <div class="tile tile--selected"><span class="tile__count">1</span><span class="tile__speak"><i data-lucide="volume-2" class="ic ic--sm"></i></span><span class="photo tile__photo"><i data-lucide="fish" class="ic ic--xl"></i></span><span class="money"><span class="bill bill--5000">5000</span></span></div>
+          </div>
+          <span class="code">défaut · --selected + .tile__count</span>
+        </div>
+        <div class="board">
+          <span class="sub">Code secret en images</span>
+          <div class="line" style="gap: var(--s-3)">
+            <span class="secret-k secret-k--on" style="--tc: var(--b-1000)"><b>1</b><i data-lucide="apple" class="ic"></i></span>
+            <span class="secret-k" style="--tc: var(--b-2000)"><i data-lucide="fish" class="ic"></i></span>
+            <span class="secret-k" style="--tc: var(--c-yellow)"><i data-lucide="sun" class="ic"></i></span>
+          </div>
+          <span class="note">Local aux écrans M01 : tuile 96 à 110 px, sélection = bordure orange + numéro d'ordre.</span>
+        </div>
+      </div>
+
+      <!-- Argent -->
+      <div class="board">
+        <span class="sub">Billets et pièces FCFA <small>.money · .bill · .coin</small></span>
+        <div class="g3" style="align-items: start">
+          <div class="demo"><span class="money"><span class="bill bill--10000">10000</span><span class="bill bill--5000">5000</span><span class="bill bill--2000">2000</span><span class="bill bill--1000">1000</span><span class="coin">500</span></span><span class="code">--10000 · --5000 · --2000 · --1000 · .coin</span></div>
+          <div class="demo"><span class="money money--lg"><span class="bill bill--10000">10000</span><span class="bill bill--10000">10000</span><span class="bill bill--2000">2000</span><span class="bill bill--2000">2000</span></span><span class="code">.money--lg · 24 000 F = 2 × 10 000 + 2 × 2 000</span></div>
+          <p class="note">Toujours la décomposition exacte du montant. Couleurs stylisées : ce n'est pas une reproduction des billets réels.</p>
+        </div>
+      </div>
+
+      <!-- Champs, segmenté, tabbar -->
+      <div class="g3">
+        <div class="board">
+          <span class="sub">Champ <small>.field</small></span>
+          <div class="field"><i data-lucide="message-square-text" class="ic"></i>Une note pour la cuisine ?</div>
+          <div class="field field--focus"><i data-lucide="message-square-text" class="ic"></i>piment ++</div>
+          <span class="code">défaut · --focus</span>
+        </div>
+        <div class="board">
+          <span class="sub">Segmenté <small>.seg</small></span>
+          <span class="seg" style="justify-self: start"><span>Semaine</span><span>Mois</span><span class="on">Année</span></span>
+          <span class="seg" style="justify-self: start"><span class="on">Parts égales</span><span>Chacun ses plats</span></span>
+          <span class="code">.on = option active</span>
+        </div>
+        <div class="board">
+          <span class="sub">Barre de navigation <small>.tabbar</small></span>
+          <div class="phone-strip" style="width: 100%">
+            <nav class="tabbar">
+              <a href="#"><i data-lucide="house" class="ic"></i>Accueil</a>
+              <a href="#"><i data-lucide="utensils" class="ic"></i>Menu</a>
+              <a href="#" class="on"><i data-lucide="gift" class="ic"></i>Fidélité</a>
+              <a href="#"><i data-lucide="leaf" class="ic"></i>Dernière louche</a>
+            </nav>
+          </div>
+          <span class="code">.on = onglet actif (couleur + position)</span>
+        </div>
+      </div>
+
+      <!-- Back-office -->
+      <div class="board">
+        <span class="sub">Back-office <small>.kpi · .panel · .table</small></span>
+        <div style="display: grid; grid-template-columns: 260px 1fr; gap: var(--s-5); align-items: start">
+          <div class="stack" style="gap: var(--s-3)">
+            <div class="kpi"><span class="kpi__label">CA du jour</span><span class="kpi__value">486 500 F</span><span class="kpi__delta up"><i data-lucide="trending-up" class="ic ic--sm"></i> +12 % vs samedi dernier</span></div>
+            <div class="kpi"><span class="kpi__label">Gaspillage</span><span class="kpi__value">3,1 kg</span><span class="kpi__delta down"><i data-lucide="trending-up" class="ic ic--sm"></i> +0,4 kg</span></div>
+          </div>
+          <div class="panel">
+            <span class="panel__title"><i data-lucide="receipt" class="ic"></i>Tickets du jour</span>
+            <table class="table">
+              <thead><tr><th>N°</th><th>Heure</th><th>Table / canal</th><th>Moyen</th><th style="text-align: right">Montant</th><th>Statut</th></tr></thead>
+              <tbody>
+                <tr><td class="t-mono">000487</td><td>21:18</td><td>Table 7</td><td>Wave · OM</td><td style="text-align: right"><b>24 000 F</b></td><td><span class="chip chip--green"><i data-lucide="check" class="ic"></i>Payé</span></td></tr>
+                <tr><td class="t-mono">000476</td><td>20:55</td><td>Table 4</td><td>Espèces</td><td style="text-align: right"><b>6 500 F</b></td><td><span class="chip chip--yellow"><i data-lucide="hourglass" class="ic"></i>Annulation demandée</span></td></tr>
+                <tr><td class="t-mono">000431</td><td>13:20</td><td>WhatsApp</td><td>Wave</td><td style="text-align: right"><b>−6 500 F</b></td><td><span class="chip chip--red"><i data-lucide="x" class="ic"></i>Annulé · validé</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuisine -->
+      <div class="stack" style="gap: var(--s-3)">
+        <span class="sub">Ticket cuisine <small>.ticket-k · --warn · --late</small></span>
+        <div class="dark-board">
+          <div class="ticket-k"><div class="row"><b class="t-h3">Table 7</b><span class="timer">01:48</span></div><span class="src">Salle · QR</span><ul><li>2 × Poisson braisé</li><li>3 × Bissap</li></ul><span class="chip chip--green" style="align-self: flex-start"><i data-lucide="check" class="ic"></i>Dans les temps</span><span class="btn btn--primary btn--lg btn--block">Démarrer</span></div>
+          <div class="ticket-k ticket-k--warn"><div class="row"><b class="t-h3">Retrait 20h</b><span class="timer">09:12</span></div><span class="src">WhatsApp vocal · payé Wave</span><ul><li>2 × Garba</li><li>1 × Gnamakoudji</li></ul><span class="note-k">PIMENT ++</span><span class="chip chip--yellow" style="align-self: flex-start"><i data-lucide="clock" class="ic"></i>Bientôt en retard</span><span class="btn btn--lg btn--block" style="background: var(--c-ink-3); color: var(--c-on-dark)">Prêt</span></div>
+          <div class="ticket-k ticket-k--late"><div class="row"><b class="t-h3">Table 3</b><span class="timer">18:40</span></div><span class="src">Salle · QR</span><ul><li>1 × Kédjénou de poulet</li><li>1 × Alloco poulet</li></ul><span class="chip chip--red" style="align-self: flex-start"><i data-lucide="triangle-alert" class="ic"></i>En retard</span><span class="btn btn--success btn--lg btn--block"><i data-lucide="check" class="ic"></i>Prêt</span></div>
+        </div>
+        <span class="note">La bordure haute donne l'urgence, mais le libellé et l'icône la disent aussi.</span>
+      </div>
+
+      <!-- WhatsApp + ticket thermique -->
+      <div class="g2" style="align-items: start">
+        <div class="stack" style="gap: var(--s-3)">
+          <span class="sub">Bulles WhatsApp <small>.wa-header · .wa-body · .bubble</small></span>
+          <div class="wa">
+            <div class="wa-header" style="padding-top: var(--s-3)"><span class="avatar avatar--sm" style="background: var(--c-surface)"><img src="logo/dabali-mark.svg" alt="" style="width: 32px; border-radius: 50%"></span><div class="stack" style="gap: 0"><b>Le Baobab · Commandes</b><span class="t-caption" style="color: var(--c-wa-bubble-me)">en ligne</span></div></div>
+            <div class="wa-body">
+              <div class="bubble bubble--me"><span class="wa-voice"><i data-lucide="play" class="ic ic--sm"></i><i class="b" style="height:8px"></i><i class="b" style="height:14px"></i><i class="b" style="height:10px"></i><i class="b" style="height:16px"></i><i class="b" style="height:7px"></i><i class="b" style="height:12px"></i><span class="t-caption">0:09</span></span></div>
+              <div class="bubble bubble--me">« Deux garbas piment ++ et un gnamakoudji, je passe à 20h. »</div>
+              <div class="bubble"><b>C'est noté !</b><br>2 × Garba (piment ++)<br>1 × Gnamakoudji<br>Total : <b>2 500 F</b> · retrait 20h00</div>
+            </div>
+          </div>
+        </div>
+        <div class="stack" style="gap: var(--s-3)">
+          <span class="sub">Ticket thermique <small>.receipt</small></span>
+          <div class="receipt-wrap">
+            <div class="receipt">
+              <div class="c"><b>LE BAOBAB</b><br>Maquis grillades · Angré 8e tr.</div>
+              <div class="sep"></div>
+              <div class="r"><span>N° 000487</span><span>21/11/2026 21:18</span></div>
+              <div class="sep"></div>
+              <div class="r"><span><i data-lucide="fish" class="ic"></i> POISSON BRAISÉ</span><span>10 000</span></div>
+              <div class="r" style="padding-left: 22px"><span>2 x 5 000</span></div>
+              <div class="r"><span><i data-lucide="cup-soda" class="ic"></i> BISSAP 50CL</span><span>1 500</span></div>
+              <div class="r" style="padding-left: 22px"><span>3 x 500</span></div>
+              <div class="dbl"></div>
+              <div class="r big"><span>TOTAL TTC</span><span>24 000</span></div>
+              <div class="c" style="margin-top: 6px"><span class="money"><span class="bill bill--10000">10000</span><span class="bill bill--10000">10000</span><span class="bill bill--2000">2000</span><span class="bill bill--2000">2000</span></span></div>
+              <div class="inv">MERCI, À BIENTÔT</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>
+  (function () {
+    var root = getComputedStyle(document.documentElement);
+    function v(name) { return root.getPropertyValue(name).trim(); }
+
+    /* ---- Couleurs ---- */
+    var groups = [
+      ["Neutres", [
+        ["--c-ink", "Texte principal, fonds sombres"], ["--c-ink-2", "Surfaces sombres (cuisine)"], ["--c-ink-3", "Boutons sur fond sombre"],
+        ["--c-muted", "Texte secondaire"], ["--c-subtle", "Texte tertiaire, indices"], ["--c-line", "Séparateurs, bordures"],
+        ["--c-bg", "Fond d'application"], ["--c-surface", "Cartes, feuilles"], ["--c-on-dark", "Texte sur fond sombre"], ["--c-on-dark-muted", "Texte secondaire sur sombre"]]],
+      ["Marque", [
+        ["--c-accent", "Orange Dabali : action principale"], ["--c-accent-dark", "Pressé, texte orange sur clair"], ["--c-accent-soft", "Fond de sélection"],
+        ["--c-accent-ink", "Texte sur orange"], ["--c-warm", "Terre cuite (dégradé d'accueil)"]]],
+      ["Sémantique · états uniquement", [
+        ["--c-green", "OK, payé, prêt"], ["--c-green-soft", "Fond OK"], ["--c-yellow", "En cours, attention"], ["--c-yellow-soft", "Fond attention"],
+        ["--c-red", "Retard, erreur, chute"], ["--c-red-soft", "Fond erreur"], ["--c-blue", "Série de comparaison (N-1)"]]],
+      ["Tiers · rendu fidèle aux services", [
+        ["--c-wave", "Wave"], ["--c-wave-ink", "Texte sur Wave"], ["--c-orange-money", "Orange Money"],
+        ["--c-wa-header", "En-tête WhatsApp"], ["--c-wa-bubble-me", "Bulle envoyée"], ["--c-wa-bg", "Fond de conversation"],
+        ["--c-paper", "Papier thermique"], ["--c-paper-ink", "Encre thermique"]]],
+      ["Billets FCFA · stylisés", [
+        ["--b-10000", "Billet 10 000"], ["--b-5000", "Billet 5 000"], ["--b-2000", "Billet 2 000"], ["--b-1000", "Billet 1 000"],
+        ["--b-coin", "Pièce 500"], ["--b-coin-ink", "Texte sur pièce"]]]
+    ];
+    var sw = document.getElementById("swatches");
+    groups.forEach(function (g) {
+      var html = '<div class="sw-group"><span class="sub">' + g[0] + '</span><div class="sw-grid">';
+      g[1].forEach(function (t) {
+        html += '<div class="sw"><div class="sw__c" style="background: var(' + t[0] + ')"></div><div class="sw__t"><b>' + t[0] + '</b><span>' + v(t[0]) + '</span><em>' + t[1] + '</em></div></div>';
+      });
+      sw.insertAdjacentHTML("beforeend", html + "</div></div>");
+    });
+
+    /* ---- Échelle typographique ---- */
+    var scale = [
+      ["--fs-4xl", "Montant héros, numéro de table", "486 500 F", "display"],
+      ["--fs-3xl", "Titres de section, montants", "Ton menu est prêt !", "display"],
+      ["--fs-2xl", "Titre d'écran (.t-h1), valeur KPI", "Bonjour Tantie Awa", "display"],
+      ["--fs-xl", "Sous-titre (.t-h2), bouton XL", "C'est parti en cuisine !", "display"],
+      ["--fs-lg", "Titre de bloc (.t-h3), bouton LG", "Comme d'habitude ?", "body"],
+      ["--fs-md", "Texte courant mobile, boutons", "Tu paies à la fin, comme d'habitude.", "body"],
+      ["--fs-sm", "Texte secondaire, tableaux back-office", "Fanta t'apporte ça vers 19:58", "body"],
+      ["--fs-xs", "Légendes, puces, descriptions de plats", "Carpe braisée, attiéké, piment frais", "body"],
+      ["--fs-2xs", "Surtitres, en-têtes de tableau, KPI", "INSCRIPTION · ÉTAPE 2 SUR 3", "body"]
+    ];
+    var sc = document.getElementById("scale");
+    scale.forEach(function (s) {
+      sc.insertAdjacentHTML("beforeend", '<div class="scale__r"><span class="code">' + s[0] + '</span><span class="code">' + v(s[0]) + '</span><span class="ex" style="font-size: var(' + s[0] + '); font-family: var(--f-' + s[3] + ')' + (s[3] === "display" ? '; font-weight: 800' : '') + '">' + s[2] + '</span><span class="note">' + s[1] + '</span></div>');
+    });
+
+    /* ---- Espacements et rayons ---- */
+    var sp = document.getElementById("spaces");
+    for (var i = 1; i <= 9; i++) {
+      sp.insertAdjacentHTML("beforeend", '<div class="space"><span class="code">--s-' + i + '</span><span class="code">' + v("--s-" + i) + '</span><i style="width: var(--s-' + i + ')"></i></div>');
+    }
+    var rd = document.getElementById("radii");
+    ["--r-xs", "--r-sm", "--r-md", "--r-lg", "--r-xl", "--r-pill"].forEach(function (r) {
+      rd.insertAdjacentHTML("beforeend", '<div class="radius"><i style="border-radius: var(' + r + ')"></i><span class="code">' + r + ' · ' + v(r) + '</span></div>');
+    });
+
+    /* ---- Icônes utilisées dans les maquettes ---- */
+    var icons = [
+      ["Plats et boissons", ["fish", "drumstick", "soup", "banana", "wheat", "cup-soda", "utensils", "chef-hat", "flame", "leaf", "cake", "package"]],
+      ["Voix, langue et sans lecture", ["volume-2", "mic", "audio-lines", "ear", "languages", "images", "play", "rotate-ccw"]],
+      ["Code secret en images", ["apple", "fish", "sun", "moon", "star", "heart", "flower", "tree-palm", "car"]],
+      ["Argent et caisse", ["banknote", "hand-coins", "coins", "wallet", "receipt", "receipt-text", "printer", "qr-code", "scan-line", "smartphone"]],
+      ["États et confiance", ["check", "circle-check", "circle-check-big", "x", "triangle-alert", "hourglass", "clock", "timer", "shield-check", "shield-alert", "user-x", "history", "wifi-off", "lock"]],
+      ["Navigation et actions", ["arrow-left", "arrow-right", "chevron-right", "plus", "minus", "pencil", "trash-2", "share-2", "search", "camera", "door-open", "house", "layout-dashboard", "download", "settings"]],
+      ["Service, livraison et relation", ["phone", "message-circle", "message-square-text", "bell-ring", "map-pin", "navigation", "bike", "truck", "shopping-bag", "shopping-basket", "gift", "sparkles", "tv", "users", "megaphone"]],
+      ["Pilotage", ["trending-up", "trending-down", "chart-line", "chart-column", "calendar-days", "file-text", "store"]],
+      ["Barre d'état", ["signal", "wifi", "battery-full"]]
+    ];
+    var ic = document.getElementById("icons");
+    icons.forEach(function (g) {
+      var html = '<div class="stack" style="gap: var(--s-3)"><span class="sub">' + g[0] + '</span><div class="icons">';
+      g[1].forEach(function (n) { html += '<div class="icon"><i data-lucide="' + n + '" class="ic"></i><span>' + n + '</span></div>'; });
+      ic.insertAdjacentHTML("beforeend", html + "</div></div>");
+    });
+
+    lucide.createIcons();
+  })();
+  </script>
+</body></html>

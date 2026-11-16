@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M01 · Connexion en images</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .hello { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-2) var(--s-4) 0; }
+  .hello__avatar { width: 64px; height: 64px; font-size: var(--fs-xl); }
+  .hello__text { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .hello__brand { height: 24px; width: auto; display: block; }
+  .speak { width: 64px; height: 64px; border-radius: var(--r-pill); background: var(--c-surface); box-shadow: var(--sh-1);
+    display: grid; place-items: center; color: var(--c-accent-dark); flex: none; text-decoration: none; }
+  .speak .ic { width: 28px; height: 28px; }
+
+  .prompt { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3);
+    background: var(--c-surface); border-radius: var(--r-lg); padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4); box-shadow: var(--sh-1); }
+  .prompt__label { display: flex; align-items: center; gap: var(--s-3); font-weight: 700; font-size: var(--fs-lg); }
+  .prompt__label .ic { width: 32px; height: 32px; color: var(--c-accent); }
+
+  .dots { display: flex; justify-content: center; gap: var(--s-4); }
+  .dot { width: 28px; height: 28px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 3px var(--c-line); display: grid; place-items: center; }
+  .dot--on { background: var(--c-accent); box-shadow: none; color: var(--c-accent-ink); }
+  .dot .ic { width: 16px; height: 16px; stroke-width: 3; }
+
+  .secret { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-3); }
+  .key { --tc: var(--c-accent); aspect-ratio: 1; border-radius: var(--r-xl); position: relative; display: grid; place-items: center;
+    background: color-mix(in srgb, var(--tc) 16%, var(--c-surface)); color: var(--tc); box-shadow: var(--sh-1); border: 4px solid transparent; }
+  .key .ic { width: 56px; height: 56px; stroke-width: 1.8; }
+  .key--on { border-color: var(--c-accent); background: var(--c-accent-soft); box-shadow: var(--sh-2); }
+  .key__n { position: absolute; top: 6px; left: 6px; width: 28px; height: 28px; border-radius: var(--r-pill);
+    background: var(--c-accent); color: var(--c-accent-ink); font-weight: 800; font-size: var(--fs-md); display: grid; place-items: center; }
+
+  .ok { display: flex; align-items: center; justify-content: center; gap: var(--s-2); font-weight: 700; color: var(--c-green); font-size: var(--fs-md); }
+  .ok .ic { width: 22px; height: 22px; }
+  .btn--xl .ic { width: 28px; height: 28px; }
+  .forgot { text-align: center; font-size: var(--fs-sm); color: var(--c-muted); display: flex; align-items: center; justify-content: center; gap: var(--s-2); min-height: var(--tap); }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="M01">
+    <div class="statusbar"><span>08:30</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <div class="hello">
+      <span class="avatar hello__avatar" aria-hidden="true">AK</span>
+      <div class="hello__text">
+        <img class="hello__brand" src="../../logo/dabali-logo.svg" alt="Dabali">
+        <h1 class="t-h1">Bonjour Tantie Awa</h1>
+      </div>
+      <a class="speak" href="#" aria-label="Écouter le message"><i data-lucide="volume-2" class="ic"></i></a>
+    </div>
+
+    <div class="content" style="padding-top: var(--s-4); gap: var(--s-4);">
+      <div class="prompt">
+        <span class="prompt__label"><i data-lucide="lock" class="ic"></i>Touche tes 3 images</span>
+        <span class="dots" aria-label="3 images sur 3 choisies">
+          <span class="dot dot--on"><i data-lucide="check" class="ic"></i></span>
+          <span class="dot dot--on"><i data-lucide="check" class="ic"></i></span>
+          <span class="dot dot--on"><i data-lucide="check" class="ic"></i></span>
+        </span>
+      </div>
+
+      <div class="secret" role="group" aria-label="Code secret en images">
+        <span class="key" style="--tc: var(--b-10000)" aria-label="Lune"><i data-lucide="moon" class="ic"></i></span>
+        <span class="key key--on" style="--tc: var(--b-1000)" aria-label="Mangue, image 1"><span class="key__n">1</span><i data-lucide="apple" class="ic"></i></span>
+        <span class="key" style="--tc: var(--c-accent)" aria-label="Étoile"><i data-lucide="star" class="ic"></i></span>
+        <span class="key key--on" style="--tc: var(--b-2000)" aria-label="Poisson, image 2"><span class="key__n">2</span><i data-lucide="fish" class="ic"></i></span>
+        <span class="key" style="--tc: var(--c-warm)" aria-label="Cœur"><i data-lucide="heart" class="ic"></i></span>
+        <span class="key" style="--tc: var(--c-ink-3)" aria-label="Voiture"><i data-lucide="car" class="ic"></i></span>
+        <span class="key" style="--tc: var(--c-green)" aria-label="Palmier"><i data-lucide="tree-palm" class="ic"></i></span>
+        <span class="key key--on" style="--tc: var(--c-yellow)" aria-label="Soleil, image 3"><span class="key__n">3</span><i data-lucide="sun" class="ic"></i></span>
+        <span class="key" style="--tc: var(--b-5000)" aria-label="Fleur"><i data-lucide="flower" class="ic"></i></span>
+      </div>
+
+      <div class="ok"><i data-lucide="circle-check-big" class="ic"></i>C'est bien toi</div>
+
+      <div class="stack" style="gap: var(--s-3)">
+        <a class="btn btn--primary btn--xl btn--block btn--split" href="../patron/P01-aujourdhui.html" data-link="P01">
+          <span style="display:flex;align-items:center;gap:var(--s-3)"><i data-lucide="door-open" class="ic"></i>Entrer</span><i data-lucide="arrow-right" class="ic"></i>
+        </a>
+        <a class="btn btn--secondary btn--xl btn--block" href="#"><i data-lucide="mic" class="ic"></i>Me connecter à la voix</a>
+      </div>
+      <a class="forgot" href="#" style="text-decoration:none"><i data-lucide="phone" class="ic ic--sm"></i>Images oubliées ? On t'appelle</a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

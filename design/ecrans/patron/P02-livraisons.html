@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P02 · Livraisons</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* --- Communs back-office patron (local, var() uniquement) --- */
+  .sidenav { gap: 2px; }
+  .sidenav__brand { display: flex; align-items: center; gap: var(--s-3); }
+  .sidenav__brand img { width: 36px; height: 36px; display: block; }
+  .sidenav__brand b { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-xl); color: var(--c-surface); letter-spacing: -.01em; line-height: 1; }
+  .sidenav__brand small { display: block; font-size: var(--fs-xs); color: var(--c-on-dark-muted); font-weight: 600; margin-top: 3px; }
+  .sidenav a { min-height: 44px; }
+  .sidenav__label { padding: var(--s-2) var(--s-3) var(--s-1); font-size: var(--fs-2xs); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-on-dark-muted); }
+  .sidenav__foot { margin-top: auto; display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3); border-top: 1px solid var(--c-ink-3); }
+  .sidenav__foot b { display: block; font-size: var(--fs-sm); color: var(--c-surface); }
+  .sidenav__foot small { font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-3); font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync .ic { width: 14px; height: 14px; color: var(--c-green-soft); }
+  .bo__main { gap: var(--s-4); }
+  .bo__head h1 { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-2xl); line-height: var(--lh-tight); }
+  .bo__head p { font-size: var(--fs-sm); color: var(--c-muted); margin-top: 2px; }
+  .bo__actions { display: flex; align-items: center; gap: var(--s-2); }
+  .kpi { padding: var(--s-3) var(--s-4); }
+  .kpi__delta { display: inline-flex; align-items: center; gap: 4px; }
+  .kpi__delta .ic { width: 14px; height: 14px; }
+  .kpi__delta--muted { color: var(--c-muted); }
+  .panel__title .ic { color: var(--c-accent-dark); }
+  .panel__title .chip { margin-left: auto; }
+  .panel__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+  .note { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-xs); color: var(--c-muted); }
+  .note .ic { width: 14px; height: 14px; }
+  .table td { padding: 9px 8px; }
+  .table tr:last-child td { border-bottom: 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .table th.num { text-align: right; }
+  .strong { font-weight: 700; }
+  .muted { color: var(--c-muted); }
+  a.btn { color: inherit; }
+  a.btn--primary { color: var(--c-accent-ink); }
+  a.btn--dark { color: var(--c-on-dark); }
+
+  /* --- Propre à P02 --- */
+.p02 { display: grid; grid-template-columns: 1.12fr 1fr; gap: var(--s-4); flex: 1; min-height: 0; }
+  .map { border-radius: var(--r-sm); overflow: hidden; box-shadow: inset 0 0 0 1px var(--c-line); }
+  .map svg { display: block; width: 100%; height: auto; }
+  .map .q { font-family: var(--f-body); font-size: 11px; font-weight: 700; fill: var(--c-muted); letter-spacing: .04em; text-transform: uppercase; }
+  .map .tag { font-family: var(--f-body); font-size: 11px; font-weight: 700; fill: var(--c-ink); }
+  .map .tagsub { font-family: var(--f-body); font-size: 10px; fill: var(--c-muted); }
+  .map .mk { font-family: var(--f-body); font-size: 11px; font-weight: 800; fill: var(--c-surface); }
+  .legend { display: flex; flex-wrap: wrap; gap: var(--s-4); font-size: var(--fs-xs); color: var(--c-muted); font-weight: 600; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dl { display: grid; grid-template-columns: 1fr auto; gap: 2px var(--s-3); padding: 10px 0; border-bottom: 1px solid var(--c-line); align-items: center; }
+  .dl:last-child { border-bottom: 0; }
+  .dl b { font-size: var(--fs-sm); }
+  .dl small { grid-column: 1 / -1; font-size: var(--fs-xs); color: var(--c-muted); display: flex; align-items: center; gap: 6px; }
+  .dl small .ic { width: 13px; height: 13px; }
+  .dl .chip { justify-self: end; }
+  .who { display: flex; align-items: center; gap: var(--s-2); font-weight: 700; }
+  .stat { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+  .stat .ic { width: 16px; height: 16px; }
+  .stat--route { color: var(--c-accent-dark); } .stat--late { color: var(--c-red); } .stat--back { color: var(--c-green); }
+  .avatar--route { background: var(--c-accent); } .avatar--late { background: var(--c-red); }
+  .left { display: flex; flex-direction: column; gap: var(--s-4); min-height: 0; }
+  .table td { padding: 6px 8px; white-space: nowrap; }
+  .table th { white-space: nowrap; }
+  .p02 .panel { overflow: hidden; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--tablet" data-screen="P02">
+  <div class="bo">
+    <nav class="sidenav" aria-label="Navigation du back-office">
+      <div class="sidenav__brand"><img src="../../logo/dabali-mark.svg" alt=""><div><b>dabali</b><small>Le Baobab · Angré</small></div></div>
+      <a href="P01-aujourdhui.html" data-link="P01"><i data-lucide="house" class="ic"></i>Aujourd'hui</a>
+      <a href="P02-livraisons.html" data-link="P02" class="on" aria-current="page"><i data-lucide="bike" class="ic"></i>Livraisons</a>
+      <a href="P03-statistiques.html" data-link="P03"><i data-lucide="chart-line" class="ic"></i>Statistiques</a>
+      <a href="P04-clients-campagnes.html" data-link="P04"><i data-lucide="megaphone" class="ic"></i>Clients &amp; campagnes</a>
+      <a href="P06-caisse.html" data-link="P06"><i data-lucide="wallet" class="ic"></i>Caisse</a>
+      <a href="P05-recherche-documents.html" data-link="P05"><i data-lucide="search" class="ic"></i>Recherche &amp; documents</a>
+      <div class="sidenav__sync"><i data-lucide="refresh-cw" class="ic"></i>Synchronisé il y a 1 min</div>
+      <div class="sidenav__foot"><span class="avatar">TA</span><div><b>Tantie Awa</b><small>Patronne</small></div></div>
+    </nav>
+    <section class="bo__main">
+<header class="bo__head">
+        <div><h1>Livraisons</h1><p>Samedi 21 novembre · tes livreurs et ceux de Glovo et Yango, au même endroit</p></div>
+        <div class="bo__actions">
+          <span class="chip chip--green"><i data-lucide="hand-coins" class="ic"></i>0 % de commission en direct</span>
+          <span class="btn btn--primary btn--sm"><i data-lucide="plus" class="ic ic--sm"></i>Nouvelle livraison</span>
+        </div>
+      </header>
+
+      <div class="kpis">
+        <div class="kpi"><span class="kpi__label">En cours</span><span class="kpi__value">5</span><span class="kpi__delta down"><i data-lucide="alarm-clock" class="ic"></i>1 en retard</span></div>
+        <div class="kpi"><span class="kpi__label">Livrées aujourd'hui</span><span class="kpi__value">38</span><span class="kpi__delta up"><i data-lucide="trending-up" class="ic"></i>+6 vs samedi dernier</span></div>
+        <div class="kpi"><span class="kpi__label">Temps moyen</span><span class="kpi__value">27 min</span><span class="kpi__delta up"><i data-lucide="trending-down" class="ic"></i>4 min de moins</span></div>
+        <div class="kpi"><span class="kpi__label">Espèces à récupérer</span><span class="kpi__value">46 500 F</span><span class="kpi__delta kpi__delta--muted"><i data-lucide="banknote" class="ic"></i>chez 2 livreurs</span></div>
+      </div>
+
+      <div class="p02">
+        <div class="left">
+        <div class="panel">
+          <div class="panel__head"><span class="panel__title"><i data-lucide="map-pin" class="ic"></i>Carte en direct · Cocody</span><span class="chip chip--neutral"><i data-lucide="refresh-cw" class="ic"></i>il y a 20 s</span></div>
+          <div class="map">
+            <svg viewBox="0 0 560 262" role="img" aria-label="Carte de Cocody : le restaurant à Angré, Moussa en route vers Riviera 2, Serge en retard vers la Palmeraie, Ibrahim qui revient au restaurant.">
+              <rect width="560" height="262" fill="var(--c-bg)"/>
+              <path d="M0,206 C90,186 170,222 270,206 S450,184 560,198 L560,262 L0,262Z" fill="var(--c-blue)" opacity=".2"/>
+              <text class="q" x="300" y="244" text-anchor="middle" style="fill:var(--c-blue)">Lagune Ébrié</text>
+              <g stroke="var(--c-surface)" fill="none" stroke-linecap="round">
+                <path d="M0,52 L560,74 M80,0 L150,196 M262,0 L292,190 M440,0 L410,192 M0,138 L560,124" stroke-width="11"/>
+                <path d="M0,98 L560,100 M196,0 L220,194 M350,0 L356,190 M500,0 L520,186" stroke-width="5"/>
+              </g>
+              <g class="q"><text x="96" y="30">Angré</text><text x="300" y="30">II Plateaux</text><text x="456" y="114">Riviera 2</text><text x="360" y="176">Palmeraie</text><text x="20" y="186">Plateau →</text></g>
+              <!-- trajet de Moussa -->
+              <path d="M150,82 L280,72 L290,112 L452,112" stroke="var(--c-accent)" stroke-width="2.5" stroke-dasharray="6 4" fill="none"/>
+              <!-- restaurant -->
+              <rect x="136" y="68" width="28" height="28" rx="8" fill="var(--c-ink)" stroke="var(--c-surface)" stroke-width="2"/>
+              <text class="mk" x="150" y="86" text-anchor="middle">B</text>
+              <text class="tag" x="150" y="112" text-anchor="middle">Le Baobab</text>
+              <!-- clients -->
+              <rect x="446" y="132" width="12" height="12" rx="3" fill="var(--c-ink)"/><text class="tagsub" x="464" y="142">Yannick</text>
+              <rect x="400" y="150" width="12" height="12" rx="3" fill="var(--c-ink)"/><text class="tagsub" x="380" y="160" text-anchor="end">Mariam</text>
+              <!-- livreurs -->
+              <circle cx="286" cy="96" r="13" fill="var(--c-accent)" stroke="var(--c-surface)" stroke-width="2"/><text class="mk" x="286" y="100" text-anchor="middle">M</text>
+              <text class="tag" x="304" y="90">Moussa · en route</text><text class="tagsub" x="304" y="103">arrive dans 6 min</text>
+              <circle cx="372" cy="200" r="13" fill="var(--c-red)" stroke="var(--c-surface)" stroke-width="2"/><text class="mk" x="372" y="204" text-anchor="middle">S</text>
+              <text class="tag" x="390" y="200">Serge · en retard</text><text class="tagsub" x="390" y="213">+8 min, client prévenu</text>
+              <circle cx="112" cy="146" r="13" fill="var(--c-green)" stroke="var(--c-surface)" stroke-width="2"/><text class="mk" x="112" y="150" text-anchor="middle">I</text>
+              <text class="tag" x="130" y="158">Ibrahim · retour</text><text class="tagsub" x="130" y="171">au resto dans 4 min</text>
+            </svg>
+          </div>
+          <div class="legend">
+            <span><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="6" fill="var(--c-accent)"/></svg>En route</span>
+            <span><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="6" fill="var(--c-red)"/></svg>En retard</span>
+            <span><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="6" fill="var(--c-green)"/></svg>Retour au resto</span>
+            <span><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" rx="3" fill="var(--c-ink)"/></svg>Client</span>
+          </div>
+        </div>
+
+      <div class="panel">
+            <span class="panel__title"><i data-lucide="users" class="ic"></i>Mes livreurs aujourd'hui</span>
+            <table class="table">
+              <thead><tr><th>Livreur</th><th>Statut</th><th class="num">Courses</th><th class="num">Temps moy.</th><th class="num">Espèces</th><th class="num">Note</th></tr></thead>
+              <tbody>
+                <tr><td><span class="who"><span class="avatar avatar--sm avatar--route">M</span>Moussa K.</span></td><td><span class="stat stat--route"><i data-lucide="navigation" class="ic"></i>En route</span></td><td class="num">14</td><td class="num">24 min</td><td class="num strong">34 000 F</td><td class="num">4,9</td></tr>
+                <tr><td><span class="who"><span class="avatar avatar--sm avatar--late">S</span>Serge A.</span></td><td><span class="stat stat--late"><i data-lucide="alarm-clock" class="ic"></i>En retard</span></td><td class="num">11</td><td class="num">31 min</td><td class="num strong">12 500 F</td><td class="num">4,6</td></tr>
+                <tr><td><span class="who"><span class="avatar avatar--sm avatar--green">I</span>Ibrahim T.</span></td><td><span class="stat stat--back"><i data-lucide="undo-2" class="ic"></i>Retour au resto</span></td><td class="num">13</td><td class="num">26 min</td><td class="num">0 F</td><td class="num">4,8</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__head"><span class="panel__title"><i data-lucide="bike" class="ic"></i>Livraisons en cours</span><span class="chip chip--neutral">5 en cours · 2 livrées</span></div>
+          <div>
+            <div class="dl"><b>#D-0315 · Yannick · Riviera 2</b><span class="chip"><i data-lucide="navigation" class="ic"></i>En route · 6 min</span><small><i data-lucide="user" class="ic"></i>Moussa · payé Wave · code 4821</small></div>
+            <div class="dl"><b>#D-0316 · Mariam · Palmeraie</b><span class="chip chip--red"><i data-lucide="alarm-clock" class="ic"></i>Retard +8 min</span><small><i data-lucide="bell-ring" class="ic"></i>Serge · espèces 12 500 F · client prévenu automatiquement</small></div>
+            <div class="dl"><b>#D-0317 · Bureau Orange · Plateau</b><span class="chip chip--yellow"><i data-lucide="chef-hat" class="ic"></i>En cuisine</span><small><i data-lucide="sparkles" class="ic"></i>À attribuer : Ibrahim est le plus proche (retour dans 4 min)</small></div>
+            <div class="dl"><b>#G-2291 · via Glovo</b><span class="chip chip--neutral"><i data-lucide="arrow-up-right" class="ic"></i>Coursier Glovo</span><small><i data-lucide="refresh-cw" class="ic"></i>Suivi géré par Glovo, statut synchronisé</small></div>
+            <div class="dl"><b>#D-0312 · Koffi · Angré 7e</b><span class="chip chip--green"><i data-lucide="check" class="ic"></i>Livré</span><small><i data-lucide="circle-check" class="ic"></i>Code validé · photo de remise · note 5 sur 5</small></div>
+            <div class="dl"><b>#Y-0461 · via Yango</b><span class="chip chip--neutral"><i data-lucide="arrow-up-right" class="ic"></i>Coursier Yango</span><small><i data-lucide="refresh-cw" class="ic"></i>Récupérée à 22:58, statut synchronisé</small></div>
+            <div class="dl"><b>#D-0313 · Aïcha · II Plateaux</b><span class="chip chip--green"><i data-lucide="check" class="ic"></i>Livré</span><small><i data-lucide="circle-check" class="ic"></i>Ibrahim · payé Orange Money · 22 min</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

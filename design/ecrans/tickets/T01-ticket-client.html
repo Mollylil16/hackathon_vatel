@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T01 · Ticket client</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* Ticket thermique 58 mm : noir sur papier uniquement */
+  .receipt .rname { font-size: 26px; font-weight: 700; letter-spacing: .16em; line-height: 1.2; }
+  .receipt .ln { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; column-gap: 8px; align-items: start; margin: 3px 0; }
+  .receipt .ln > .ic { margin-top: 2px; }
+  .receipt .ln .sub { grid-column: 2 / 4; padding-left: 1ch; margin-top: -2px; }
+  .receipt .tot { font-size: 22px; font-weight: 700; }
+  .receipt .lbl { font-weight: 700; letter-spacing: .08em; margin-bottom: 2px; }
+  .receipt .bill { background: var(--c-paper); color: var(--c-paper-ink); box-shadow: inset 0 0 0 1.5px var(--c-paper-ink); font-family: var(--f-receipt); font-size: 12px; min-width: 50px; }
+  .receipt .coin { background: var(--c-paper); color: var(--c-paper-ink); box-shadow: inset 0 0 0 1.5px var(--c-paper-ink); }
+  .receipt .qr, .receipt .barcode { display: block; margin: 8px auto 4px; color: var(--c-paper-ink); }
+  .receipt .small { font-size: 13px; }
+  .receipt .paid { display: inline-flex; align-items: center; gap: 4px; }
+  .receipt .ok { display: inline-flex; align-items: center; gap: 3px; }
+  .receipt .ok .ic { width: 13px; height: 13px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame" style="width:384px;height:auto;background:transparent" data-screen="T01">
+    <div class="receipt">
+      <div class="c">
+        <div class="rname">LE BAOBAB</div>
+        MAQUIS · GRILLADES<br>
+        Angré 8e tranche, Cocody<br>
+        Tél : +225 07 00 00 00 00<br>
+        <span class="small">NCC : 0000000 X (exemple)</span>
+      </div>
+      <div class="inv">TICKET DE CAISSE</div>
+      <div class="r"><span>N° 000487</span><span>TABLE 7</span></div>
+      <div class="r"><span>21/11/2026 21:18</span><span>CAISSE 01</span></div>
+      <div class="r"><span>Servi par : FANTA</span><span>4 COUV.</span></div>
+      <div class="sep"></div>
+
+      <div class="ln"><i data-lucide="fish" class="ic"></i><span>POISSON BRAISE</span><span>10 000</span><span class="sub">2 x 5 000</span></div>
+      <div class="ln"><i data-lucide="drumstick" class="ic"></i><span>KEDJENOU POULET</span><span>4 500</span><span class="sub">1 x 4 500</span></div>
+      <div class="ln"><i data-lucide="banana" class="ic"></i><span>ALLOCO POULET</span><span>5 000</span><span class="sub">2 x 2 500</span></div>
+      <div class="ln"><i data-lucide="soup" class="ic"></i><span>FOUTOU SAUCE GRAINE</span><span>3 500</span><span class="sub">1 x 3 500</span></div>
+      <div class="ln"><i data-lucide="cup-soda" class="ic"></i><span>BISSAP GLACE 50CL</span><span>1 500</span><span class="sub">3 x 500</span></div>
+      <div class="ln"><i data-lucide="wheat" class="ic"></i><span>ATTIEKE SUPPL.</span><span>500</span><span class="sub">1 x 500</span></div>
+      <div class="sep"></div>
+
+      <div class="r"><span>NB ARTICLES</span><span>10</span></div>
+      <div class="r"><span>SOUS-TOTAL</span><span>25 000</span></div>
+      <div class="r"><span>REMISE FIDELITE</span><span>-1 000</span></div>
+      <div class="dbl"></div>
+      <div class="r tot"><span>TOTAL TTC</span><span>24 000 F</span></div>
+      <div class="dbl"></div>
+      <div class="r"><span>TOTAL HT</span><span>20 339</span></div>
+      <div class="r"><span>DONT TVA 18 %</span><span>3 661</span></div>
+      <div class="r" style="margin-top:8px;align-items:center"><span>EN BILLETS</span><span class="money" aria-label="10 000, 10 000, 2 000, 2 000"><span class="bill">10000</span><span class="bill">10000</span><span class="bill">2000</span><span class="bill">2000</span></span></div>
+      <div class="sep"></div>
+
+      <div class="lbl">REGLEMENT · COTISATION</div>
+      <div class="r"><span>WAVE · KOFFI</span><span>6 000</span></div>
+      <div class="r"><span>ORANGE MONEY · AICHA</span><span>9 000</span></div>
+      <div class="r"><span>WAVE · YANNICK</span><span>3 000</span></div>
+      <div class="r"><span>WAVE · MARIAM</span><span>6 000</span></div>
+      <div class="r" style="font-weight:700"><span>TOTAL REGLE</span><span>24 000</span></div>
+      <div class="r"><span>RENDU MONNAIE</span><span>0</span></div>
+      <div class="sep"></div>
+
+      <div class="c">FIDELITE : +240 PTS (4 CLIENTS)<br><span class="small">1 point pour 100 F payés</span></div>
+      <div class="sep"></div>
+
+      <svg class="qr" data-decoratif="true" viewBox="0 0 25 25" width="120" height="120" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" fill-rule="evenodd" d="M8 0h1v1h-1z M11 0h1v1h-1z M15 0h1v1h-1z M16 0h1v1h-1z M8 1h1v1h-1z M11 1h1v1h-1z M13 1h1v1h-1z M15 1h1v1h-1z M9 2h1v1h-1z M10 2h1v1h-1z M13 2h1v1h-1z M16 2h1v1h-1z M8 3h1v1h-1z M10 3h1v1h-1z M13 3h1v1h-1z M14 3h1v1h-1z M15 3h1v1h-1z M16 3h1v1h-1z M9 4h1v1h-1z M10 4h1v1h-1z M13 4h1v1h-1z M16 4h1v1h-1z M9 5h1v1h-1z M14 5h1v1h-1z M8 6h1v1h-1z M14 6h1v1h-1z M8 7h1v1h-1z M11 7h1v1h-1z M13 7h1v1h-1z M3 8h1v1h-1z M4 8h1v1h-1z M6 8h1v1h-1z M9 8h1v1h-1z M10 8h1v1h-1z M11 8h1v1h-1z M15 8h1v1h-1z M18 8h1v1h-1z M20 8h1v1h-1z M21 8h1v1h-1z M1 9h1v1h-1z M2 9h1v1h-1z M3 9h1v1h-1z M4 9h1v1h-1z M5 9h1v1h-1z M6 9h1v1h-1z M9 9h1v1h-1z M10 9h1v1h-1z M11 9h1v1h-1z M12 9h1v1h-1z M15 9h1v1h-1z M17 9h1v1h-1z M18 9h1v1h-1z M19 9h1v1h-1z M20 9h1v1h-1z M21 9h1v1h-1z M22 9h1v1h-1z M23 9h1v1h-1z M24 9h1v1h-1z M0 10h1v1h-1z M4 10h1v1h-1z M5 10h1v1h-1z M6 10h1v1h-1z M7 10h1v1h-1z M8 10h1v1h-1z M12 10h1v1h-1z M13 10h1v1h-1z M14 10h1v1h-1z M15 10h1v1h-1z M16 10h1v1h-1z M17 10h1v1h-1z M23 10h1v1h-1z M24 10h1v1h-1z M2 11h1v1h-1z M4 11h1v1h-1z M7 11h1v1h-1z M13 11h1v1h-1z M14 11h1v1h-1z M15 11h1v1h-1z M20 11h1v1h-1z M21 11h1v1h-1z M23 11h1v1h-1z M24 11h1v1h-1z M0 12h1v1h-1z M2 12h1v1h-1z M4 12h1v1h-1z M6 12h1v1h-1z M7 12h1v1h-1z M8 12h1v1h-1z M9 12h1v1h-1z M11 12h1v1h-1z M12 12h1v1h-1z M13 12h1v1h-1z M15 12h1v1h-1z M16 12h1v1h-1z M21 12h1v1h-1z M22 12h1v1h-1z M23 12h1v1h-1z M24 12h1v1h-1z M0 13h1v1h-1z M1 13h1v1h-1z M2 13h1v1h-1z M4 13h1v1h-1z M5 13h1v1h-1z M7 13h1v1h-1z M8 13h1v1h-1z M10 13h1v1h-1z M11 13h1v1h-1z M13 13h1v1h-1z M21 13h1v1h-1z M22 13h1v1h-1z M23 13h1v1h-1z M24 13h1v1h-1z M6 14h1v1h-1z M7 14h1v1h-1z M8 14h1v1h-1z M9 14h1v1h-1z M12 14h1v1h-1z M13 14h1v1h-1z M14 14h1v1h-1z M16 14h1v1h-1z M21 14h1v1h-1z M22 14h1v1h-1z M24 14h1v1h-1z M3 15h1v1h-1z M4 15h1v1h-1z M5 15h1v1h-1z M6 15h1v1h-1z M8 15h1v1h-1z M9 15h1v1h-1z M10 15h1v1h-1z M13 15h1v1h-1z M14 15h1v1h-1z M17 15h1v1h-1z M19 15h1v1h-1z M20 15h1v1h-1z M21 15h1v1h-1z M22 15h1v1h-1z M2 16h1v1h-1z M3 16h1v1h-1z M5 16h1v1h-1z M9 16h1v1h-1z M13 16h1v1h-1z M15 16h1v1h-1z M17 16h1v1h-1z M18 16h1v1h-1z M19 16h1v1h-1z M20 16h1v1h-1z M22 16h1v1h-1z M23 16h1v1h-1z M24 16h1v1h-1z M9 17h1v1h-1z M11 17h1v1h-1z M13 17h1v1h-1z M15 17h1v1h-1z M16 17h1v1h-1z M19 17h1v1h-1z M20 17h1v1h-1z M21 17h1v1h-1z M24 17h1v1h-1z M8 18h1v1h-1z M11 18h1v1h-1z M17 18h1v1h-1z M18 18h1v1h-1z M19 18h1v1h-1z M20 18h1v1h-1z M23 18h1v1h-1z M8 19h1v1h-1z M12 19h1v1h-1z M13 19h1v1h-1z M14 19h1v1h-1z M15 19h1v1h-1z M20 19h1v1h-1z M22 19h1v1h-1z M23 19h1v1h-1z M10 20h1v1h-1z M11 20h1v1h-1z M13 20h1v1h-1z M14 20h1v1h-1z M16 20h1v1h-1z M19 20h1v1h-1z M20 20h1v1h-1z M23 20h1v1h-1z M24 20h1v1h-1z M8 21h1v1h-1z M20 21h1v1h-1z M21 21h1v1h-1z M22 21h1v1h-1z M24 21h1v1h-1z M8 22h1v1h-1z M13 22h1v1h-1z M14 22h1v1h-1z M15 22h1v1h-1z M17 22h1v1h-1z M18 22h1v1h-1z M20 22h1v1h-1z M21 22h1v1h-1z M24 22h1v1h-1z M9 23h1v1h-1z M11 23h1v1h-1z M12 23h1v1h-1z M14 23h1v1h-1z M15 23h1v1h-1z M16 23h1v1h-1z M18 23h1v1h-1z M21 23h1v1h-1z M22 23h1v1h-1z M8 24h1v1h-1z M10 24h1v1h-1z M11 24h1v1h-1z M12 24h1v1h-1z M13 24h1v1h-1z M17 24h1v1h-1z M20 24h1v1h-1z M22 24h1v1h-1z M24 24h1v1h-1z M0 0h7v7h-7z M1 1v5h5v-5z M2 2h3v3h-3z M18 0h7v7h-7z M19 1v5h5v-5z M20 2h3v3h-3z M0 18h7v7h-7z M1 19v5h5v-5z M2 20h3v3h-3z"/></svg>
+      <div class="c small">Scannez : reçu numérique,<br>avis vocal, facture PDF</div>
+      <svg class="barcode" data-decoratif="true" viewBox="0 0 190 44" width="304" height="44" preserveAspectRatio="none" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M0 0h2v44h-2z M3 0h1v44h-1z M6 0h3v44h-3z M10 0h3v44h-3z M15 0h1v44h-1z M17 0h2v44h-2z M21 0h3v44h-3z M26 0h1v44h-1z M28 0h2v44h-2z M32 0h2v44h-2z M35 0h1v44h-1z M38 0h1v44h-1z M41 0h2v44h-2z M44 0h3v44h-3z M49 0h3v44h-3z M53 0h2v44h-2z M56 0h3v44h-3z M60 0h3v44h-3z M65 0h2v44h-2z M68 0h1v44h-1z M71 0h2v44h-2z M74 0h1v44h-1z M77 0h1v44h-1z M79 0h2v44h-2z M82 0h1v44h-1z M84 0h1v44h-1z M87 0h1v44h-1z M90 0h2v44h-2z M94 0h2v44h-2z M97 0h1v44h-1z M100 0h1v44h-1z M103 0h2v44h-2z M107 0h2v44h-2z M110 0h2v44h-2z M113 0h3v44h-3z M117 0h1v44h-1z M120 0h3v44h-3z M124 0h2v44h-2z M128 0h1v44h-1z M131 0h3v44h-3z M136 0h1v44h-1z M138 0h1v44h-1z M141 0h3v44h-3z M146 0h3v44h-3z M150 0h2v44h-2z M154 0h3v44h-3z M158 0h1v44h-1z M160 0h1v44h-1z M163 0h3v44h-3z M167 0h2v44h-2z M171 0h1v44h-1z M173 0h3v44h-3z M177 0h2v44h-2z M181 0h3v44h-3z M185 0h1v44h-1z M187 0h2v44h-2z"/></svg>
+      <div class="c small">0487 2111 2026 0107</div>
+      <div class="c" style="margin-top:4px">CODE CONTROLE : 7F3A-91C2</div>
+      <div class="sep"></div>
+      <div class="c"><b>*** MERCI, A BIENTOT ! ***</b><br>Akwaba au Baobab</div>
+      <div class="c small" style="margin-top:6px">Ticket édité avec Dabali</div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

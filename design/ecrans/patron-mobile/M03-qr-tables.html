@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M03 · QR des tables</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-2); }
+  .steps i { display: block; height: 6px; border-radius: var(--r-pill); background: var(--c-green); }
+
+  .done { display: flex; align-items: center; gap: var(--s-3); }
+  .done__badge { width: 56px; height: 56px; border-radius: var(--r-pill); background: var(--c-green); color: var(--c-surface); display: grid; place-items: center; flex: none; }
+  .done__badge .ic { width: 32px; height: 32px; stroke-width: 2.6; }
+
+  /* Carte imprimable (format chevalet de table) */
+  .print { background: var(--c-surface); border-radius: var(--r-lg); box-shadow: var(--sh-2); padding: var(--s-4); display: grid; grid-template-columns: 1fr 150px; gap: var(--s-4); align-items: center; position: relative; }
+  .print::before { content: ""; position: absolute; inset: 6px; border-radius: var(--r-md); border: 1.5px dashed var(--c-line); pointer-events: none; }
+  .print__side { display: grid; gap: var(--s-2); align-content: center; }
+  .print__logo { height: 28px; width: auto; }
+  .print__table { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-4xl); line-height: 1; color: var(--c-accent); }
+  .print__table small { display: block; font-size: var(--fs-sm); color: var(--c-muted); font-family: var(--f-body); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+  .print__hint { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--c-muted); font-weight: 600; }
+
+  .qrbox { position: relative; background: var(--c-surface); border-radius: var(--r-sm); }
+  svg.qr { display: block; width: 100%; height: auto; }
+  svg.qr .m { fill: var(--c-ink); }
+  .qrbox__mark { position: absolute; left: 50%; top: 50%; width: 30%; transform: translate(-50%, -50%); background: var(--c-surface); padding: 3px; border-radius: 8px; }
+  .qrbox__mark img { display: block; width: 100%; height: auto; }
+
+  .mini { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--s-2); }
+  .mini__c { background: var(--c-surface); border-radius: var(--r-sm); box-shadow: var(--sh-1); padding: 5px 5px 3px; display: grid; gap: 2px; justify-items: center; }
+  .mini__c b { font-size: var(--fs-2xs); font-weight: 800; color: var(--c-muted); }
+  .mini__c--on { box-shadow: inset 0 0 0 2px var(--c-accent); }
+  .mini__c--on b { color: var(--c-accent-dark); }
+
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+  .btn--xl .ic { width: 26px; height: 26px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="M03">
+    <div class="statusbar"><span>09:04</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <div class="appbar">
+      <span class="iconbtn"><i data-lucide="arrow-left" class="ic"></i></span>
+      <div class="appbar__title"><span class="t-eyebrow">Inscription · étape 3 sur 3</span><span class="t-small">Le Baobab · Angré</span></div>
+      <span class="iconbtn" aria-label="Écouter"><i data-lucide="volume-2" class="ic"></i></span>
+    </div>
+
+    <div class="content" style="gap: var(--s-4)">
+      <div class="steps" aria-label="Étape 3 sur 3, terminée"><i></i><i></i><i></i></div>
+
+      <div class="done">
+        <span class="done__badge"><i data-lucide="check" class="ic"></i></span>
+        <div class="stack" style="gap: 2px">
+          <h1 class="t-h1">Ton menu est prêt !</h1>
+          <span class="t-small">7 plats en ligne · 12 QR pour tes tables</span>
+        </div>
+      </div>
+
+      <div class="print" aria-label="Aperçu de la carte imprimable, table 7">
+        <div class="print__side">
+          <img class="print__logo" src="../../logo/dabali-logo.svg" alt="Dabali">
+          <span class="t-h3">Le Baobab</span>
+          <span class="print__table"><small>Table</small>7</span>
+          <span class="print__hint"><i data-lucide="scan-line" class="ic ic--sm"></i>Scanne, commande, cotise</span>
+        </div>
+        <div class="qrbox">
+          <svg class="qr" data-seed="7" viewBox="0 0 25 25" aria-hidden="true"></svg>
+          <span class="qrbox__mark"><img src="../../logo/dabali-mark.svg" alt=""></span>
+        </div>
+      </div>
+
+      <div class="stack" style="gap: var(--s-2)">
+        <div class="row"><span class="t-h3">Tables 1 à 12</span><span class="chip chip--green"><i data-lucide="check" class="ic"></i>12 prêts</span></div>
+        <div class="mini" id="mini"></div>
+      </div>
+
+      <div class="duo" style="margin-top:auto">
+        <a class="btn btn--secondary btn--xl" href="#"><i data-lucide="printer" class="ic"></i>Imprimer</a>
+        <a class="btn btn--secondary btn--xl" href="#"><i data-lucide="share-2" class="ic"></i>Partager</a>
+      </div>
+      <a class="btn btn--primary btn--xl btn--block" href="../patron/P01-aujourdhui.html" data-link="P01" style="margin-bottom: var(--s-2); font-size: var(--fs-lg)">
+        <i data-lucide="layout-dashboard" class="ic"></i>Ouvrir mon tableau de bord
+      </a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+  <script>
+  /* QR décoratifs (non scannables), dessinés en SVG */
+  (function () {
+    var NS = "http://www.w3.org/2000/svg";
+    var mini = document.getElementById("mini");
+    for (var t = 1; t <= 12; t++) {
+      mini.insertAdjacentHTML("beforeend", '<div class="mini__c' + (t === 7 ? ' mini__c--on' : '') + '"><svg class="qr" data-seed="' + t + '" viewBox="0 0 25 25" aria-hidden="true"></svg><b>T' + t + '</b></div>');
+    }
+    function rng(seed) { return function () { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }; }
+    function rect(svg, x, y, w, h) { var r = document.createElementNS(NS, "rect"); r.setAttribute("x", x); r.setAttribute("y", y); r.setAttribute("width", w); r.setAttribute("height", h); r.setAttribute("class", "m"); svg.appendChild(r); }
+    document.querySelectorAll("svg.qr").forEach(function (svg) {
+      var n = 25, r = rng(40 + Number(svg.dataset.seed) * 7);
+      for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
+        var finder = (x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9);
+        if (!finder && r() > 0.52) rect(svg, x, y, 1, 1);
+      }
+      [[0, 0], [n - 7, 0], [0, n - 7]].forEach(function (p) {
+        var f = document.createElementNS(NS, "path");
+        f.setAttribute("class", "m"); f.setAttribute("fill-rule", "evenodd");
+        var X = p[0], Y = p[1];
+        f.setAttribute("d", "M" + X + " " + Y + "h7v7h-7z M" + (X + 1) + " " + (Y + 1) + "v5h5v-5z M" + (X + 2) + " " + (Y + 2) + "h3v3h-3z");
+        svg.appendChild(f);
+      });
+    });
+  })();
+  </script>
+</body></html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C03 · Menu</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .appbar { padding-bottom: var(--s-2); }
+  .iconbtn--48 { width: 48px; height: 48px; text-decoration: none; }
+  .iconbtn--accent { background: var(--c-accent-soft); color: var(--c-accent-dark); box-shadow: inset 0 0 0 1px var(--c-accent); }
+  .cats { display: flex; gap: var(--s-2); padding: 0 var(--s-4); flex: none; overflow: hidden; }
+  .cat { height: 40px; padding: 0 var(--s-4); border-radius: var(--r-pill); display: inline-flex; align-items: center; gap: 6px;
+    font-weight: 700; font-size: var(--fs-sm); background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-line); color: var(--c-ink); white-space: nowrap; }
+  .cat--on { background: var(--c-ink); color: var(--c-on-dark); box-shadow: none; }
+  .cat .ic { width: 16px; height: 16px; }
+  .live { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-2) var(--s-3); border-radius: var(--r-md);
+    background: var(--c-green-soft); color: var(--c-green); font-size: var(--fs-sm); }
+  .live b { font-weight: 800; }
+  .live__dot { width: 10px; height: 10px; border-radius: var(--r-pill); background: var(--c-green); box-shadow: 0 0 0 4px var(--c-surface); flex: none; margin-left: 4px; }
+  .live span:last-child { margin-left: auto; color: var(--c-ink); font-size: var(--fs-xs); }
+  .content { gap: var(--s-3); padding-top: var(--s-3); }
+  .list { background: var(--c-surface); border-radius: var(--r-lg); box-shadow: var(--sh-1); padding: 0 var(--s-3); }
+  .item { display: grid; grid-template-columns: 84px 1fr; gap: var(--s-3); padding: var(--s-3) 0; border-bottom: 1px solid var(--c-line); }
+  .item:last-child { border-bottom: 0; }
+  .item .photo { width: 84px; height: 84px; flex-direction: column; gap: 2px; }
+  .item__body { display: grid; gap: 2px; align-content: start; min-width: 0; }
+  .item__name { font-weight: 700; font-size: var(--fs-md); line-height: var(--lh-tight); }
+  .item__desc { font-size: var(--fs-xs); color: var(--c-muted); line-height: var(--lh-normal); }
+  .item__foot { display: flex; align-items: center; justify-content: space-between; margin-top: var(--s-1); }
+  .item__price { font-weight: 800; font-size: var(--fs-md); font-variant-numeric: tabular-nums; }
+  .add { width: 44px; height: 44px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink); display: grid; place-items: center; }
+  .qty { padding: 3px; }
+  .qty span { width: 38px; height: 38px; }
+  .qty span.minus { background: var(--c-surface); color: var(--c-accent-dark); box-shadow: inset 0 0 0 1px var(--c-accent); }
+  .qty b { font-size: var(--fs-md); }
+  .item--sel .item__name { color: var(--c-accent-dark); }
+  .ph-fish { background: linear-gradient(135deg, var(--c-accent), var(--c-warm)); }
+  .ph-kedj { background: linear-gradient(135deg, var(--b-1000), var(--c-warm)); }
+  .ph-alloco { background: linear-gradient(135deg, var(--b-coin), var(--c-accent-dark)); }
+  .ph-foutou { background: linear-gradient(135deg, var(--b-5000), var(--c-ink-2)); }
+  .ph-bissap { background: linear-gradient(135deg, var(--c-red), var(--c-warm)); }
+  .count { min-width: 28px; height: 28px; padding: 0 8px; border-radius: var(--r-pill); background: var(--c-accent-ink); color: var(--c-accent-dark); display: inline-grid; place-items: center; font-weight: 800; font-size: var(--fs-sm); }
+  .actionbar .btn span.lbl { display: inline-flex; align-items: center; gap: var(--s-2); }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C03">
+    <div class="statusbar"><span>19:42</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <header class="appbar">
+      <div class="appbar__title">
+        <span class="t-caption">Table 7 · Le Baobab</span>
+        <h1 class="t-h2">On mange quoi ?</h1>
+      </div>
+      <a href="C04-menu-images.html" data-link="C04" class="iconbtn iconbtn--48 iconbtn--accent" aria-label="Menu en images"><i data-lucide="images" class="ic"></i></a>
+      <span class="iconbtn iconbtn--48" aria-label="Appeler Fanta"><i data-lucide="bell-ring" class="ic"></i></span>
+    </header>
+
+    <nav class="cats" aria-label="Catégories">
+      <span class="cat cat--on"><i data-lucide="flame" class="ic"></i>Populaire</span>
+      <span class="cat">Grillades</span>
+      <span class="cat">Plats en sauce</span>
+      <span class="cat">Boissons</span>
+    </nav>
+
+    <div class="content">
+      <div class="live">
+        <span class="live__dot" aria-hidden="true"></span>
+        <span><b>Prêt en 12 min</b> en ce moment</span>
+        <span>Mis à jour il y a 1 min</span>
+      </div>
+
+      <div class="list">
+        <div class="item item--sel">
+          <div class="photo ph-fish"><i data-lucide="fish" class="ic ic--lg"></i><span class="photo-label">photo du plat</span></div>
+          <div class="item__body">
+            <div class="item__name">Poisson braisé + attiéké</div>
+            <div class="item__desc">Carpe entière, piment frais, oignons</div>
+            <div class="item__foot"><span class="item__price">5 000 F</span>
+              <span class="qty"><span class="minus"><i data-lucide="minus" class="ic ic--sm"></i></span><b>2</b><span><i data-lucide="plus" class="ic ic--sm"></i></span></span></div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="photo ph-kedj"><i data-lucide="drumstick" class="ic ic--lg"></i><span class="photo-label">photo du plat</span></div>
+          <div class="item__body">
+            <div class="item__name">Kédjénou de poulet</div>
+            <div class="item__desc">Mijoté à l'étouffée, riz ou attiéké</div>
+            <div class="item__foot"><span class="item__price">4 500 F</span><span class="add" aria-label="Ajouter"><i data-lucide="plus" class="ic"></i></span></div>
+          </div>
+        </div>
+        <div class="item item--sel">
+          <div class="photo ph-alloco"><i data-lucide="banana" class="ic ic--lg"></i><span class="photo-label">photo du plat</span></div>
+          <div class="item__body">
+            <div class="item__name">Alloco poulet</div>
+            <div class="item__desc">Banane plantain frite, poulet grillé</div>
+            <div class="item__foot"><span class="item__price">2 500 F</span>
+              <span class="qty"><span class="minus"><i data-lucide="minus" class="ic ic--sm"></i></span><b>1</b><span><i data-lucide="plus" class="ic ic--sm"></i></span></span></div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="photo ph-foutou"><i data-lucide="soup" class="ic ic--lg"></i><span class="photo-label">photo du plat</span></div>
+          <div class="item__body">
+            <div class="item__name">Foutou sauce graine</div>
+            <div><span class="chip chip--yellow"><i data-lucide="hourglass" class="ic"></i>Plus que 4 portions</span></div>
+            <div class="item__foot"><span class="item__price">3 500 F</span><span class="add" aria-label="Ajouter"><i data-lucide="plus" class="ic"></i></span></div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="photo ph-bissap"><i data-lucide="cup-soda" class="ic ic--lg"></i><span class="photo-label">photo du plat</span></div>
+          <div class="item__body">
+            <div class="item__name">Bissap glacé 50 cl</div>
+            <div class="item__desc">Fait maison, bien frais</div>
+            <div class="item__foot"><span class="item__price">500 F</span><span class="add" aria-label="Ajouter"><i data-lucide="plus" class="ic"></i></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actionbar">
+      <a href="C05-panier.html" data-link="C05" class="btn btn--primary btn--lg btn--block btn--split">
+        <span class="lbl"><span class="count">3</span>Voir ma commande</span>
+        <span class="t-num">12 500 F<i data-lucide="chevron-right" class="ic" style="margin-left:4px"></i></span>
+      </a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

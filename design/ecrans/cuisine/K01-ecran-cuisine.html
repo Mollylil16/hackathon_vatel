@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K01 · Écran cuisine</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* --- Propre à K01 (var() uniquement) --- */
+  .kds-top { flex: none; height: 68px; display: flex; align-items: center; gap: var(--s-4); padding: 0 var(--s-5); background: var(--c-ink-2); border-bottom: 1px solid var(--c-ink-3); }
+  .kds-top img { width: 36px; height: 36px; }
+  .kds-top h1 { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-xl); color: var(--c-surface); }
+  .kds-top .chips { margin-left: auto; align-items: center; }
+  .kds-top .chip { height: 32px; padding: 0 12px; font-size: var(--fs-sm); }
+  .chip--offline { background: var(--c-ink-3); color: var(--c-on-dark); }
+  .clock { font-family: var(--f-mono); font-weight: 600; font-size: var(--fs-xl); color: var(--c-surface); padding-left: var(--s-3); border-left: 1px solid var(--c-ink-3); }
+  .cols { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); padding: var(--s-4) var(--s-5) 0; }
+  .col { display: flex; flex-direction: column; gap: var(--s-3); min-height: 0; overflow: hidden; position: relative; }
+  .col__head { flex: none; display: flex; align-items: center; gap: var(--s-2); font-weight: 800; font-size: var(--fs-md); color: var(--c-surface); text-transform: uppercase; letter-spacing: .06em; }
+  .col__head .ic { width: 18px; height: 18px; color: var(--c-on-dark-muted); }
+  .col__head .n { margin-left: auto; min-width: 30px; height: 26px; border-radius: var(--r-pill); background: var(--c-ink-3); color: var(--c-surface); display: grid; place-items: center; font-size: var(--fs-sm); letter-spacing: 0; }
+  .col::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 40px; background: linear-gradient(to bottom, transparent, var(--c-ink)); pointer-events: none; }
+  .ticket-k { flex: none; gap: 6px; padding: var(--s-3) var(--s-4) var(--s-4); }
+  .tk__top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-2); }
+  .tk__id { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-2xl); color: var(--c-surface); line-height: 1.1; }
+  .tk__timer { font-family: var(--f-mono); font-weight: 600; font-size: var(--fs-xl); color: var(--c-surface); display: inline-flex; align-items: center; gap: 6px; }
+  .tk__timer .ic { width: 18px; height: 18px; color: var(--c-on-dark-muted); }
+  .tk__meta { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); }
+  .src { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-sm); font-weight: 600; color: var(--c-on-dark-muted); }
+  .src .ic { width: 16px; height: 16px; }
+  .urg { height: 26px; font-size: var(--fs-xs); }
+  .lines { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 3px; }
+  .lines li { display: flex; gap: var(--s-2); font-size: var(--fs-lg); font-weight: 600; color: var(--c-on-dark); line-height: 1.3; }
+  .lines li b { min-width: 30px; font-weight: 800; color: var(--c-surface); font-variant-numeric: tabular-nums; }
+  .lines li.done { color: var(--c-on-dark-muted); text-decoration: line-through; }
+  .lines li.done b { color: var(--c-on-dark-muted); }
+  .knote { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; background: var(--c-on-dark); color: var(--c-ink); font-weight: 800; font-size: var(--fs-sm); letter-spacing: .08em; padding: 3px 10px; border-radius: var(--r-xs); text-transform: uppercase; }
+  .knote .ic { width: 15px; height: 15px; }
+  .kbtn { margin-top: 6px; min-height: 56px; border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; gap: var(--s-2); font-weight: 800; font-size: var(--fs-lg); background: var(--c-ink-3); color: var(--c-surface); }
+  .kbtn--go { background: var(--c-green); }
+  .kbtn--start { background: var(--c-accent); color: var(--c-accent-ink); }
+  .kbtn .ic { width: 22px; height: 22px; }
+  .ready { display: flex; flex-direction: column; gap: 4px; font-size: var(--fs-sm); color: var(--c-on-dark-muted); }
+  .kds-foot { flex: none; height: 44px; display: flex; align-items: center; gap: var(--s-5); padding: 0 var(--s-5); font-size: var(--fs-sm); color: var(--c-on-dark-muted); border-top: 1px solid var(--c-ink-3); }
+  .kds-foot span { display: inline-flex; align-items: center; gap: 6px; }
+  .kds-foot .ic { width: 16px; height: 16px; }
+  .kds-foot .sw { width: 14px; height: 6px; border-radius: 2px; background: var(--c-green); }
+  .kds-foot .sw--warn { background: var(--c-amber); } .kds-foot .sw--late { background: var(--c-red); }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--tablet frame--dark" data-screen="K01">
+    <header class="kds-top">
+      <img src="../../logo/dabali-mark.svg" alt="">
+      <h1>Cuisine · Le Baobab</h1>
+      <div class="chips">
+        <span class="chip chip--green"><i data-lucide="flame" class="ic"></i>8 en cours</span>
+        <span class="chip chip--red"><i data-lucide="alarm-clock" class="ic"></i>1 en retard</span>
+        <span class="chip chip--offline"><i data-lucide="wifi-off" class="ic"></i>Hors-ligne : synchronisation auto</span>
+        <span class="clock">21:12</span>
+      </div>
+    </header>
+
+    <div class="cols">
+      <!-- À FAIRE -->
+      <section class="col" aria-label="À faire">
+        <div class="col__head"><i data-lucide="inbox" class="ic"></i>À faire<span class="n">3</span></div>
+
+        <article class="ticket-k">
+          <div class="tk__top"><span class="tk__id">Table 7</span><span class="tk__timer"><i data-lucide="timer" class="ic"></i>01:48</span></div>
+          <div class="tk__meta"><span class="src"><i data-lucide="qr-code" class="ic"></i>Salle QR · Fanta</span><span class="chip chip--green urg"><i data-lucide="check" class="ic"></i>Dans les temps</span></div>
+          <ul class="lines">
+            <li><b>2 ×</b>Poisson braisé + attiéké</li>
+            <li><b>1 ×</b>Kédjénou de poulet</li>
+            <li><b>2 ×</b>Alloco poulet</li>
+            <li><b>1 ×</b>Foutou sauce graine</li>
+            <li><b>1 ×</b>Attiéké supplément</li>
+            <li><b>3 ×</b>Bissap glacé</li>
+          </ul>
+          <span class="knote"><i data-lucide="flame" class="ic"></i>Piment ++ sur le poisson</span>
+          <div class="kbtn kbtn--start"><i data-lucide="play" class="ic"></i>Démarrer</div>
+        </article>
+
+        <article class="ticket-k">
+          <div class="tk__top"><span class="tk__id">Retrait 21h30</span><span class="tk__timer"><i data-lucide="timer" class="ic"></i>03:12</span></div>
+          <div class="tk__meta"><span class="src"><i data-lucide="mic" class="ic"></i>WhatsApp vocal · payé Wave</span><span class="chip chip--green urg"><i data-lucide="check" class="ic"></i>Dans les temps</span></div>
+          <ul class="lines">
+            <li><b>2 ×</b>Garba</li>
+            <li><b>1 ×</b>Gnamakoudji</li>
+          </ul>
+          <span class="knote"><i data-lucide="flame" class="ic"></i>Piment ++</span>
+          <div class="kbtn kbtn--start"><i data-lucide="play" class="ic"></i>Démarrer</div>
+        </article>
+
+        <article class="ticket-k">
+          <div class="tk__top"><span class="tk__id">Table 11</span><span class="tk__timer"><i data-lucide="timer" class="ic"></i>00:40</span></div>
+          <div class="tk__meta"><span class="src"><i data-lucide="qr-code" class="ic"></i>Salle QR · Fanta</span><span class="chip chip--green urg"><i data-lucide="check" class="ic"></i>Dans les temps</span></div>
+          <ul class="lines"><li><b>3 ×</b>Alloco poulet</li><li><b>3 ×</b>Bissap glacé</li></ul>
+        </article>
+      </section>
+
+      <!-- EN PRÉPARATION -->
+      <section class="col" aria-label="En préparation">
+        <div class="col__head"><i data-lucide="chef-hat" class="ic"></i>En préparation<span class="n">3</span></div>
+
+        <article class="ticket-k ticket-k--late">
+          <div class="tk__top"><span class="tk__id">Table 3</span><span class="tk__timer"><i data-lucide="timer" class="ic"></i>18:40</span></div>
+          <div class="tk__meta"><span class="src"><i data-lucide="qr-code" class="ic"></i>Salle QR · Fanta</span><span class="chip chip--red urg"><i data-lucide="alarm-clock" class="ic"></i>En retard · +4 min</span></div>
+          <ul class="lines">
+            <li><b>2 ×</b>Poisson braisé + attiéké</li>
+            <li class="done"><b>1 ×</b>Alloco poulet</li>
+          </ul>
+          <div class="kbtn kbtn--go"><i data-lucide="check" class="ic"></i>Prêt</div>
+        </article>
+
+        <article class="ticket-k ticket-k--warn">
+          <div class="tk__top"><span class="tk__id">#G-2291</span><span class="tk__timer"><i data-lucide="timer" class="ic"></i>11:05</span></div>
+          <div class="tk__meta"><span class="src"><i data-lucide="bike" class="ic"></i>Glovo · coursier dans 6 min</span><span class="chip chip--yellow urg"><i data-lucide="hourglass" class="ic"></i>Bientôt</span></div>
+          <ul class="lines">
+            <li><b>1 ×</b>Kédjénou de poulet</li>
+            <li><b>2 ×</b>Bissap glacé</li>
+          </ul>
+          <div class="kbtn kbtn--go"><i data-lucide="check" class="ic"></i>Prêt</div>
+        </article>
+
+        <article class="ticket-k">
+          <div class="tk__top"><span class="tk__id">#Y-0458</span><span class="tk__timer"><i data-lucide="timer" class="ic"></i>06:20</span></div>
+          <div class="tk__meta"><span class="src"><i data-lucide="car" class="ic"></i>Yango · coursier dans 14 min</span><span class="chip chip--green urg"><i data-lucide="check" class="ic"></i>Dans les temps</span></div>
+          <ul class="lines"><li><b>1 ×</b>Foutou sauce graine</li><li><b>1 ×</b>Garba</li></ul>
+          <span class="knote"><i data-lucide="ban" class="ic"></i>Sans oignon</span>
+          <div class="kbtn kbtn--go"><i data-lucide="check" class="ic"></i>Prêt</div>
+        </article>
+      </section>
+
+      <!-- PRÊT -->
+      <section class="col" aria-label="Prêt">
+        <div class="col__head"><i data-lucide="bell-ring" class="ic"></i>Prêt<span class="n">2</span></div>
+
+        <article class="ticket-k">
+          <div class="tk__top"><span class="tk__id">Table 5</span><span class="tk__timer"><i data-lucide="timer" class="ic"></i>12:30</span></div>
+          <div class="tk__meta"><span class="src"><i data-lucide="qr-code" class="ic"></i>Salle QR · Fanta</span><span class="chip chip--green urg"><i data-lucide="bell-ring" class="ic"></i>Prêt depuis 2 min</span></div>
+          <ul class="lines"><li><b>1 ×</b>Kédjénou de poulet</li><li><b>2 ×</b>Garba</li><li><b>1 ×</b>Gnamakoudji</li></ul>
+          <div class="kbtn"><i data-lucide="hand-platter" class="ic"></i>Servi par Fanta</div>
+        </article>
+
+        <article class="ticket-k">
+          <div class="tk__top"><span class="tk__id">#D-0318</span><span class="tk__timer"><i data-lucide="timer" class="ic"></i>15:02</span></div>
+          <div class="tk__meta"><span class="src"><i data-lucide="bike" class="ic"></i>Livraison · Moussa</span><span class="chip chip--green urg"><i data-lucide="bell-ring" class="ic"></i>Prêt depuis 1 min</span></div>
+          <ul class="lines"><li><b>2 ×</b>Poisson braisé + attiéké</li><li><b>2 ×</b>Bissap glacé</li></ul>
+          <div class="ready"><span>Moussa revient de Riviera 2 dans 5 min · code 5203</span></div>
+          <div class="kbtn"><i data-lucide="package" class="ic"></i>Remis au livreur</div>
+        </article>
+      </section>
+    </div>
+
+    <footer class="kds-foot">
+      <span><i class="sw"></i>Dans les temps</span>
+      <span><i class="sw sw--warn"></i>Bientôt en retard</span>
+      <span><i class="sw sw--late"></i>En retard</span>
+      <span style="margin-left:auto"><i data-lucide="cloud-off" class="ic"></i>3 commandes gardées sur la tablette, envoi dès le retour du réseau</span>
+    </footer>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

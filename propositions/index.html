@@ -1,0 +1,1277 @@
+<title>Dabali — Dossier Hackathon</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+/* Layout : colonne éditoriale de 1080px, bandes pleine largeur pour le hero et les maquettes ; les écrans d'app sont dessinés en HTML. */
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#0F1B2D; --muted:#5A6577; --line:#DDE1E8;
+  --accent:#E36A0A; --accent-ink:#FFFFFF; --green:#0E8A5C; --red:#C8332B; --soft:#FFF1E5; --band:#0F1B2D; --band-fg:#E9EDF3; --band-muted:#9FAABB;
+  /* écrans d'app : look fixe, identique dans les deux thèmes */
+  --app-bg:#FFFFFF; --app-ink:#14202F; --app-muted:#6B7686; --app-line:#E6E9EE; --app-tint:#FFF3E8; --app-accent:#E36A0A; --app-green:#0E8A5C; --app-red:#C8332B; --app-dark:#101A28; --app-dark2:#1B2738; --app-dark-fg:#E8ECF2; --app-wave:#1DC8F2; --app-wa:#E7FFDB; --app-wa-bg:#EFE7DE;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C1420; --surface:#141F2E; --ink:#E8ECF2; --muted:#A3AEBF; --line:#26344A;
+  --accent:#FF8A2B; --accent-ink:#1A0E02; --green:#3CC48E; --red:#FF6B61; --soft:#2A1C10; --band:#060B12; --band-fg:#E8ECF2; --band-muted:#8D99AB; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0C1420; --surface:#141F2E; --ink:#E8ECF2; --muted:#A3AEBF; --line:#26344A;
+  --accent:#FF8A2B; --accent-ink:#1A0E02; --green:#3CC48E; --red:#FF6B61; --soft:#2A1C10; --band:#060B12; --band-fg:#E8ECF2; --band-muted:#8D99AB; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.1;margin:0}
+h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.01em}
+h3{font-size:20px;font-weight:700}
+p{margin:0}
+.lede{color:var(--muted);max-width:65ch;font-size:17px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+section{padding-block:64px}
+.sec-head{display:grid;gap:12px;margin-bottom:32px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* HERO */
+.hero{background:var(--band);color:var(--band-fg)}
+.hero .wrap{padding-block:56px 48px;display:grid;gap:28px}
+.prompt{font-family:var(--f-mono);color:var(--band-muted);font-size:14px}
+.prompt b{color:var(--accent);font-weight:600}
+.hero h1{font-size:clamp(44px,8vw,92px);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--accent)}
+.hero .lede{color:var(--band-muted);font-size:18px}
+.hero .lede strong{color:var(--band-fg)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:#ffffff1f;border:1px solid #ffffff1f;border-radius:10px;overflow:hidden}
+.fact{background:var(--band);padding:16px 18px;display:grid;gap:4px}
+.fact .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--band-muted)}
+.fact .v{font-family:var(--f-display);font-size:20px;font-weight:700}
+.fact .v.hot{color:var(--accent)}
+
+/* TERRAIN */
+.findings{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.finding{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:8px;align-content:start}
+.finding .num{font-family:var(--f-display);font-size:30px;font-weight:800;color:var(--accent);line-height:1}
+.finding p{color:var(--muted);font-size:15px}
+.finding .src{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.callout{margin-top:24px;background:var(--soft);border-radius:10px;padding:20px 22px;display:grid;gap:6px}
+.callout strong{font-family:var(--f-display);font-size:19px}
+
+/* BOUCLE */
+.loop{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;counter-reset:step}
+.step{border-top:3px solid var(--ink);padding-top:14px;display:grid;gap:6px;align-content:start}
+.step .tag{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.step h3{font-size:19px}
+.step p{font-size:15px;color:var(--muted)}
+.step .wow{font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.step .wow b{color:var(--accent)}
+.step.ia{border-top-color:var(--accent)}
+
+/* MAQUETTES */
+.mock-band{background:linear-gradient(180deg,var(--bg),var(--surface))}
+.screens{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:36px 24px;align-items:start}
+.screen-card{display:grid;gap:14px;justify-items:center;min-width:0}
+.screen-card figcaption{display:grid;gap:4px;max-width:300px;text-align:left;width:100%}
+.screen-card figcaption .eyebrow{color:var(--muted)}
+.screen-card figcaption p{font-size:14px;color:var(--muted)}
+figure{margin:0}
+.phone{width:260px;max-width:100%;border-radius:34px;background:#0B0F16;padding:9px;box-shadow:0 24px 50px -20px #0F1B2D66}
+.phone .scr{background:var(--app-bg);color:var(--app-ink);border-radius:26px;overflow:hidden;height:520px;display:flex;flex-direction:column;font-size:12px;line-height:1.35;font-family:var(--f-body)}
+.sbar{display:flex;justify-content:space-between;padding:8px 18px 4px;font-size:10px;font-weight:600}
+.app-h{padding:6px 14px 10px;display:grid;gap:2px}
+.app-h .t{font-family:var(--f-display);font-weight:800;font-size:17px}
+.app-h .s{color:var(--app-muted);font-size:11px}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 8px;font-size:10px;font-weight:600;background:var(--app-tint);color:var(--app-accent)}
+.chip.g{background:#E3F5EC;color:var(--app-green)}
+.chip.r{background:#FCE7E5;color:var(--app-red)}
+.chips{display:flex;gap:6px;padding:0 14px 8px;flex-wrap:wrap}
+.items{flex:1;overflow:hidden;padding:0 14px;display:grid;gap:8px;align-content:start}
+.item{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;border-bottom:1px solid var(--app-line);padding-bottom:8px}
+.thumb{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;color:#fff;font-size:14px}
+.item .n{font-weight:700;font-size:12px}
+.item .d{color:var(--app-muted);font-size:10px}
+.item .p{font-weight:700;font-size:12px;text-align:right}
+.add{width:22px;height:22px;border-radius:50%;background:var(--app-accent);color:#fff;display:grid;place-items:center;font-weight:700;margin-left:auto;margin-top:2px}
+.cta{margin:10px 14px 14px;background:var(--app-accent);color:#fff;border-radius:14px;padding:11px 14px;display:flex;justify-content:space-between;font-weight:700;font-size:13px}
+.cta.dark{background:var(--app-dark)}
+.cta.wave{background:var(--app-wave);color:#062433}
+.banner{margin:0 14px 10px;border-radius:12px;padding:10px 12px;background:var(--app-dark);color:var(--app-dark-fg);display:grid;gap:2px}
+.banner b{font-size:12px}
+.banner span{font-size:10px;color:#AEB8C8}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.person{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--app-line)}
+.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:11px;color:#fff}
+.bar{height:6px;border-radius:3px;background:var(--app-line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--app-green)}
+.big{font-family:var(--f-display);font-weight:800;font-size:26px;letter-spacing:-.01em}
+
+/* WhatsApp */
+.wa .scr{background:var(--app-wa-bg)}
+.wa-h{background:#075E54;color:#fff;padding:8px 14px 10px;display:flex;gap:8px;align-items:center}
+.wa-h .av{background:#E36A0A}
+.wa-body{flex:1;padding:10px;display:grid;gap:8px;align-content:start;overflow:hidden}
+.bub{max-width:82%;background:#fff;border-radius:10px;padding:7px 9px;font-size:11px;box-shadow:0 1px 0 #0000001a}
+.bub.me{background:var(--app-wa);margin-left:auto}
+.voice{display:flex;align-items:center;gap:6px}
+.voice .wave{flex:1;height:18px;background:repeating-linear-gradient(90deg,#4B8A6A 0 2px,transparent 2px 4px);mask:linear-gradient(90deg,#000 0 70%,#0004 70%);-webkit-mask:linear-gradient(90deg,#000 0 70%,#0004 70%);border-radius:2px}
+.bub .tr{color:var(--app-muted);font-style:italic;font-size:10px;margin-top:4px}
+.recap{border-top:1px dashed var(--app-line);margin-top:6px;padding-top:6px;display:grid;gap:2px}
+
+/* Tablette KDS & dashboard */
+.wide{grid-column:1/-1}
+.tablet{width:100%;max-width:880px;border-radius:22px;background:#0B0F16;padding:10px;box-shadow:0 24px 50px -20px #0F1B2D66}
+.tablet .scr{border-radius:14px;overflow:hidden;font-size:12px;line-height:1.35}
+.scroll-x{width:100%;overflow-x:auto}
+.kds{background:var(--app-dark);color:var(--app-dark-fg);padding:14px;min-width:760px}
+.kds-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.kds-top .t{font-family:var(--f-display);font-weight:800;font-size:18px}
+.kds-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ticket{background:var(--app-dark2);border-radius:10px;padding:10px;display:grid;gap:6px;border-top:4px solid var(--app-green)}
+.ticket.late{border-top-color:var(--app-red)}
+.ticket.warn{border-top-color:#F2B233}
+.ticket .row b{font-family:var(--f-display);font-size:15px}
+.ticket .src{font-size:10px;color:#AEB8C8}
+.ticket ul{margin:0;padding-left:16px;display:grid;gap:2px}
+.ticket .timer{font-family:var(--f-mono);font-weight:600}
+.ticket.late .timer{color:#FF8A80}
+.tbtn{background:#2A3A52;border-radius:8px;padding:6px;text-align:center;font-weight:600;font-size:11px}
+.tbtn.go{background:var(--app-green);color:#fff}
+.dash{background:var(--app-bg);color:var(--app-ink);padding:16px;min-width:760px;display:grid;grid-template-columns:200px 1fr;gap:16px}
+.side{background:#F4F6F9;border-radius:10px;padding:12px;display:grid;gap:4px;align-content:start}
+.side .t{font-family:var(--f-display);font-weight:800;font-size:16px;margin-bottom:8px}
+.side div{padding:6px 8px;border-radius:6px;color:var(--app-muted)}
+.side .on{background:var(--app-tint);color:var(--app-accent);font-weight:700}
+.dmain{display:grid;gap:12px;min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{border:1px solid var(--app-line);border-radius:10px;padding:10px;display:grid;gap:2px}
+.kpi .l{font-size:10px;color:var(--app-muted);text-transform:uppercase;letter-spacing:.06em}
+.kpi .v{font-family:var(--f-display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:10px;font-weight:600}
+.up{color:var(--app-green)} .down{color:var(--app-red)}
+.dgrid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px}
+.panel{border:1px solid var(--app-line);border-radius:10px;padding:12px;display:grid;gap:8px;align-content:start}
+.panel h4{margin:0;font-family:var(--f-display);font-size:14px}
+.prev{display:grid;grid-template-columns:110px 1fr 60px;gap:8px;align-items:center;font-size:11px}
+.prev .bar{height:10px}
+.prev .bar i{background:var(--app-accent)}
+.prev .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.why{font-size:10px;color:var(--app-muted);display:flex;gap:6px;flex-wrap:wrap}
+.alert{background:#FFF7ED;border:1px solid #F8D2AE;border-radius:8px;padding:8px 10px;font-size:11px;display:grid;gap:4px}
+.alert b{color:var(--app-accent)}
+.spark{width:100%;height:70px;display:block}
+
+/* IDÉES */
+.ideas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.idea{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:10px;grid-template-rows:auto auto 1fr auto}
+.idea .axis{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.idea p{font-size:15px;color:var(--muted)}
+.scores{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:10px}
+.score{font-family:var(--f-mono);font-size:11px;border-radius:999px;padding:3px 9px;border:1px solid var(--line);color:var(--muted)}
+.score.hi{border-color:var(--accent);color:var(--accent)}
+.score.ok{border-color:var(--green);color:var(--green)}
+.idea.star{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+
+/* CONCEPTS */
+.concepts{display:grid;gap:12px}
+.concept{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr) minmax(0,220px);gap:20px;align-items:start;padding:20px 0;border-top:1px solid var(--line)}
+.concept h3{font-size:22px}
+.concept .pitch{color:var(--muted);font-size:15px}
+.concept .verdict{font-size:14px;display:grid;gap:4px}
+.concept .verdict b{font-family:var(--f-display)}
+.concept.rec h3{color:var(--accent)}
+@media (max-width:760px){.concept{grid-template-columns:1fr;gap:8px}}
+
+/* DÉMO / PLANNING */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px}
+.timeline{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.timeline li{display:grid;grid-template-columns:72px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.timeline .h{font-family:var(--f-mono);font-size:13px;color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
+.timeline p{font-size:15px}
+.timeline small{color:var(--muted);font-size:13px;display:block}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td:first-child{font-weight:600;white-space:nowrap}
+
+.todo{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.todo li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.todo .due{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--accent-ink);background:var(--accent);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.todo .due.later{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.sources{font-size:13px;color:var(--muted);display:grid;gap:4px;padding:0;margin:0;list-style:none}
+footer{padding-block:32px 48px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+
+/* ACCESSIBILITÉ */
+.stat{display:flex;gap:12px 24px;align-items:baseline;flex-wrap:wrap;margin-bottom:32px}
+.stat .n{font-family:var(--f-display);font-size:clamp(56px,10vw,96px);font-weight:800;color:var(--accent);line-height:.9;letter-spacing:-.02em}
+.stat p{max-width:54ch;color:var(--muted);font-size:17px}
+.stat p b{color:var(--ink)}
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 28px;margin-bottom:48px}
+.pr{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:4px;align-content:start}
+.pr h3{font-size:18px}
+.pr p{font-size:15px;color:var(--muted)}
+.bill{display:inline-grid;place-items:center;min-width:32px;height:17px;border-radius:3px;font-size:8.5px;font-weight:800;color:#fff;padding:0 4px;box-shadow:inset 0 0 0 2px #ffffff55;font-family:var(--f-body)}
+.b10000{background:#6B4FA0}.b5000{background:#2F7D4F}.b2000{background:#2D63A8}.b1000{background:#A0522D}
+.coin{width:17px;height:17px;border-radius:50%;background:#C9A24A;color:#3A2A00;display:inline-grid;place-items:center;font-size:7px;font-weight:800;font-family:var(--f-body)}
+.money{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;align-items:center}
+.langs{display:flex;gap:4px;padding:0 12px 8px;flex-wrap:wrap}
+.langs span{border-radius:999px;padding:3px 8px;font-size:10px;font-weight:700;background:#F4F6F9;color:var(--app-muted)}
+.langs span.on{background:var(--app-dark);color:#fff}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px;flex:1;align-content:start}
+.tile{border-radius:14px;padding:10px 6px 8px;display:grid;gap:4px;justify-items:center;position:relative;background:#F4F6F9;border:2px solid transparent}
+.tile.sel{border-color:var(--app-accent);background:var(--app-tint)}
+.tile .pic{font-size:32px;line-height:1.1}
+.tile .spk{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:10px}
+.tile .cnt{position:absolute;top:5px;left:5px;background:var(--app-accent);color:#fff;border-radius:999px;font-size:10px;font-weight:800;padding:1px 6px}
+.tile .nm{font-size:9px;color:var(--app-muted)}
+.echo{flex:1;display:grid;gap:14px;align-content:center;justify-items:center;padding:0 14px}
+.echo .line{display:flex;align-items:center;gap:12px;font-size:44px;line-height:1}
+.dots{display:flex;gap:4px}.dots i{width:13px;height:13px;border-radius:50%;background:var(--app-accent);display:block}
+.playing{display:flex;gap:3px;align-items:end;height:18px}
+.playing i{width:4px;background:var(--app-accent);border-radius:2px;display:block}
+@media (prefers-reduced-motion:no-preference){.playing i{animation:eq 1s ease-in-out infinite}.playing i:nth-child(2){animation-delay:-.3s}.playing i:nth-child(3){animation-delay:-.6s}.playing i:nth-child(4){animation-delay:-.15s}}
+@keyframes eq{0%,100%{height:5px}50%{height:18px}}
+.bigbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 14px}
+.bb{border-radius:18px;padding:14px 8px;display:grid;justify-items:center;gap:2px;font-weight:800;color:#fff;font-size:30px;line-height:1}
+.bb small{font-size:11px;font-weight:700}
+.bb.yes{background:var(--app-green)}.bb.no{background:var(--app-red)}
+.scr.dark{background:var(--app-dark);color:var(--app-dark-fg)}
+.mic{width:80px;height:80px;border-radius:50%;background:var(--app-accent);display:grid;place-items:center;font-size:32px;margin:6px auto 10px;box-shadow:0 0 0 9px #E36A0A33,0 0 0 18px #E36A0A1a}
+.qbub{margin:0 14px;background:var(--app-dark2);border-radius:12px;padding:8px 10px;font-size:11px;display:grid;gap:2px}
+.qbub span{color:#AEB8C8;font-size:10px}
+.ans{margin:8px 14px 0;background:#fff;color:var(--app-ink);border-radius:14px;padding:12px;display:grid;gap:7px}
+.pbar{display:grid;grid-template-columns:22px 1fr 30px;gap:6px;align-items:center;font-size:16px}
+.pbar .n{font-size:11px;font-weight:700;text-align:right}
+.secret{margin:auto 14px 14px;display:grid;gap:6px;justify-items:center;font-size:10px;color:#AEB8C8}
+.secret div{display:flex;gap:6px}
+.secret .k{width:34px;height:34px;border-radius:10px;background:var(--app-dark2);display:grid;place-items:center;font-size:18px}
+
+/* REÇUS THERMIQUES */
+.receipts{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:40px 24px;align-items:start}
+.rwrap{filter:drop-shadow(0 14px 16px #0F1B2D38);width:300px;max-width:100%}
+.receipt{--z:10px;background:#FBFBF7;color:#1F1F1F;font-family:"Courier Prime","Courier New",monospace;font-size:12.5px;line-height:1.4;padding:26px 18px;
+  -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/var(--z) 51% repeat-x,conic-gradient(from 135deg at top,#0000,#000 1deg 89deg,#0000 90deg) top/var(--z) 51% repeat-x;
+  mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/var(--z) 51% repeat-x,conic-gradient(from 135deg at top,#0000,#000 1deg 89deg,#0000 90deg) top/var(--z) 51% repeat-x}
+.receipt .c{text-align:center}
+.receipt .rname{font-size:20px;letter-spacing:.14em;font-weight:700}
+.receipt .inv{background:#1F1F1F;color:#FBFBF7;text-align:center;font-weight:700;letter-spacing:.16em;margin:8px 0;padding:2px 0}
+.receipt .r{display:flex;justify-content:space-between;gap:8px}
+.receipt .sep{border-top:1px dashed #1F1F1F;margin:8px 0}
+.receipt .dbl{border-top:3px double #1F1F1F;margin:6px 0}
+.receipt .ln{display:grid;grid-template-columns:1.5em minmax(0,1fr) auto;column-gap:6px;align-items:start}
+.receipt .pc{filter:grayscale(1) contrast(1.5);font-size:13px}
+.receipt .sub{grid-column:2/4;padding-left:1ch;color:#4A4A4A;margin-top:-2px}
+.receipt .tot{font-size:19px;font-weight:700}
+.receipt .lbl{font-weight:700;letter-spacing:.08em}
+.receipt .bill{background:#FBFBF7;color:#1F1F1F;box-shadow:inset 0 0 0 1px #1F1F1F;font-family:inherit}
+.receipt .coin{background:#FBFBF7;color:#1F1F1F;box-shadow:inset 0 0 0 1px #1F1F1F}
+.receipt canvas.qr{width:96px;height:96px;image-rendering:pixelated;display:block;margin:6px auto}
+.receipt .barcode{display:flex;justify-content:center;height:38px;margin-top:6px}
+.receipt .barcode i{display:block;height:100%;background:#1F1F1F}
+.receipt.mini{--z:6px;font-size:8.5px;padding:14px 10px;line-height:1.35}
+.receipt.mini .rname{font-size:12px}
+.receipt.mini .tot{font-size:12px}
+.wa-bub-rc{background:#fff;border-radius:10px;padding:5px;box-shadow:0 1px 0 #0000001a;max-width:86%}
+/* ICÔNES (Lucide) */
+.ic{display:inline-block;width:1em;height:1em;stroke-width:2;vertical-align:-.14em;flex:none}
+i.ic{width:1em;height:1em}
+.tile .pic .ic,.echo .line .ic{stroke-width:1.6}
+.receipt .ic{stroke-width:2.4}
+.stars{display:inline-flex;gap:1px;vertical-align:-.1em}
+.stars .ic{width:11px;height:11px}
+.stars .on{fill:currentColor}
+.stars .off{opacity:.45}
+.sbar .ic{width:12px;height:12px}
+.tile .pic{color:var(--app-ink)}
+.tile.sel .pic{color:var(--app-accent)}
+.mic .ic{color:#fff}
+.av .ic{width:14px;height:14px;color:#fff}
+.bb .ic{width:32px;height:32px;stroke-width:3}
+
+/* MODULES PATRON */
+.filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--app-line);border-radius:8px;overflow:hidden;font-size:11px}
+.seg span{padding:5px 10px}.seg .on{background:var(--app-dark);color:#fff}
+.btn-s{display:inline-flex;gap:5px;align-items:center;border:1px solid var(--app-line);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;background:var(--app-bg);color:var(--app-ink)}
+.btn-s.pri{background:var(--app-accent);border-color:var(--app-accent);color:#fff}
+.btn-s .ic{width:13px;height:13px}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--app-muted);align-items:center;flex-wrap:wrap}
+.legend .sw{display:inline-block;width:20px;border-top:2px solid;vertical-align:middle;margin-right:5px}
+.chart svg{width:100%;height:auto;display:block}
+.chart .hit:hover{fill:#14202F0d}
+.g4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.li{display:grid;grid-template-columns:16px 1fr auto;gap:6px;font-size:11px;align-items:start;padding:5px 0;border-bottom:1px solid var(--app-line)}
+.li:last-child{border-bottom:0}
+.li .ic{width:14px;height:14px;margin-top:1px}
+.li small{display:block;color:var(--app-muted);font-size:10px}
+.li .v{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.good{color:var(--app-green)}.bad{color:var(--app-red)}.warn-c{color:#A86A00}
+.panel h4{display:flex;gap:6px;align-items:center}
+.panel h4 .ic{width:15px;height:15px}
+.tip{background:var(--app-tint);border-radius:8px;padding:8px;display:grid;gap:4px;font-size:11px}
+.tip small{color:var(--app-muted);font-size:10px}
+.chip.y{background:#FFF4D6;color:#8A5A00}
+.chip .ic{width:11px;height:11px}
+.scr table{font-size:11px}
+.scr th,.scr td{border-bottom:1px solid var(--app-line);color:var(--app-ink);padding:6px 6px}
+.scr th{color:var(--app-muted);font-size:9px}
+.scr td:first-child{font-weight:600}
+details.data{font-size:11px;color:var(--app-muted)}
+details.data summary{cursor:pointer}
+.map{border-radius:10px;overflow:hidden;background:#EAEFF3}
+.map svg{display:block;width:100%;height:auto}
+.dl{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:7px 0;border-bottom:1px solid var(--app-line);font-size:11px}
+.dl:last-child{border-bottom:0}
+.dl small{color:var(--app-muted);font-size:10px;grid-column:1/-1}
+.segs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sg{border:1px solid var(--app-line);border-radius:10px;padding:8px;display:grid;gap:2px}
+.sg.on{border-color:var(--app-accent);background:var(--app-tint)}
+.sg .v{font-family:var(--f-display);font-weight:800;font-size:18px}
+.sg .l{font-size:10px;color:var(--app-muted);line-height:1.25}
+.g2{display:grid;grid-template-columns:1.25fr 1fr;gap:12px}
+.poster{border-radius:10px;background:linear-gradient(135deg,#7E3B22,#E36A0A);color:#fff;padding:12px;display:grid;gap:4px}
+.poster .h{font-family:var(--f-display);font-weight:800;font-size:17px;line-height:1.1}
+.poster small{opacity:.85;font-size:10px}
+.wa-prev{background:var(--app-wa-bg);border-radius:10px;padding:8px;display:grid;gap:6px}
+.sbox{display:flex;gap:8px;align-items:center;border:2px solid var(--app-accent);border-radius:10px;padding:8px 12px;font-size:13px}
+.sbox .q{flex:1}
+.kbd{font-family:var(--f-mono);font-size:10px;border:1px solid var(--app-line);border-radius:4px;padding:1px 5px;color:var(--app-muted)}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.res h5{margin:0 0 4px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--app-muted)}
+.hl{background:#FFE2C7;border-radius:2px;padding:0 1px}
+.ico-t{display:inline-flex;gap:6px;align-items:center}
+.ico-t .ic{width:14px;height:14px;color:var(--app-accent)}
+/* Accueil */
+.hello{margin:0 12px;border-radius:16px;background:linear-gradient(160deg,#7E3B22,#E36A0A 75%);color:#fff;padding:14px;display:grid;gap:7px}
+.hello .t{font-family:var(--f-display);font-weight:800;font-size:21px;line-height:1.1}
+.hello .s{font-size:11px;opacity:.9}
+.audio{display:flex;gap:8px;align-items:center;background:#FFFFFF2B;border-radius:999px;padding:5px 10px;font-size:11px}
+.audio .ic{width:14px;height:14px}
+.card-s{margin:8px 12px 0;border:1px solid var(--app-line);border-radius:12px;padding:10px;display:grid;gap:6px}
+.card-s .k{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--app-muted)}
+.mini-row{display:flex;gap:8px;align-items:center;font-size:11px}
+.mini-row .ic{color:var(--app-accent);width:14px;height:14px}
+.langbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 12px}
+.langbtns span{border:1px solid var(--app-line);border-radius:10px;padding:8px;font-weight:700;font-size:12px;display:flex;gap:6px;align-items:center;justify-content:center}
+.langbtns .on{border-color:var(--app-accent);background:var(--app-tint);color:var(--app-accent)}
+.langbtns .ic{width:13px;height:13px}
+.steps{display:grid;gap:7px;padding:0 14px;font-size:11px}
+.st{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center}
+.st .ic{width:14px;height:14px}
+.st.done .ic{color:var(--app-green)}
+.st.now{font-weight:700}.st.now .ic{color:var(--app-accent)}
+.st.todo{color:var(--app-muted)}
+.st small{color:var(--app-muted);font-weight:400}
+.code{font-family:var(--f-mono);font-size:20px;font-weight:600;letter-spacing:.2em}
+.tone td:first-child{font-weight:400;white-space:normal;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.tone td:last-child{font-weight:600}
+@media (prefers-reduced-motion:no-preference){.screen-card .phone,.tablet{transition:transform .25s ease}.screen-card:hover .phone{transform:translateY(-4px)}}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="prompt"><b>&gt;_</b> hackathon-restauration-vatel --equipe --proposition v2</p>
+    <h1>Dabali<span>.</span></h1>
+    <p class="lede"><strong>Une seule plateforme qui répond aux quatre problèmes de l'affiche</strong> : commander sans attendre, gérer le restaurant en temps réel, réduire le gaspillage et fidéliser. Elle est pensée pour Abidjan, du maquis de quartier au restaurant de Cocody, avec Wave, WhatsApp et les coupures de réseau. <strong>Elle s'utilise aussi sans savoir lire</strong>, grâce aux images, à la voix et aux langues locales. Chaque paiement sort un vrai ticket de caisse, comme au supermarché. <em>« Dabali »</em> (manger, en nouchi) est un nom de travail.</p>
+    <div class="facts">
+      <div class="fact"><span class="k">Candidature</span><span class="v hot">10 nov. 2026 · J-7</span></div>
+      <div class="fact"><span class="k">Hackathon</span><span class="v">Sam. 21 nov. · 8h–18h</span></div>
+      <div class="fact"><span class="k">Lieu</span><span class="v">Vatel Abidjan, Vallon-Cocody</span></div>
+      <div class="fact"><span class="k">1er prix</span><span class="v">1 000 000 FCFA + Epitech + contrat</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Recherche terrain</span>
+      <h2>Ce que font les plateformes, et ce qu'elles laissent de côté</h2>
+      <p class="lede">Les applications présentes à Abidjan font surtout de la livraison. Le service en salle, la cuisine et la gestion du restaurant restent très peu équipés. Le jury mêle des pros de l'hôtellerie et de la tech : il faut parler à ces deux publics.</p>
+    </div>
+    <div class="findings">
+      <div class="finding"><span class="num">Glovo · Yango Deli</span><h3>La livraison est déjà prise</h3><p>Yango Deli s'est lancé en 2023 (Cocody, Marcory, Plateau), puis s'est étendu à Abobo, Adjamé et Port-Bouët. Glovo couvre tout Abidjan. Refaire une app de livraison ne nous démarquera pas.</p><span class="src">abidjan.net · digitalmag.ci</span></div>
+      <div class="finding"><span class="num">≈ 22–28 %</span><h3>Le coût des commissions</h3><p>C'est la commission estimée par commande sur les agrégateurs (chiffre de blogs, à vérifier). Les restaurateurs veulent un canal direct qu'ils maîtrisent, en complément des agrégateurs.</p><span class="src">kolonell.com (estimation)</span></div>
+      <div class="finding"><span class="num">300 000</span><h3>Wave est partout au maquis</h3><p>Le nombre de marchands Wave équipés en QR est passé de 600 à 300 000 entre 2022 et 2024. Le client paie déjà avec son téléphone. Le paiement mobile est un prérequis.</p><span class="src">osiris.sn (DG Wave CI)</span></div>
+      <div class="finding"><span class="num">QR + KDS</span><h3>Ce que tout le monde fait</h3><p>Dans le monde, le menu QR et l'écran cuisine (KDS) sont devenus la base. La tendance 2026 est d'intégrer commande, paiement, cuisine, fidélité et livraison dans un seul outil, plutôt que dix applis séparées.</p><span class="src">restolabs · flipdish · servmeco</span></div>
+      <div class="finding"><span class="num">Peu traité</span><h3>Le gaspillage, angle mort</h3><p>Les solutions anti-gaspillage restent rares et centrées sur l'Europe. La prévision par IA (historique, météo, événements) existe, mais elle n'est pas adaptée aux réalités d'ici : fin de mois, matchs, Ramadan, pluie.</p><span class="src">orderingstack · startus-insights</span></div>
+      <div class="finding"><span class="num">Voix &amp; WhatsApp</span><h3>Le vrai canal ivoirien</h3><p>Beaucoup de commandes passent déjà par WhatsApp et les notes vocales. La commande vocale par IA est une tendance mondiale, et ici elle a un usage local évident.</p><span class="src">observation terrain · tendances 2026</span></div>
+      <div class="finding"><span class="num">46,5 %</span><h3>Près d'un Ivoirien sur deux ne sait pas lire</h3><p>Le taux monte à 55,7 % chez les femmes (enquête ESACI 2025). Cela concerne des clients, mais aussi des serveuses, des cuisinières et des patronnes de maquis. Une appli pleine de texte les exclut.</p><span class="src">allafrica.com · ESACI 2025</span></div>
+      <div class="finding"><span class="num">FNE · RNE</span><h3>La DGI numérise les factures et les tickets</h3><p>La DGI a lancé en 2025 la facture normalisée électronique (FNE) et le reçu normalisé électronique (RNE). Un ticket de caisse numérique propre devient un vrai argument. Il reste à vérifier si les restaurants sont concernés.</p><span class="src">finances.gouv.ci · apanews · digitalmag.ci</span></div>
+    </div>
+    <div class="callout">
+      <strong>Notre angle</strong>
+      <p>Ne pas concurrencer Glovo, mais équiper le restaurant lui-même : la salle, la cuisine et la caisse, avec une IA qui comprend le contexte d'Abidjan. Il faut aussi que ça marche sur un Android d'entrée de gamme avec une connexion qui coupe.</p>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Le concept</span>
+      <h2>Une boucle, quatre problèmes, un effet « waouh » par étape</h2>
+      <p class="lede">L'affiche cite quatre problèmes. On les relie en une seule boucle de données : chaque commande alimente la cuisine, puis la gestion, puis la prévision du lendemain. C'est ce qui fait de Dabali une plateforme et pas une simple appli.</p>
+    </div>
+    <div class="loop">
+      <div class="step"><span class="tag">Client · « commander sans attendre »</span><h3>Table QR, sans appli</h3><p>Le client scanne le QR, commande et paie depuis le navigateur ou WhatsApp. Il ne télécharge rien.</p><div class="wow"><b>Waouh :</b> l'addition « on cotise », partagée et payée en Wave par chacun.</div></div>
+      <div class="step"><span class="tag">Cuisine · « temps réel »</span><h3>Écran cuisine unifié</h3><p>Les commandes de la salle, de WhatsApp, de Glovo et de Yango arrivent sur un seul écran, avec des minuteurs et des alertes de retard.</p><div class="wow"><b>Waouh :</b> la commande vocale WhatsApp, transcrite par l'IA en ticket cuisine.</div></div>
+      <div class="step"><span class="tag">Gérant · « gérer en temps réel »</span><h3>Cockpit du patron</h3><p>Le patron suit son chiffre du jour, ses stocks et ses plats rentables depuis son téléphone.</p><div class="wow"><b>Waouh :</b> il photographie l'ardoise du maquis et le menu numérique est prêt en 30 secondes.</div></div>
+      <div class="step"><span class="tag">Client · « fidéliser »</span><h3>Fidélité sans carte</h3><p>Les points sont liés au numéro de téléphone. Le client est relancé au bon moment, et le parrainage passe par WhatsApp.</p><div class="wow"><b>Waouh :</b> la « tontine gourmande », un objectif de points collectif pour un groupe d'amis.</div></div>
+      <div class="step ia"><span class="tag">IA · « réduire le gaspillage »</span><h3>Prévision du lendemain</h3><p>L'IA dit combien préparer de chaque plat selon l'historique, le jour de paie, la météo et les matchs.</p><div class="wow"><b>Waouh :</b> les invendus sont vendus à -50 % en fin de service, avec une alerte aux clients du quartier.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="accueil">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Accueil chaleureux</span>
+      <h2>Comme si on vous recevait au restaurant</h2>
+      <p class="lede">Dès qu'il scanne le QR, le client doit se sentir attendu. L'appli le salue par son prénom et se souvient de ce qu'il aime. Un petit message de la patronne l'accueille. Elle parle comme la maison : on tutoie au maquis, on vouvoie au restaurant chic, et chaque restaurant choisit son ton.</p>
+    </div>
+    <div class="screens">
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>19:58</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="hello">
+            <span class="s">Le Baobab · Table 7</span>
+            <span class="t">Bonne arrivée Yannick !<br>Content de te revoir.</span>
+            <div class="audio"><i data-lucide="play" class="ic"></i><span>Message de Tantie Awa · 0:06</span></div>
+            <span class="s">« Installez-vous bien, ce soir le poisson est tout frais ! »</span>
+          </div>
+          <div class="card-s">
+            <span class="k">Comme d'habitude ?</span>
+            <div class="row"><span class="mini-row"><i data-lucide="banana" class="ic"></i> Alloco poulet + bissap</span><b>3 000 F</b></div>
+            <div class="btn-s pri" style="justify-content:center">Oui, comme d'habitude</div>
+          </div>
+          <div class="card-s">
+            <span class="k">Ce soir chez nous</span>
+            <div class="mini-row"><i data-lucide="fish" class="ic"></i> Plat du jour : capitaine braisé, 6 000 F</div>
+            <div class="mini-row"><i data-lucide="tv" class="ic"></i> Match à 20h30 sur grand écran</div>
+            <div class="mini-row"><i data-lucide="wifi" class="ic"></i> Wi-Fi : Baobab-Invites · baobab2026</div>
+          </div>
+          <div class="card-s" style="grid-template-columns:auto 1fr auto;align-items:center">
+            <div class="av" style="background:#0E8A5C">AW</div><div style="font-size:11px"><b>Awa</b> s'occupe de toi ce soir</div><span class="chip"><i data-lucide="bell-ring" class="ic"></i> Appeler</span>
+          </div>
+        </div></div>
+        <figcaption><span class="eyebrow">15 · Client fidèle</span><h3>L'accueil d'un habitué</h3><p>L'appli le salue par son prénom et propose sa commande habituelle en un toucher. Il entend la voix de la patronne et sait qui le sert. Il se sent chez lui.</p></figcaption>
+      </figure>
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>12:41</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="hello">
+            <span class="s">Le Baobab · Angré</span>
+            <span class="t">Akwaba !<br>C'est ta première fois chez nous ?</span>
+            <span class="s">Rien à installer. Tu commandes, tu paies et tu appelles la serveuse d'ici.</span>
+          </div>
+          <div style="padding:10px 12px 6px;font-size:11px;font-weight:700">Dans quelle langue on te parle ?</div>
+          <div class="langbtns"><span class="on"><i data-lucide="volume-2" class="ic"></i>Français</span><span><i data-lucide="volume-2" class="ic"></i>Dioula</span><span><i data-lucide="volume-2" class="ic"></i>Baoulé</span><span><i data-lucide="volume-2" class="ic"></i>Nouchi</span></div>
+          <div class="card-s">
+            <span class="k">Les clients adorent</span>
+            <div class="row"><span class="mini-row"><i data-lucide="fish" class="ic"></i> Poisson braisé</span><span class="chip"><i data-lucide="star" class="ic"></i> 4,8</span></div>
+            <div class="row"><span class="mini-row"><i data-lucide="banana" class="ic"></i> Alloco poulet</span><span class="chip"><i data-lucide="star" class="ic"></i> 4,7</span></div>
+            <div class="row"><span class="mini-row"><i data-lucide="drumstick" class="ic"></i> Kédjénou</span><span class="chip"><i data-lucide="star" class="ic"></i> 4,6</span></div>
+          </div>
+          <div class="card-s" style="background:#E3F5EC;border-color:#E3F5EC">
+            <div class="mini-row" style="color:var(--app-green)"><i data-lucide="gift" class="ic" style="color:var(--app-green)"></i><b>Bissap offert pour ta première visite</b></div>
+          </div>
+          <div class="cta"><span>Voir le menu</span><span><i data-lucide="arrow-right" class="ic"></i></span></div>
+        </div></div>
+        <figcaption><span class="eyebrow">16 · Nouveau client</span><h3>Le premier passage</h3><p>On l'accueille, il choisit sa langue et voit les plats préférés des clients. Un petit cadeau de bienvenue lui donne envie de revenir. L'appli ne demande ni compte ni mot de passe.</p></figcaption>
+      </figure>
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>19:27</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s">Commande #D-0315 · Riviera 2</span><span class="t">Moussa arrive dans 6 min</span></div>
+          <div class="map" style="margin:0 12px">
+            <svg viewBox="0 0 236 120" role="img" aria-label="Carte : le livreur est à mi-chemin entre le restaurant et le client">
+              <rect width="236" height="120" fill="#EAEFF3"/>
+              <path d="M0,100 C60,88 110,112 160,100 S220,90 236,96 L236,120 L0,120Z" fill="#BFD7EA"/>
+              <path d="M0,30 L236,40 M40,0 L70,100 M130,0 L145,95 M200,0 L190,95 M0,70 L236,64" stroke="#FFFFFF" stroke-width="7" fill="none"/>
+              <path d="M58,34 L138,38 L142,66 L196,64" stroke="#E36A0A" stroke-width="2.5" stroke-dasharray="5 4" fill="none"/>
+              <circle cx="58" cy="34" r="8" fill="#101A28"/><text x="58" y="37.5" font-size="9" fill="#FFFFFF" text-anchor="middle" font-weight="700">B</text>
+              <circle cx="140" cy="52" r="9" fill="#E36A0A" stroke="#FFFFFF" stroke-width="2"/><text x="140" y="55.5" font-size="9" fill="#FFFFFF" text-anchor="middle" font-weight="700">M</text>
+              <rect x="190" y="58" width="12" height="12" rx="3" fill="#0E8A5C" stroke="#FFFFFF" stroke-width="2"/>
+              <text x="172" y="86" font-size="8" fill="#6B7686">Toi</text><text x="40" y="22" font-size="8" fill="#6B7686">Le Baobab</text>
+            </svg>
+          </div>
+          <div class="card-s" style="grid-template-columns:auto 1fr auto;align-items:center">
+            <div class="av" style="background:#E36A0A">MO</div><div style="font-size:11px"><b>Moussa · moto</b><br><span style="color:var(--app-muted)">4,9 · 1 240 livraisons</span></div><span class="chip g"><i data-lucide="phone" class="ic"></i> Appeler</span>
+          </div>
+          <div class="steps" style="margin-top:10px">
+            <div class="st done"><i data-lucide="check" class="ic"></i><span>Commande reçue</span><small>19:02</small></div>
+            <div class="st done"><i data-lucide="check" class="ic"></i><span>Préparée en cuisine</span><small>19:18</small></div>
+            <div class="st done"><i data-lucide="check" class="ic"></i><span>Récupérée par Moussa</span><small>19:21</small></div>
+            <div class="st now"><i data-lucide="navigation" class="ic"></i><span>En route vers toi</span><small>≈ 19:33</small></div>
+          </div>
+          <div class="card-s" style="justify-items:center;margin-bottom:12px"><span class="k">Ton code de livraison</span><span class="code">4821</span><span style="font-size:10px;color:var(--app-muted)">Donne-le à Moussa à l'arrivée</span></div>
+        </div></div>
+        <figcaption><span class="eyebrow">17 · Livraison client</span><h3>Suivi du livreur en direct</h3><p>Le client voit le livreur sur la carte et l'heure d'arrivée. Il peut l'appeler et donne un code à l'arrivée. Le code évite les erreurs et les fausses livraisons.</p></figcaption>
+      </figure>
+    </div>
+    <div class="scroll-x" style="margin-top:40px">
+      <table class="tone">
+        <thead><tr><th>Une appli froide dit</th><th>Dabali dit (ton maquis)</th></tr></thead>
+        <tbody>
+          <tr><td>Erreur 402 : paiement refusé.</td><td>Le paiement n'est pas passé. Pas de souci, on réessaie avec Wave ou Orange Money ?</td></tr>
+          <tr><td>Article indisponible.</td><td>Le foutou est fini pour aujourd'hui, désolé ! Le kédjénou est bien chaud, tu veux goûter ?</td></tr>
+          <tr><td>Commande envoyée.</td><td>C'est parti en cuisine ! Awa t'apporte ça dans 12 minutes environ.</td></tr>
+          <tr><td>Veuillez patienter.</td><td>On s'occupe de toi, deux secondes…</td></tr>
+          <tr><td>Merci pour votre achat.</td><td>Merci et bonne digestion ! À la prochaine au Baobab.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="pour-tous">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Accessibilité · notre différence</span>
+      <h2>Une plateforme qu'on utilise sans savoir lire</h2>
+      <p class="lede">Les applis de restauration sont pensées pour des gens qui lisent le français. Dabali, lui, fonctionne entièrement avec des images, des sons et la voix, en français et en langues locales. Le texte reste là pour ceux qui le veulent, mais on peut tout faire sans.</p>
+    </div>
+    <div class="stat"><span class="n">46,5 %</span><p><b>des Ivoiriens ne savent pas lire</b>, et 55,7 % des femmes (ESACI 2025). Ce sont nos clients, nos serveuses, nos cuisinières et beaucoup de patronnes de maquis. Si elles ne peuvent pas utiliser l'outil, il ne sera pas adopté.</p></div>
+    <div class="principles">
+      <div class="pr"><h3>L'image d'abord</h3><p>Chaque plat est représenté par une grande photo. On commande en touchant l'image, et chaque toucher ajoute une portion, affichée par des points. Dans le produit, ce seront les vraies photos des plats du restaurant. Les maquettes utilisent des icônes à la place.</p></div>
+      <div class="pr"><h3>Le prix en billets</h3><p>Le prix est aussi affiché sous forme de billets et de pièces FCFA. On voit tout de suite « un billet de 2 000 et une pièce de 500 », sans avoir à lire de chiffres.</p></div>
+      <div class="pr"><h3>Tout se dit à voix haute</h3><p>Un bouton haut-parleur est placé sur chaque élément. La voix parle français, dioula, baoulé ou nouchi. Les voix sont enregistrées par de vrais locuteurs, car la synthèse vocale de ces langues n'est pas encore fiable.</p></div>
+      <div class="pr"><h3>L'appli répète avant d'envoyer</h3><p>Avant d'envoyer en cuisine, l'appli relit la commande à voix haute. On valide avec un gros bouton vert ou on corrige avec le rouge. Il n'y a rien à lire.</p></div>
+      <div class="pr"><h3>Un code secret en images</h3><p>Pas de mot de passe à écrire : le patron ou la serveuse choisit 3 images, par exemple mangue, poisson, soleil. C'est facile à retenir et ça ne demande aucune lecture.</p></div>
+      <div class="pr"><h3>Mêmes couleurs, mêmes sons</h3><p>Vert veut dire c'est bon, orange veut dire en cours, rouge veut dire problème. Chaque étape a son son : la commande reçue en cuisine, le plat prêt, le paiement arrivé.</p></div>
+    </div>
+    <div class="screens">
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>12:58</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s">Table 2 · Le Baobab</span><span class="t"><i data-lucide="volume-2" class="ic"></i> Écouter le menu</span></div>
+          <div class="langs"><span>Français</span><span class="on">Dioula</span><span>Baoulé</span><span>Nouchi</span></div>
+          <div class="tiles">
+            <div class="tile sel"><span class="cnt">1</span><span class="spk"><i data-lucide="volume-2" class="ic"></i></span><span class="pic"><i data-lucide="fish" class="ic"></i></span><div class="money"><span class="bill b5000">5000</span></div><span class="nm">Poisson braisé</span></div>
+            <div class="tile"><span class="spk"><i data-lucide="volume-2" class="ic"></i></span><span class="pic"><i data-lucide="drumstick" class="ic"></i></span><div class="money"><span class="bill b2000">2000</span><span class="bill b2000">2000</span><span class="coin">500</span></div><span class="nm">Kédjénou</span></div>
+            <div class="tile sel"><span class="cnt">1</span><span class="spk"><i data-lucide="volume-2" class="ic"></i></span><span class="pic"><i data-lucide="banana" class="ic"></i></span><div class="money"><span class="bill b2000">2000</span><span class="coin">500</span></div><span class="nm">Alloco poulet</span></div>
+            <div class="tile"><span class="spk"><i data-lucide="volume-2" class="ic"></i></span><span class="pic"><i data-lucide="wheat" class="ic"></i></span><div class="money"><span class="bill b1000">1000</span></div><span class="nm">Garba</span></div>
+            <div class="tile"><span class="spk"><i data-lucide="volume-2" class="ic"></i></span><span class="pic"><i data-lucide="soup" class="ic"></i></span><div class="money"><span class="bill b2000">2000</span><span class="bill b1000">1000</span><span class="coin">500</span></div><span class="nm">Foutou graine</span></div>
+            <div class="tile"><span class="spk"><i data-lucide="volume-2" class="ic"></i></span><span class="pic"><i data-lucide="cup-soda" class="ic"></i></span><div class="money"><span class="coin">500</span></div><span class="nm">Bissap</span></div>
+          </div>
+          <div class="cta" style="align-items:center"><span style="font-size:20px"><i data-lucide="shopping-basket" class="ic"></i> <i data-lucide="check" class="ic"></i></span><span class="money"><span class="bill b5000">5000</span><span class="bill b2000">2000</span><span class="coin">500</span></span></div>
+        </div></div>
+        <figcaption><span class="eyebrow">09 · Client sans lecture</span><h3>Menu en images, prix en billets</h3><p>Le client touche une image pour ajouter un plat et écoute son nom dans sa langue. Le total s'affiche en billets. Les couleurs des billets sont stylisées pour la maquette.</p></figcaption>
+      </figure>
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>12:59</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s">Lecture en dioula</span><span class="t" style="display:flex;gap:8px;align-items:center"><i data-lucide="volume-2" class="ic"></i> <span class="playing"><i></i><i></i><i></i><i></i></span></span></div>
+          <div class="echo">
+            <div class="line"><i data-lucide="fish" class="ic"></i> <span class="dots"><i></i></span></div>
+            <div class="line"><i data-lucide="banana" class="ic"></i> <span class="dots"><i></i></span></div>
+            <div class="money" style="gap:4px;transform:scale(1.5);margin-top:8px"><span class="bill b5000">5000</span><span class="bill b2000">2000</span><span class="coin">500</span></div>
+            <p style="font-size:11px;color:var(--app-muted);text-align:center;max-width:200px;margin-top:10px">« Un poisson braisé, un alloco poulet. Ça fait sept mille cinq cents francs. C'est bon ? »</p>
+          </div>
+          <div class="bigbtns"><div class="bb no"><i data-lucide="x" class="ic"></i><small>Changer</small></div><div class="bb yes"><i data-lucide="check" class="ic"></i><small>C'est bon</small></div></div>
+          <div class="cta dark" style="justify-content:center;gap:8px"><span><i data-lucide="bell-ring" class="ic"></i> Appeler la serveuse</span></div>
+        </div></div>
+        <figcaption><span class="eyebrow">10 · Client sans lecture</span><h3>L'appli répète la commande avant de l'envoyer</h3><p>Elle relit la commande en images, en voix et en billets. Le client valide avec un gros bouton, ce qui évite les erreurs de commande, même pour ceux qui lisent.</p></figcaption>
+      </figure>
+      <figure class="screen-card">
+        <div class="phone"><div class="scr dark">
+          <div class="sbar"><span>23:05</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s" style="color:#AEB8C8">Patronne · Tantie Awa</span><span class="t">Parle, je t'écoute</span></div>
+          <div class="mic"><i data-lucide="mic" class="ic"></i></div>
+          <div class="qbub"><span>Question posée en dioula</span>« Combien j'ai gagné aujourd'hui ? »</div>
+          <div class="ans">
+            <div class="row"><span class="big">486 500 F</span><span style="font-size:22px;color:var(--app-green)"><i data-lucide="trending-up" class="ic"></i></span></div>
+            <div class="money" style="justify-content:flex-start;gap:3px"><span class="bill b10000">10000</span><span class="bill b10000">10000</span><span class="bill b10000">10000</span><span class="bill b10000">10000</span><span style="font-size:11px;font-weight:700;margin-left:4px">× 48 et plus</span></div>
+            <div class="pbar"><span><i data-lucide="fish" class="ic"></i></span><div class="bar"><i style="width:90%;background:var(--app-accent)"></i></div><span class="n">41</span></div>
+            <div class="pbar"><span><i data-lucide="banana" class="ic"></i></span><div class="bar"><i style="width:80%;background:var(--app-accent)"></i></div><span class="n">37</span></div>
+            <div class="pbar"><span><i data-lucide="wheat" class="ic"></i></span><div class="bar"><i style="width:72%;background:var(--app-accent)"></i></div><span class="n">33</span></div>
+            <span style="font-size:10px;color:var(--app-muted)"><i data-lucide="volume-2" class="ic"></i> La réponse est aussi lue à voix haute</span>
+          </div>
+          <div class="secret"><span>Code secret en images</span><div><span class="k"><i data-lucide="apple" class="ic"></i></span><span class="k"><i data-lucide="fish" class="ic"></i></span><span class="k"><i data-lucide="sun" class="ic"></i></span></div></div>
+        </div></div>
+        <figcaption><span class="eyebrow">11 · Patron sans lecture</span><h3>Le cockpit qu'on interroge à la voix</h3><p>La patronne pose sa question dans sa langue et l'appli répond en voix, en billets et en images de plats. Elle se connecte avec un code secret en images, sans clavier.</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Reçus · comme au supermarché</span>
+      <h2>Le vrai ticket de caisse, imprimé et sur WhatsApp</h2>
+      <p class="lede">Chaque paiement sort un ticket thermique de 58 mm sur une petite imprimante Bluetooth, comme à la caisse d'un supermarché. Le même ticket arrive sur le WhatsApp du client, avec une version audio. Le soir, le patron reçoit son rapport de clôture de caisse (le « Z »).</p>
+    </div>
+    <div class="receipts">
+      <figure class="screen-card">
+        <div class="rwrap"><div class="receipt">
+          <div class="c"><div class="rname">LE BAOBAB</div>MAQUIS · GRILLADES<br>Angré 8e tranche, Cocody<br>Tél : +225 07 00 00 00 00<br>NCC : 0000000 X (exemple)</div>
+          <div class="inv">TICKET DE CAISSE</div>
+          <div class="r"><span>N° 000487</span><span>TABLE 7</span></div>
+          <div class="r"><span>21/11/2026 21:18</span><span>CAISSE 01</span></div>
+          <div class="r"><span>Servi par : AWA</span><span>4 COUV.</span></div>
+          <div class="sep"></div>
+          <div class="ln"><span class="pc"><i data-lucide="fish" class="ic"></i></span><span>POISSON BRAISE</span><span>10 000</span><span class="sub">2 x 5 000</span></div>
+          <div class="ln"><span class="pc"><i data-lucide="drumstick" class="ic"></i></span><span>KEDJENOU POULET</span><span>4 500</span></div>
+          <div class="ln"><span class="pc"><i data-lucide="banana" class="ic"></i></span><span>ALLOCO POULET</span><span>5 000</span><span class="sub">2 x 2 500</span></div>
+          <div class="ln"><span class="pc"><i data-lucide="soup" class="ic"></i></span><span>FOUTOU GRAINE</span><span>3 500</span></div>
+          <div class="ln"><span class="pc"><i data-lucide="cup-soda" class="ic"></i></span><span>BISSAP 50CL</span><span>1 500</span><span class="sub">3 x 500</span></div>
+          <div class="ln"><span class="pc"><i data-lucide="wheat" class="ic"></i></span><span>ATTIEKE SUPPL.</span><span>500</span></div>
+          <div class="sep"></div>
+          <div class="r"><span>NB ARTICLES</span><span>10</span></div>
+          <div class="r"><span>SOUS-TOTAL</span><span>25 000</span></div>
+          <div class="r"><span>REMISE FIDELITE</span><span>-1 000</span></div>
+          <div class="dbl"></div>
+          <div class="r tot"><span>TOTAL TTC</span><span>24 000 F</span></div>
+          <div class="dbl"></div>
+          <div class="r"><span>TOTAL HT</span><span>20 339</span></div>
+          <div class="r"><span>DONT TVA 18 %</span><span>3 661</span></div>
+          <div class="r" style="margin-top:6px;align-items:center"><span>EN BILLETS</span><span class="money"><span class="bill">10000</span><span class="bill">10000</span><span class="bill">2000</span><span class="bill">2000</span></span></div>
+          <div class="sep"></div>
+          <div class="lbl">REGLEMENT · COTISATION</div>
+          <div class="r"><span>WAVE · KOFFI</span><span>6 000</span></div>
+          <div class="r"><span>ORANGE MONEY · AICHA</span><span>9 000</span></div>
+          <div class="r"><span>WAVE · YANNICK</span><span>3 000</span></div>
+          <div class="r"><span>WAVE · MARIAM</span><span>6 000</span></div>
+          <div class="r"><span>RENDU MONNAIE</span><span>0</span></div>
+          <div class="sep"></div>
+          <div class="c">FIDELITE : +240 PTS (4 CLIENTS)<br>Ce mois : 3 repas sauvés · 1,8 kg</div>
+          <div class="sep"></div>
+          <canvas class="qr" aria-label="QR code d'exemple"></canvas>
+          <div class="c">Scannez : reçu numérique,<br>avis vocal, facture</div>
+          <div class="barcode" aria-hidden="true"></div>
+          <div class="c">0487 2111 2026 0107</div>
+          <div class="c" style="margin-top:4px">CODE CONTROLE : 7F3A-91C2</div>
+          <div class="sep"></div>
+          <div class="c"><b>*** MERCI, A BIENTOT ! ***</b><br>Akwaba au Baobab</div>
+        </div></div>
+        <figcaption><span class="eyebrow">12 · Ticket client</span><h3>Ticket thermique illustré</h3><p>Il ressemble à un ticket de supermarché : quantités, prix unitaires, TVA et règlement de chaque personne. La nouveauté : un pictogramme pour chaque plat et le total en billets, pour ceux qui ne lisent pas. Le QR code ouvre le reçu numérique et l'avis vocal.</p></figcaption>
+      </figure>
+
+      <figure class="screen-card">
+        <div class="phone wa"><div class="scr">
+          <div class="wa-h"><div class="av">B</div><div><b style="font-size:12px">Le Baobab</b><div style="font-size:10px;opacity:.8">compte professionnel</div></div></div>
+          <div class="wa-body">
+            <div class="wa-bub-rc"><div class="receipt mini">
+              <div class="c"><div class="rname">LE BAOBAB</div>TICKET N° 000487</div>
+              <div class="sep"></div>
+              <div class="ln"><span class="pc"><i data-lucide="banana" class="ic"></i></span><span>ALLOCO POULET</span><span>2 500</span></div>
+              <div class="ln"><span class="pc"><i data-lucide="cup-soda" class="ic"></i></span><span>BISSAP 50CL</span><span>500</span></div>
+              <div class="dbl"></div>
+              <div class="r tot"><span>VOTRE PART</span><span>3 000 F</span></div>
+              <div class="r"><span>WAVE · 21:18</span><span>PAYÉ <i data-lucide="check" class="ic"></i></span></div>
+            </div></div>
+            <div class="bub"><div class="voice"><i data-lucide="play" class="ic"></i> <span class="wave"></span> 0:12</div><div class="tr">Reçu audio en dioula : « Merci Yannick. Tu as payé trois mille francs avec Wave. Tu gagnes 30 points. »</div></div>
+            <div class="bub"><i data-lucide="banana" class="ic"></i> + <i data-lucide="cup-soda" class="ic"></i> = <span class="money" style="display:inline-flex"><span class="bill b2000">2000</span><span class="bill b1000">1000</span></span> <i data-lucide="check" class="ic"></i></div>
+            <div class="bub"><i data-lucide="star" class="ic"></i> Laisser un avis vocal en 10 secondes<br><i data-lucide="file-text" class="ic"></i> Télécharger la facture (PDF)</div>
+          </div>
+          <div style="background:#F0F0F0;padding:8px 10px;display:flex;gap:6px;align-items:center"><div style="flex:1;background:#fff;border-radius:16px;padding:6px 10px;color:#999;font-size:11px">Message</div><div class="av" style="background:#075E54"><i data-lucide="mic" class="ic"></i></div></div>
+        </div></div>
+        <figcaption><span class="eyebrow">13 · Reçu numérique</span><h3>Le ticket sur WhatsApp, avec une version audio</h3><p>Chaque personne de la table reçoit le ticket de sa part. Il arrive en image, en audio dans sa langue et en résumé de pictos. Il n'y a pas de papier perdu, et la facture sert pour les notes de frais.</p></figcaption>
+      </figure>
+
+      <figure class="screen-card">
+        <div class="rwrap"><div class="receipt">
+          <div class="c"><div class="rname">LE BAOBAB</div>RAPPORT Z · FIN DE JOURNEE</div>
+          <div class="inv">CLOTURE N° 0142</div>
+          <div class="r"><span>21/11/2026</span><span>23:47</span></div>
+          <div class="r"><span>OUVERTURE 10:30</span><span>CAISSE : AWA</span></div>
+          <div class="sep"></div>
+          <div class="r"><span>TICKETS</span><span>64</span></div>
+          <div class="r"><span>COUVERTS</span><span>118</span></div>
+          <div class="r"><span>PANIER MOYEN</span><span>7 602</span></div>
+          <div class="sep"></div>
+          <div class="lbl">VENTES PAR MODE</div>
+          <div class="r"><span>ESPECES</span><span>112 000</span></div>
+          <div class="r"><span>WAVE</span><span>241 500</span></div>
+          <div class="r"><span>ORANGE MONEY</span><span>98 000</span></div>
+          <div class="r"><span>MTN MOMO</span><span>35 000</span></div>
+          <div class="dbl"></div>
+          <div class="r tot"><span>TOTAL TTC</span><span>486 500</span></div>
+          <div class="dbl"></div>
+          <div class="lbl">CONTROLE CAISSE</div>
+          <div class="r"><span>ANNULATIONS (2)</span><span>-7 500</span></div>
+          <div class="sub" style="padding-left:1ch">validées par la patronne <i data-lucide="check" class="ic"></i></div>
+          <div class="r"><span>REMISES FIDELITE</span><span>-9 200</span></div>
+          <div class="r"><span>ESPECES COMPTEES</span><span>112 000</span></div>
+          <div class="r"><b>ECART</b><b>0 F <i data-lucide="check" class="ic"></i></b></div>
+          <div class="sep"></div>
+          <div class="lbl">ANTI-GASPI</div>
+          <div class="r"><span>PORTIONS SAUVEES</span><span>11</span></div>
+          <div class="r"><span>RECUPERE</span><span>24 750</span></div>
+          <div class="r"><span>NOURRITURE SAUVEE</span><span>4,6 KG</span></div>
+          <div class="sep"></div>
+          <div class="lbl">TOP 3</div>
+          <div class="ln"><span class="pc"><i data-lucide="fish" class="ic"></i></span><span>POISSON BRAISE</span><span>x41</span></div>
+          <div class="ln"><span class="pc"><i data-lucide="banana" class="ic"></i></span><span>ALLOCO POULET</span><span>x37</span></div>
+          <div class="ln"><span class="pc"><i data-lucide="wheat" class="ic"></i></span><span>GARBA</span><span>x33</span></div>
+          <div class="sep"></div>
+          <div class="c">DEMAIN (PREVISION IA) :<br>46 POISSONS · MATCH A 17H</div>
+          <div class="barcode" aria-hidden="true"></div>
+          <div class="c">Envoyé à la patronne sur WhatsApp <i data-lucide="check" class="ic"></i> 23:48</div>
+        </div></div>
+        <figcaption><span class="eyebrow">14 · Patron</span><h3>Le rapport Z de clôture, anti-vol</h3><p>C'est le ticket de fin de journée des supermarchés : ventes par mode de paiement, écart de caisse et annulations. Chaque annulation doit être validée par le patron sur son téléphone. Le patron absent sait exactement ce qui s'est passé.</p></figcaption>
+      </figure>
+    </div>
+    <div class="callout">
+      <strong>Prêt pour la facture normalisée</strong>
+      <p>La DGI a lancé la FNE et le reçu normalisé électronique (RNE) en 2025. Si Dabali peut produire des tickets conformes, c'est un argument fort devant les pros du jury. Il faut vérifier avant le 21 si les restaurants sont concernés et comment l'API fonctionne (portail FNE de la DGI).</p>
+    </div>
+  </div>
+</section>
+
+<section class="mock-band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Maquettes · v1</span>
+      <h2>Les écrans clés à montrer au jury</h2>
+      <p class="lede">Les maquettes utilisent des données d'exemple : un maquis fictif, « Le Baobab », à Angré, et des prix réalistes en FCFA. Elles servent de base pour Figma ou directement pour le code.</p>
+    </div>
+    <div class="screens">
+
+      <!-- 1. Menu QR -->
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>19:42</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s">Table 7 · Le Baobab, Angré</span><span class="t">Akwaba ! On mange quoi ?</span></div>
+          <div class="chips"><span class="chip">Populaire</span><span class="chip g">Prêt en 12 min</span><span class="chip">Grillades</span><span class="chip">Boissons</span></div>
+          <div class="items">
+            <div class="item"><div class="thumb" style="background:#C9772B">PA</div><div><div class="n">Poisson braisé + attiéké</div><div class="d">Carpe, piment frais, oignons</div></div><div><div class="p">5 000 F</div><div class="add">+</div></div></div>
+            <div class="item"><div class="thumb" style="background:#9B4A2F">KP</div><div><div class="n">Kédjénou de poulet</div><div class="d">Cuit à l'étouffée, riz ou attiéké</div></div><div><div class="p">4 500 F</div><div class="add">+</div></div></div>
+            <div class="item"><div class="thumb" style="background:#D8A13A">AL</div><div><div class="n">Alloco poulet</div><div class="d">Banane plantain frite, sauce tomate</div></div><div><div class="p">2 500 F</div><div class="add">+</div></div></div>
+            <div class="item"><div class="thumb" style="background:#6E8B3D">FG</div><div><div class="n">Foutou sauce graine</div><div class="d">Plus que 4 portions aujourd'hui</div></div><div><div class="p">3 500 F</div><div class="add">+</div></div></div>
+            <div class="item"><div class="thumb" style="background:#A8324A">BI</div><div><div class="n">Bissap glacé</div><div class="d">Maison, 50 cl</div></div><div><div class="p">500 F</div><div class="add">+</div></div></div>
+          </div>
+          <div class="cta"><span>Envoyer en cuisine · 3 articles</span><span>12 500 F</span></div>
+        </div></div>
+        <figcaption><span class="eyebrow">01 · Client</span><h3>Menu à table par QR</h3><p>Il s'ouvre dans le navigateur, sans appli à installer. Le temps de préparation est affiché en direct et les plats presque épuisés sont signalés.</p></figcaption>
+      </figure>
+
+      <!-- 2. Split Wave -->
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>21:15</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s">Table 7 · 4 personnes</span><span class="t">On cotise ?</span></div>
+          <div style="padding:0 14px;display:grid;gap:4px">
+            <div class="row"><span style="color:var(--app-muted)">Total de la table</span><span class="big">24 000 F</span></div>
+            <div class="bar"><i style="width:62%"></i></div>
+            <div class="row" style="font-size:10px;color:var(--app-muted)"><span>15 000 F déjà payés</span><span>reste 9 000 F</span></div>
+          </div>
+          <div class="items" style="margin-top:8px">
+            <div class="person"><div class="av" style="background:#0E8A5C">KO</div><div><b>Koffi</b><div class="d" style="color:var(--app-muted);font-size:10px">Wave · payé</div></div><span class="chip g">6 000 F <i data-lucide="check" class="ic"></i></span></div>
+            <div class="person"><div class="av" style="background:#0E8A5C">AÏ</div><div><b>Aïcha</b><div class="d" style="color:var(--app-muted);font-size:10px">Orange Money · payé</div></div><span class="chip g">9 000 F <i data-lucide="check" class="ic"></i></span></div>
+            <div class="person"><div class="av" style="background:#E36A0A">YA</div><div><b>Yannick (moi)</b><div class="d" style="color:var(--app-muted);font-size:10px">Ses plats : alloco, bissap</div></div><span class="chip">3 000 F</span></div>
+            <div class="person"><div class="av" style="background:#8A94A6">MA</div><div><b>Mariam</b><div class="d" style="color:var(--app-muted);font-size:10px">Lien envoyé sur WhatsApp</div></div><span class="chip r">6 000 F</span></div>
+          </div>
+          <div class="chips"><span class="chip">Partager à parts égales</span><span class="chip">Chacun ses plats</span></div>
+          <div class="cta wave"><span>Payer ma part avec Wave</span><span>3 000 F</span></div>
+        </div></div>
+        <figcaption><span class="eyebrow">02 · Client</span><h3>L'addition « on cotise »</h3><p>Chacun paie sa part par mobile money, à parts égales ou selon ce qu'il a pris. Fini le serveur qui fait le tour de la table. C'est une démo très parlante pour le jury.</p></figcaption>
+      </figure>
+
+      <!-- 3. WhatsApp vocal -->
+      <figure class="screen-card">
+        <div class="phone wa"><div class="scr">
+          <div class="wa-h"><div class="av">B</div><div><b style="font-size:12px">Le Baobab · Commandes</b><div style="font-size:10px;opacity:.8">assistant Dabali · en ligne</div></div></div>
+          <div class="wa-body">
+            <div class="bub me"><div class="voice"><i data-lucide="play" class="ic"></i> <span class="wave"></span> 0:09</div><div class="tr">« Bonsoir, mettez-moi deux garbas avec beaucoup de piment et un gnamakoudji, je passe récupérer à 20h. »</div></div>
+            <div class="bub"><b>C'est noté <i data-lucide="thumbs-up" class="ic"></i></b><div class="recap"><div class="row"><span>2 × Garba (piment ++)</span><span>2 000 F</span></div><div class="row"><span>1 × Gnamakoudji</span><span>500 F</span></div><div class="row"><b>Total</b><b>2 500 F</b></div></div><div style="margin-top:6px">Retrait à <b>20h00</b>. On confirme ?</div></div>
+            <div class="bub me">Oui c'est bon</div>
+            <div class="bub">Payez ici : <span style="color:#027EB5;text-decoration:underline">wave.com/pay/baobab-7Q2</span><br>Votre commande part en cuisine dès le paiement.</div>
+          </div>
+          <div style="background:#F0F0F0;padding:8px 10px;display:flex;gap:6px;align-items:center"><div style="flex:1;background:#fff;border-radius:16px;padding:6px 10px;color:#999;font-size:11px">Message</div><div class="av" style="background:#075E54"><i data-lucide="mic" class="ic"></i></div></div>
+        </div></div>
+        <figcaption><span class="eyebrow">03 · Client</span><h3>Commande par note vocale WhatsApp</h3><p>L'IA comprend le français ivoirien et les noms de plats locaux, puis crée le ticket cuisine et le lien de paiement. Pas besoin de taper.</p></figcaption>
+      </figure>
+
+      <!-- 4. KDS -->
+      <figure class="screen-card wide">
+        <div class="tablet"><div class="scr"><div class="scroll-x"><div class="kds">
+          <div class="kds-top"><span class="t">Cuisine · Le Baobab</span><span style="display:flex;gap:8px"><span class="chip g">8 en cours</span><span class="chip r">1 en retard</span><span class="chip" style="background:#2A3A52;color:#E8ECF2">Hors-ligne : sync auto</span></span></div>
+          <div class="kds-cols">
+            <div class="ticket late"><div class="row"><b>Table 3</b><span class="timer">18:40</span></div><span class="src">Salle · QR</span><ul><li>2 × Poisson braisé</li><li>1 × Alloco poulet</li></ul><div class="tbtn go">Prêt <i data-lucide="check" class="ic"></i></div></div>
+            <div class="ticket warn"><div class="row"><b>#G-2291</b><span class="timer">11:05</span></div><span class="src">Glovo · coursier dans 6 min</span><ul><li>1 × Kédjénou</li><li>2 × Bissap</li></ul><div class="tbtn">En préparation</div></div>
+            <div class="ticket"><div class="row"><b>Retrait 20h</b><span class="timer">03:12</span></div><span class="src">WhatsApp vocal · payé Wave</span><ul><li>2 × Garba <i>(piment ++)</i></li><li>1 × Gnamakoudji</li></ul><div class="tbtn">Démarrer</div></div>
+            <div class="ticket"><div class="row"><b>Table 7</b><span class="timer">01:48</span></div><span class="src">Salle · QR · cotisation</span><ul><li>1 × Foutou sauce graine</li><li>1 × Alloco poulet</li><li>1 × Bissap</li></ul><div class="tbtn">Démarrer</div></div>
+          </div>
+        </div></div></div></div>
+        <figcaption style="max-width:880px"><span class="eyebrow">04 · Cuisine</span><h3>Écran cuisine unifié, tous canaux</h3><p>Une tablette à 60 000 F suffit. Elle regroupe les commandes de la salle, de WhatsApp et des agrégateurs, avec des couleurs selon l'urgence. Elle fonctionne même pendant une coupure d'internet.</p></figcaption>
+      </figure>
+
+      <!-- 5. Dashboard gérant -->
+      <figure class="screen-card wide">
+        <div class="tablet" style="background:#D9DDE4"><div class="scr"><div class="scroll-x"><div class="dash">
+          <div class="side"><span class="t">Dabali · Patron</span><div class="on">Aujourd'hui</div><div>Prévisions IA</div><div>Stock</div><div>Menu</div><div>Clients &amp; fidélité</div><div>Anti-gaspi</div></div>
+          <div class="dmain">
+            <div class="kpis">
+              <div class="kpi"><span class="l">Chiffre du jour</span><span class="v">486 500 F</span><span class="d up">+12 % vs samedi dernier</span></div>
+              <div class="kpi"><span class="l">Couverts</span><span class="v">118</span><span class="d up">+9</span></div>
+              <div class="kpi"><span class="l">Attente moyenne</span><span class="v">14 min</span><span class="d up">−6 min</span></div>
+              <div class="kpi"><span class="l">Gaspillage estimé</span><span class="v">3,1 kg</span><span class="d up">−41 % ce mois</span></div>
+            </div>
+            <div class="dgrid">
+              <div class="panel">
+                <h4>Prévision IA · demain dimanche</h4>
+                <div class="why"><span class="chip">Fin de mois : paie le 30</span><span class="chip">Match des Éléphants à 17h</span><span class="chip g">Pas de pluie</span></div>
+                <div class="prev"><span>Poisson braisé</span><div class="bar"><i style="width:92%"></i></div><span class="n">46 port.</span></div>
+                <div class="prev"><span>Alloco poulet</span><div class="bar"><i style="width:78%"></i></div><span class="n">39 port.</span></div>
+                <div class="prev"><span>Garba</span><div class="bar"><i style="width:70%"></i></div><span class="n">35 port.</span></div>
+                <div class="prev"><span>Kédjénou</span><div class="bar"><i style="width:36%"></i></div><span class="n">18 port.</span></div>
+                <div class="prev"><span>Foutou graine</span><div class="bar"><i style="width:24%"></i></div><span class="n">12 port.</span></div>
+                <span class="why">Liste d'achats générée : 14 kg de carpe, 9 kg de poulet, 30 régimes de banane plantain.</span>
+              </div>
+              <div class="panel">
+                <h4>Ventes de la journée</h4>
+                <svg class="spark" viewBox="0 0 300 70" preserveAspectRatio="none" aria-label="Courbe des ventes : pics à midi et le soir">
+                  <line x1="0" y1="69" x2="300" y2="69" stroke="#E6E9EE" stroke-width="1"/>
+                  <path d="M0,62 L25,60 L50,48 L75,22 L100,18 L125,40 L150,55 L175,52 L200,34 L225,14 L250,8 L275,20 L300,30 L300,70 L0,70Z" fill="#FFF3E8"/>
+                  <path d="M0,62 L25,60 L50,48 L75,22 L100,18 L125,40 L150,55 L175,52 L200,34 L225,14 L250,8 L275,20 L300,30" fill="none" stroke="#E36A0A" stroke-width="2"/>
+                  <circle cx="250" cy="8" r="3.5" fill="#E36A0A"/>
+                </svg>
+                <div class="row" style="font-size:10px;color:var(--app-muted)"><span>11h</span><span>14h</span><span>17h</span><span>20h</span><span>23h</span></div>
+                <div class="alert"><b>Anti-gaspi · 21h30</b><span>Il reste 6 portions de kédjénou. Les mettre en « Dernière louche » à 2 250 F pour 214 clients à moins de 2 km ?</span><div class="row"><span class="chip">Ignorer</span><span class="chip g">Publier l'offre</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div></div></div></div>
+        <figcaption style="max-width:880px"><span class="eyebrow">05 · Gérant</span><h3>Cockpit du patron et prévision anti-gaspillage</h3><p>L'IA explique sa prévision avec des repères que le patron comprend tout de suite : la paie, le match, la météo. Elle propose aussi d'écouler les invendus avant la fermeture. C'est le cœur de l'innovation.</p></figcaption>
+      </figure>
+
+      <!-- 6. Photo menu -->
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>09:03</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s">Inscription · étape 2 sur 3</span><span class="t">Votre menu en 30 secondes</span></div>
+          <div style="margin:0 14px;height:150px;border-radius:12px;background:#2E3A2F;color:#F1F1E6;padding:12px;font-family:'Comic Sans MS','Segoe Print',cursive;font-size:13px;line-height:1.5;position:relative">
+            GARBA ...... 1000<br>ALLOCO POULET .. 2500<br>KEDJENOU ..... 4500<br>POISSON BRAISÉ  5000
+            <span style="position:absolute;inset:8px;border:2px dashed #E36A0A;border-radius:8px"></span>
+          </div>
+          <div style="padding:10px 14px 4px;font-size:11px;color:var(--app-muted)">Photo de l'ardoise analysée par l'IA · 4 plats détectés</div>
+          <div class="items">
+            <div class="item"><div class="thumb" style="background:#D8A13A">GA</div><div><div class="n">Garba</div><div class="d">Catégorie : plats · 98 %</div></div><div class="p">1 000 F</div></div>
+            <div class="item"><div class="thumb" style="background:#C9772B">AL</div><div><div class="n">Alloco poulet</div><div class="d">Catégorie : plats · 97 %</div></div><div class="p">2 500 F</div></div>
+            <div class="item"><div class="thumb" style="background:#9B4A2F">KE</div><div><div class="n">Kédjénou</div><div class="d">À vérifier · 81 %</div></div><div class="p">4 500 F</div></div>
+          </div>
+          <div class="cta dark"><span>Valider et créer mes QR de table</span><span><i data-lucide="arrow-right" class="ic"></i></span></div>
+        </div></div>
+        <figcaption><span class="eyebrow">06 · Gérant</span><h3>L'ardoise devient un menu numérique</h3><p>Le patron photographie son ardoise, l'IA lit les plats et les prix. Il a son menu et ses QR en moins d'une minute. C'est ce qui permet d'équiper un maquis.</p></figcaption>
+      </figure>
+
+      <!-- 7. Anti-gaspi client -->
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>21:31</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s">Près de vous · Angré, Riviera</span><span class="t">Dernière louche</span></div>
+          <div class="banner"><b>Bons plats, petits prix, zéro gâchis</b><span>Ce soir, 9 restaurants écoulent leurs invendus</span></div>
+          <div class="items">
+            <div class="item"><div class="thumb" style="background:#9B4A2F">KE</div><div><div class="n">Kédjénou · Le Baobab</div><div class="d">6 restantes · 650 m · jusqu'à 22h30</div></div><div><div class="p" style="color:var(--app-red)">2 250 F</div><div class="d" style="text-decoration:line-through;text-align:right;color:var(--app-muted);font-size:10px">4 500 F</div></div></div>
+            <div class="item"><div class="thumb" style="background:#5A7D9A">PS</div><div><div class="n">Panier surprise · Chez Tantie Awa</div><div class="d">3 restants · 1,2 km</div></div><div><div class="p" style="color:var(--app-red)">1 500 F</div><div class="d" style="text-decoration:line-through;text-align:right;color:var(--app-muted);font-size:10px">≈ 3 500 F</div></div></div>
+            <div class="item"><div class="thumb" style="background:#C9772B">VI</div><div><div class="n">Viennoiseries · Boulangerie Riviera</div><div class="d">12 restantes · 1,8 km</div></div><div><div class="p" style="color:var(--app-red)">200 F</div><div class="d" style="text-decoration:line-through;text-align:right;color:var(--app-muted);font-size:10px">400 F</div></div></div>
+          </div>
+          <div style="margin:0 14px;padding:10px;border-radius:12px;background:#E3F5EC;color:var(--app-green);font-size:11px"><b>Votre impact :</b> 7 repas sauvés · 4,2 kg · 1 840 points fidélité</div>
+          <div class="cta"><span>Réserver · payer au retrait</span><span><i data-lucide="arrow-right" class="ic"></i></span></div>
+        </div></div>
+        <figcaption><span class="eyebrow">07 · Client</span><h3>Invendus à prix cassé</h3><p>Le restaurant écoule ses restes et le client fait une affaire. Le kilo de nourriture sauvé est une mesure d'impact que le jury retient facilement.</p></figcaption>
+      </figure>
+
+      <!-- 8. Fidélité -->
+      <figure class="screen-card">
+        <div class="phone"><div class="scr">
+          <div class="sbar"><span>13:10</span><span>4G <i data-lucide="signal" class="ic"></i></span></div>
+          <div class="app-h"><span class="s">+225 07 •• •• 21 · sans carte, sans appli</span><span class="t">Ma fidélité</span></div>
+          <div style="margin:0 14px 10px;border-radius:14px;background:var(--app-dark);color:var(--app-dark-fg);padding:14px;display:grid;gap:6px">
+            <span style="font-size:10px;color:#AEB8C8;text-transform:uppercase;letter-spacing:.08em">Le Baobab · niveau Habitué</span>
+            <span class="big">1 840 pts</span>
+            <div class="bar" style="background:#2A3A52"><i style="width:74%;background:var(--app-accent)"></i></div>
+            <span style="font-size:10px;color:#AEB8C8">Plus que 160 pts pour un poisson braisé offert</span>
+          </div>
+          <div style="padding:0 14px;display:grid;gap:6px">
+            <b style="font-size:12px">Tontine gourmande · « Les gars du bureau »</b>
+            <div class="row" style="font-size:11px"><span>5 membres · objectif commun</span><span><b>7 200</b> / 10 000 pts</span></div>
+            <div class="bar"><i style="width:72%"></i></div>
+            <span style="font-size:10px;color:var(--app-muted)">À 10 000 pts, tout le groupe gagne une tournée de grillades.</span>
+          </div>
+          <div class="items" style="margin-top:10px">
+            <div class="person"><div class="av" style="background:#E36A0A"><i data-lucide="cake" class="ic"></i></div><div><b>Votre anniversaire, c'est jeudi</b><div style="font-size:10px;color:var(--app-muted)">Dessert offert pour votre table</div></div><span class="chip">Offert</span></div>
+            <div class="person"><div class="av" style="background:#0E8A5C"><i data-lucide="share-2" class="ic"></i></div><div><b>Parrainer un ami</b><div style="font-size:10px;color:var(--app-muted)">+300 pts chacun, lien WhatsApp</div></div><span class="chip g">Partager</span></div>
+          </div>
+        </div></div>
+        <figcaption><span class="eyebrow">08 · Client</span><h3>Fidélité liée au numéro de téléphone</h3><p>Le client n'a pas de carte à garder : les points sont crédités à chaque paiement Wave ou Orange Money. La tontine gourmande reprend une pratique que tout le monde connaît.</p></figcaption>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<section id="espace-patron" style="background:var(--surface)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Espace patron · modules complets</span>
+      <h2>Livraison, statistiques, clients, recherche et documents</h2>
+      <p class="lede">C'est le back-office du restaurant. Le patron y suit ses livreurs en direct, compare ses années et voit ce qui marche ou pas. Il reçoit des conseils pour grandir et fidélise ses clients comme un community manager. Il retrouve aussi n'importe quel document en une recherche.</p>
+    </div>
+    <div class="screens">
+
+      <!-- STATISTIQUES -->
+      <figure class="screen-card wide">
+        <div class="tablet" style="background:#D9DDE4"><div class="scr"><div class="scroll-x"><div class="dash">
+          <div class="side"><span class="t">Dabali · Patron</span><div>Aujourd'hui</div><div>Livraisons</div><div class="on">Statistiques</div><div>Clients &amp; campagnes</div><div>Recherche &amp; documents</div></div>
+          <div class="dmain">
+            <div class="filters">
+              <div class="seg"><span>Semaine</span><span>Mois</span><span class="on">Année</span></div>
+              <span class="btn-s"><i data-lucide="calendar" class="ic"></i> 2026 vs 2025 · janv. → oct.</span>
+              <span class="btn-s"><i data-lucide="store" class="ic"></i> Tous les canaux</span>
+              <span class="btn-s pri" style="margin-left:auto"><i data-lucide="download" class="ic"></i> Bilan PDF</span>
+            </div>
+            <div class="kpis">
+              <div class="kpi"><span class="l">CA cumulé 2026</span><span class="v">114,7 M F</span><span class="d up">+19,9 % vs 95,7 M</span></div>
+              <div class="kpi"><span class="l">Clients uniques</span><span class="v">3 412</span><span class="d up">+27 % vs 2 687</span></div>
+              <div class="kpi"><span class="l">Panier moyen</span><span class="v">7 450 F</span><span class="d up">+4 %</span></div>
+              <div class="kpi"><span class="l">Nourriture jetée</span><span class="v">38 kg/mois</span><span class="d up">−41 %</span></div>
+            </div>
+            <div class="panel chart">
+              <div class="row"><h4><i data-lucide="chart-column" class="ic"></i> Chiffre d'affaires mensuel, en millions de FCFA</h4>
+                <div class="legend"><span><span class="sw" style="border-color:#E36A0A"></span>2026</span><span><span class="sw" style="border-color:#3D6FB0;border-top-style:dashed"></span>2025</span><span style="display:inline-flex;align-items:center;gap:4px"><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="none" stroke="#C8332B" stroke-width="2"/></svg>Chute détectée</span></div></div>
+              <svg viewBox="0 0 560 200" role="img" aria-label="Chiffre d'affaires mensuel 2026 contre 2025, de janvier à octobre. 2026 est au-dessus chaque mois sauf en mars et en août, où des chutes sont détectées.">
+                <g stroke="#E6E9EE" stroke-width="1">
+                  <line x1="40" y1="151.25" x2="548" y2="151.25"/><line x1="40" y1="113.75" x2="548" y2="113.75"/><line x1="40" y1="76.25" x2="548" y2="76.25"/><line x1="40" y1="38.75" x2="548" y2="38.75"/>
+                  <line x1="40" y1="170" x2="548" y2="170" stroke="#C9CFD8"/>
+                </g>
+                <g font-size="10" fill="#6B7686" text-anchor="end"><text x="32" y="154">8 M</text><text x="32" y="117">10 M</text><text x="32" y="79">12 M</text><text x="32" y="42">14 M</text></g>
+                <g font-size="10" fill="#6B7686" text-anchor="middle"><text x="40" y="188">janv.</text><text x="95.6" y="188">févr.</text><text x="151.1" y="188">mars</text><text x="206.7" y="188">avr.</text><text x="262.2" y="188">mai</text><text x="317.8" y="188">juin</text><text x="373.3" y="188">juil.</text><text x="428.9" y="188">août</text><text x="484.4" y="188">sept.</text><text x="540" y="188">oct.</text></g>
+                <polyline points="40,128.75 95.6,138.1 151.1,153.1 206.7,121.25 262.2,111.9 317.8,117.5 373.3,106.25 428.9,123.1 484.4,115.6 540,102.5" fill="none" stroke="#3D6FB0" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>
+                <polyline points="40,98.75 95.6,111.9 151.1,140 206.7,78.1 262.2,68.75 317.8,91.25 373.3,55.6 428.9,110 484.4,61.25 540,46.25" fill="none" stroke="#E36A0A" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="151.1" cy="140" r="7" fill="none" stroke="#C8332B" stroke-width="2"/>
+                <circle cx="428.9" cy="110" r="7" fill="none" stroke="#C8332B" stroke-width="2"/>
+                <circle cx="540" cy="46.25" r="4.5" fill="#E36A0A" stroke="#FFFFFF" stroke-width="2"/>
+                <circle cx="540" cy="102.5" r="4.5" fill="#3D6FB0" stroke="#FFFFFF" stroke-width="2"/>
+                <text x="530" y="36" font-size="11" font-weight="700" fill="#14202F" text-anchor="end">13,6 M</text>
+                <text x="530" y="120" font-size="11" fill="#6B7686" text-anchor="end">10,6 M</text>
+                <g fill="transparent">
+                  <rect class="hit" x="12" y="20" width="55.6" height="150"><title>Janvier : 2026 10,8 M · 2025 9,2 M</title></rect>
+                  <rect class="hit" x="67.8" y="20" width="55.6" height="150"><title>Février : 2026 10,1 M · 2025 8,7 M</title></rect>
+                  <rect class="hit" x="123.3" y="20" width="55.6" height="150"><title>Mars : 2026 8,6 M · 2025 7,9 M · chute pendant le Ramadan</title></rect>
+                  <rect class="hit" x="178.9" y="20" width="55.6" height="150"><title>Avril : 2026 11,9 M · 2025 9,6 M</title></rect>
+                  <rect class="hit" x="234.4" y="20" width="55.6" height="150"><title>Mai : 2026 12,4 M · 2025 10,1 M</title></rect>
+                  <rect class="hit" x="290" y="20" width="55.6" height="150"><title>Juin : 2026 11,2 M · 2025 9,8 M</title></rect>
+                  <rect class="hit" x="345.5" y="20" width="55.6" height="150"><title>Juillet : 2026 13,1 M · 2025 10,4 M</title></rect>
+                  <rect class="hit" x="401.1" y="20" width="55.6" height="150"><title>Août : 2026 10,2 M · 2025 9,5 M · chute de 22 % par rapport à juillet</title></rect>
+                  <rect class="hit" x="456.6" y="20" width="55.6" height="150"><title>Septembre : 2026 12,8 M · 2025 9,9 M</title></rect>
+                  <rect class="hit" x="512.2" y="20" width="47.8" height="150"><title>Octobre : 2026 13,6 M · 2025 10,6 M</title></rect>
+                </g>
+              </svg>
+              <details class="data"><summary>Voir les chiffres</summary>
+                <table><thead><tr><th>Mois</th><th>janv.</th><th>févr.</th><th>mars</th><th>avr.</th><th>mai</th><th>juin</th><th>juil.</th><th>août</th><th>sept.</th><th>oct.</th></tr></thead>
+                <tbody><tr><td>2026</td><td>10,8</td><td>10,1</td><td>8,6</td><td>11,9</td><td>12,4</td><td>11,2</td><td>13,1</td><td>10,2</td><td>12,8</td><td>13,6</td></tr><tr><td>2025</td><td>9,2</td><td>8,7</td><td>7,9</td><td>9,6</td><td>10,1</td><td>9,8</td><td>10,4</td><td>9,5</td><td>9,9</td><td>10,6</td></tr></tbody></table>
+              </details>
+            </div>
+            <div class="g4">
+              <div class="panel"><h4 class="good"><i data-lucide="circle-check" class="ic"></i> Ce qui a marché</h4>
+                <div class="li"><i data-lucide="trending-up" class="ic good"></i><span>Dernière louche<small>412 kg de nourriture sauvés</small></span><span class="v good">+1,9 M F</span></div>
+                <div class="li"><i data-lucide="trending-up" class="ic good"></i><span>Soirées match<small>CA de ces soirs-là comparé à un soir normal</small></span><span class="v good">+34 %</span></div>
+                <div class="li"><i data-lucide="trending-up" class="ic good"></i><span>Poisson braisé, plat n°1<small>par rapport à 2025</small></span><span class="v good">+28 %</span></div>
+                <div class="li"><i data-lucide="trending-up" class="ic good"></i><span>Paiement Wave<small>part des ventes (31 % en 2025)</small></span><span class="v good">50 %</span></div>
+              </div>
+              <div class="panel"><h4 class="bad"><i data-lucide="circle-x" class="ic"></i> Ce qui n'a pas marché</h4>
+                <div class="li"><i data-lucide="trending-down" class="ic bad"></i><span>Desserts<small>2 % des ventes, 40 % jetés</small></span><span class="v bad">−40 %</span></div>
+                <div class="li"><i data-lucide="trending-down" class="ic bad"></i><span>Kédjénou le midi en semaine<small>par rapport à 2025</small></span><span class="v bad">−24 %</span></div>
+                <div class="li"><i data-lucide="trending-down" class="ic bad"></i><span>Commandes Glovo<small>commission de 27 %, marge nette de 6 %</small></span><span class="v bad">6 %</span></div>
+                <div class="li"><i data-lucide="trending-down" class="ic bad"></i><span>Attente le samedi soir<small>objectif : 15 min</small></span><span class="v bad">31 min</span></div>
+              </div>
+              <div class="panel"><h4 class="warn-c"><i data-lucide="triangle-alert" class="ic"></i> Chutes détectées</h4>
+                <div class="li"><span class="chip y">Hebdo</span><span>Mardis soir<small>sur les 4 dernières semaines</small></span><span class="v bad">−18 %</span></div>
+                <div class="li"><span class="chip r">Mois</span><span>Août 2026 par rapport à juillet<small>vacances : la clientèle des bureaux est partie</small></span><span class="v bad">−22 %</span></div>
+                <div class="li"><span class="chip y">Mois</span><span>Mars 2026 par rapport à février<small>Ramadan, une baisse attendue</small></span><span class="v warn-c">−15 %</span></div>
+                <div class="li"><span class="chip r">Année</span><span>Livraisons vers Yopougon<small>par rapport à 2025</small></span><span class="v bad">−30 %</span></div>
+              </div>
+              <div class="panel"><h4><i data-lucide="lightbulb" class="ic" style="color:var(--app-accent)"></i> Conseils pour grandir</h4>
+                <div class="tip"><div class="row"><b>Menu midi bureau à 2 500 F, du mardi au jeudi</b><span class="btn-s pri">Créer l'offre</span></div><small>Ça compense la baisse du kédjénou le midi. Gain estimé : +450 000 F par mois.</small></div>
+                <div class="tip"><div class="row"><b>Relancer 86 clients absents depuis 30 jours</b><span class="btn-s pri">Lancer</span></div><small>Environ 20 retours attendus, soit +150 000 F.</small></div>
+                <div class="tip"><div class="row"><b>Ajouter 1 serveur le samedi de 19h à 23h</b><span class="btn-s">Planifier</span></div><small>L'attente passerait de 31 à environ 19 minutes.</small></div>
+                <small style="font-size:10px;color:var(--app-muted)">Ce sont des estimations de l'IA, calculées sur votre historique, à valider par vous.</small>
+              </div>
+            </div>
+          </div>
+        </div></div></div></div>
+        <figcaption style="max-width:880px"><span class="eyebrow">18 · Statistiques</span><h3>Bilan comparé et conseils pour grandir</h3><p>La vue peut être hebdomadaire, mensuelle ou annuelle. Elle compare 2026 et 2025, liste ce qui a marché et ce qui n'a pas marché, et signale les chutes avec leur cause probable. Chaque conseil est chiffré et se lance en un clic. Le graphique est utilisable par les daltoniens : 2025 est en pointillés, et chaque mois est détaillé au survol.</p></figcaption>
+      </figure>
+
+      <!-- LIVRAISON -->
+      <figure class="screen-card wide">
+        <div class="tablet" style="background:#D9DDE4"><div class="scr"><div class="scroll-x"><div class="dash">
+          <div class="side"><span class="t">Dabali · Patron</span><div>Aujourd'hui</div><div class="on">Livraisons</div><div>Statistiques</div><div>Clients &amp; campagnes</div><div>Recherche &amp; documents</div></div>
+          <div class="dmain">
+            <div class="kpis">
+              <div class="kpi"><span class="l">En cours</span><span class="v">5</span><span class="d down">1 en retard</span></div>
+              <div class="kpi"><span class="l">Livrées aujourd'hui</span><span class="v">38</span><span class="d up">+6 vs samedi dernier</span></div>
+              <div class="kpi"><span class="l">Temps moyen</span><span class="v">27 min</span><span class="d up">−4 min</span></div>
+              <div class="kpi"><span class="l">Espèces à récupérer</span><span class="v">46 500 F</span><span class="d" style="color:var(--app-muted)">chez 2 livreurs</span></div>
+            </div>
+            <div class="g2">
+              <div class="panel"><h4><i data-lucide="map-pin" class="ic" style="color:var(--app-accent)"></i> Carte en direct · Cocody</h4>
+                <div class="map">
+                  <svg viewBox="0 0 420 240" role="img" aria-label="Carte de Cocody avec le restaurant, trois livreurs et leurs clients">
+                    <rect width="420" height="240" fill="#EAEFF3"/>
+                    <path d="M0,192 C80,172 140,206 220,192 S360,172 420,186 L420,240 L0,240Z" fill="#BFD7EA"/>
+                    <text x="200" y="226" font-size="10" fill="#5B7A94" text-anchor="middle">Lagune Ébrié</text>
+                    <path d="M0,46 L420,64 M60,0 L118,182 M200,0 L226,176 M330,0 L306,180 M0,124 L420,112" stroke="#FFFFFF" stroke-width="9" fill="none"/>
+                    <path d="M0,88 L420,90 M150,0 L170,180 M260,0 L268,180" stroke="#FFFFFF" stroke-width="4" fill="none"/>
+                    <g font-size="10" fill="#6B7686"><text x="76" y="30">Angré</text><text x="338" y="100">Riviera 2</text><text x="128" y="150">II Plateaux</text><text x="300" y="158">Riviera Palmeraie</text></g>
+                    <path d="M130,72 L214,60 L222,106 L330,104" stroke="#E36A0A" stroke-width="2.5" stroke-dasharray="6 4" fill="none"/>
+                    <circle cx="130" cy="72" r="10" fill="#101A28"/><text x="130" y="76" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700">B</text>
+                    <circle cx="219" cy="86" r="10" fill="#E36A0A" stroke="#FFFFFF" stroke-width="2"/><text x="219" y="90" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700">M</text>
+                    <circle cx="94" cy="124" r="10" fill="#0E8A5C" stroke="#FFFFFF" stroke-width="2"/><text x="94" y="128" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700">I</text>
+                    <circle cx="300" cy="140" r="10" fill="#C8332B" stroke="#FFFFFF" stroke-width="2"/><text x="300" y="144" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700">S</text>
+                    <rect x="324" y="98" width="12" height="12" rx="3" fill="#14202F"/><rect x="316" y="160" width="12" height="12" rx="3" fill="#14202F"/>
+                  </svg>
+                </div>
+                <div class="legend"><span><svg width="10" height="10" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#E36A0A"/></svg> En route</span><span><svg width="10" height="10" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#0E8A5C"/></svg> Retour au resto</span><span><svg width="10" height="10" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8332B"/></svg> En retard</span><span><svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" fill="#14202F"/></svg> Client</span></div>
+              </div>
+              <div class="panel"><h4><i data-lucide="bike" class="ic" style="color:var(--app-accent)"></i> Livraisons en cours</h4>
+                <div class="dl"><b>#D-0315 · Yannick · Riviera 2</b><span class="chip">En route · 6 min</span><small>Moussa · payé Wave · code 4821</small></div>
+                <div class="dl"><b>#D-0316 · Mariam · Palmeraie</b><span class="chip r">Retard +8 min</span><small>Serge · espèces 12 500 F · client prévenu automatiquement</small></div>
+                <div class="dl"><b>#D-0317 · Bureau Orange · Plateau</b><span class="chip y">En cuisine</span><small>À attribuer : Ibrahim est le plus proche (retour dans 4 min)</small></div>
+                <div class="dl"><b>#D-0312 · Koffi · Angré 7e</b><span class="chip g">Livré <i data-lucide="check" class="ic"></i></span><small>Code validé · photo de remise · note de 5</small></div>
+                <div class="dl"><b>#G-2291 · via Glovo</b><span class="chip" style="background:#F4F6F9;color:var(--app-muted)">Coursier Glovo</span><small>Suivi géré par Glovo, statut synchronisé</small></div>
+              </div>
+            </div>
+            <div class="panel"><h4><i data-lucide="users" class="ic" style="color:var(--app-accent)"></i> Mes livreurs aujourd'hui</h4>
+              <table><thead><tr><th>Livreur</th><th>Statut</th><th>Courses</th><th>Temps moyen</th><th>Espèces encaissées</th><th>Note</th></tr></thead>
+              <tbody>
+                <tr><td>Moussa K.</td><td>En route</td><td>14</td><td>24 min</td><td>34 000 F</td><td>4,9</td></tr>
+                <tr><td>Serge A.</td><td>En retard</td><td>11</td><td>31 min</td><td>12 500 F</td><td>4,6</td></tr>
+                <tr><td>Ibrahim T.</td><td>Retour au resto</td><td>13</td><td>26 min</td><td>0 F</td><td>4,8</td></tr>
+              </tbody></table>
+            </div>
+          </div>
+        </div></div></div></div>
+        <figcaption style="max-width:880px"><span class="eyebrow">19 · Livraison</span><h3>Suivi des livreurs en temps réel</h3><p>On voit sur la carte les livreurs du restaurant, leur statut et le temps de chaque course. Le client est prévenu automatiquement en cas de retard. Les espèces encaissées par chaque livreur sont suivies. Les commandes Glovo et Yango apparaissent dans la même liste. La livraison en direct ne coûte aucune commission.</p></figcaption>
+      </figure>
+
+      <!-- CLIENTS & CAMPAGNES -->
+      <figure class="screen-card wide">
+        <div class="tablet" style="background:#D9DDE4"><div class="scr"><div class="scroll-x"><div class="dash">
+          <div class="side"><span class="t">Dabali · Patron</span><div>Aujourd'hui</div><div>Livraisons</div><div>Statistiques</div><div class="on">Clients &amp; campagnes</div><div>Recherche &amp; documents</div></div>
+          <div class="dmain">
+            <div class="segs">
+              <div class="sg"><span class="v">214</span><span class="l">Habitués<br>4 visites et plus par mois</span></div>
+              <div class="sg on"><span class="v">86</span><span class="l">À relancer<br>absents depuis 30 jours</span></div>
+              <div class="sg"><span class="v">23</span><span class="l">Anniversaires<br>ce mois-ci</span></div>
+              <div class="sg"><span class="v">312</span><span class="l">Fans du poisson<br>braisé</span></div>
+              <div class="sg"><span class="v">140</span><span class="l">Clients bureau<br>le midi en semaine</span></div>
+            </div>
+            <div class="g2">
+              <div class="panel"><h4><i data-lucide="heart" class="ic" style="color:var(--app-accent)"></i> Clients fidèles</h4>
+                <table><thead><tr><th>Client</th><th>Visites</th><th>Dépensé en 2026</th><th>Plat préféré</th><th>Dernier passage</th></tr></thead>
+                <tbody>
+                  <tr><td>Aïcha D.</td><td>61</td><td>412 000 F</td><td>Kédjénou</td><td>hier</td></tr>
+                  <tr><td>Koffi N.</td><td>48</td><td>356 500 F</td><td>Poisson braisé</td><td>il y a 3 j</td></tr>
+                  <tr><td>Yannick B.</td><td>39</td><td>118 000 F</td><td>Alloco poulet</td><td>aujourd'hui</td></tr>
+                  <tr><td>Mariam K.</td><td>12</td><td>96 000 F</td><td>Foutou graine</td><td>il y a 34 j</td></tr>
+                </tbody></table>
+                <small style="font-size:10px;color:var(--app-muted)">Seuls les clients qui ont accepté de recevoir des offres sont contactés. Ils se désinscrivent en un toucher.</small>
+              </div>
+              <div class="panel"><h4><i data-lucide="megaphone" class="ic" style="color:var(--app-accent)"></i> Nouvelle campagne · 86 clients</h4>
+                <div class="poster"><small>Le Baobab · Angré</small><span class="h">On vous a manqué ?<br>Votre poisson braisé vous attend.</span><small>-20 % sur votre plat préféré jusqu'à dimanche</small></div>
+                <div class="wa-prev"><div class="bub">Coucou Mariam ! Ça fait un moment ! Ton foutou sauce graine t'attend au Baobab, avec -20 % jusqu'à dimanche. On te garde une table ?</div></div>
+                <div class="filters"><span class="btn-s"><i data-lucide="message-circle" class="ic"></i> WhatsApp</span><span class="btn-s"><i data-lucide="clock" class="ic"></i> Jeudi 11h30</span><span class="btn-s"><i data-lucide="sparkles" class="ic"></i> Texte et visuel par l'IA</span><span class="btn-s pri" style="margin-left:auto"><i data-lucide="send" class="ic"></i> Programmer</span></div>
+              </div>
+            </div>
+            <div class="panel"><h4><i data-lucide="chart-column" class="ic" style="color:var(--app-accent)"></i> Résultat de la dernière campagne · « Soirée match des Éléphants »</h4>
+              <div class="kpis"><div class="kpi"><span class="l">Envoyés</span><span class="v">412</span></div><div class="kpi"><span class="l">Lus</span><span class="v">371</span><span class="d" style="color:var(--app-muted)">90 %</span></div><div class="kpi"><span class="l">Venus au resto</span><span class="v">58</span><span class="d up">14 % des envoyés</span></div><div class="kpi"><span class="l">CA généré</span><span class="v">436 000 F</span><span class="d up">coût : 0 F</span></div></div>
+            </div>
+          </div>
+        </div></div></div></div>
+        <figcaption style="max-width:880px"><span class="eyebrow">20 · Fidélisation</span><h3>Clients fidèles et campagnes, comme un community manager</h3><p>Les clients sont classés automatiquement en groupes : habitués, à relancer, anniversaires, plat préféré. L'IA rédige le message et crée le visuel pour chaque groupe. La campagne part sur WhatsApp au bon moment, et on mesure combien de clients sont vraiment venus. Tout respecte le consentement des clients, qu'exige la loi ivoirienne sur les données personnelles.</p></figcaption>
+      </figure>
+
+      <!-- RECHERCHE & DOCUMENTS -->
+      <figure class="screen-card wide">
+        <div class="tablet" style="background:#D9DDE4"><div class="scr"><div class="scroll-x"><div class="dash">
+          <div class="side"><span class="t">Dabali · Patron</span><div>Aujourd'hui</div><div>Livraisons</div><div>Statistiques</div><div>Clients &amp; campagnes</div><div class="on">Recherche &amp; documents</div></div>
+          <div class="dmain">
+            <div class="sbox"><i data-lucide="search" class="ic" style="color:var(--app-accent)"></i><span class="q"><b>mariam octobre</b></span><span class="kbd">Ctrl K</span><span class="btn-s"><i data-lucide="mic" class="ic"></i> À la voix</span></div>
+            <div class="res">
+              <div class="panel"><h5>Clients</h5><div class="ico-t"><i data-lucide="users" class="ic"></i><span><b class="hl">Mariam</b> K. · 12 visites · Foutou graine</span></div><div class="ico-t"><i data-lucide="users" class="ic"></i><span><b class="hl">Mariam</b> T. · 2 visites</span></div></div>
+              <div class="panel"><h5>Tickets et commandes</h5><div class="ico-t"><i data-lucide="file-text" class="ic"></i><span>Ticket 000412 · 18 <span class="hl">oct.</span> · 6 000 F</span></div><div class="ico-t"><i data-lucide="bike" class="ic"></i><span>Livraison D-0281 · 27 <span class="hl">oct.</span></span></div></div>
+              <div class="panel"><h5>Documents</h5><div class="ico-t"><i data-lucide="file-text" class="ic"></i><span>Bilan d'<span class="hl">octobre</span> 2026.pdf</span></div><div class="ico-t"><i data-lucide="file-text" class="ic"></i><span>Rapport Z · 31 <span class="hl">oct.</span></span></div></div>
+            </div>
+            <div class="panel"><div class="row"><h4><i data-lucide="folder" class="ic" style="color:var(--app-accent)"></i> Mes documents</h4><div class="filters"><span class="chip">Tous</span><span class="chip" style="background:#F4F6F9;color:var(--app-muted)">Rapports Z</span><span class="chip" style="background:#F4F6F9;color:var(--app-muted)">Factures</span><span class="chip" style="background:#F4F6F9;color:var(--app-muted)">Fournisseurs</span><span class="chip" style="background:#F4F6F9;color:var(--app-muted)">Contrats</span></div></div>
+              <table><thead><tr><th>Document</th><th>Type</th><th>Date</th><th>Ajouté par</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Rapport Z · clôture 0142</td><td>Caisse</td><td>21/11/2026</td><td>Automatique</td><td><i data-lucide="download" class="ic"></i></td></tr>
+                <tr><td>Bilan d'octobre 2026</td><td>Statistiques</td><td>01/11/2026</td><td>Automatique</td><td><i data-lucide="download" class="ic"></i></td></tr>
+                <tr><td>Facture poissonnerie · 14 kg de carpe</td><td>Fournisseur</td><td>20/11/2026</td><td>Photo de Tantie Awa</td><td><i data-lucide="download" class="ic"></i></td></tr>
+                <tr><td>Facture normalisée · Bureau Orange</td><td>Facture client</td><td>19/11/2026</td><td>Automatique</td><td><i data-lucide="download" class="ic"></i></td></tr>
+                <tr><td>Contrat livreur · Moussa K.</td><td>Contrat</td><td>02/03/2026</td><td>Tantie Awa</td><td><i data-lucide="download" class="ic"></i></td></tr>
+                <tr><td>Contrôle hygiène 2026</td><td>Administratif</td><td>15/06/2026</td><td>Scan</td><td><i data-lucide="download" class="ic"></i></td></tr>
+              </tbody></table>
+              <div class="mini-row" style="color:var(--app-muted)"><i data-lucide="lock" class="ic"></i> Sauvegarde automatique et chiffrée · tout l'historique depuis l'ouverture · consultable sans connexion</div>
+            </div>
+          </div>
+        </div></div></div></div>
+        <figcaption style="max-width:880px"><span class="eyebrow">21 · Recherche &amp; documents</span><h3>Une seule recherche pour tout retrouver</h3><p>On tape ou on dit un mot, et l'appli cherche dans les clients, les tickets, les livraisons et les documents à la fois. Tous les documents sont classés automatiquement : rapports Z, bilans, factures fournisseurs prises en photo, contrats. Ils sont sauvegardés et ne se perdent plus.</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Banque d'idées</span>
+      <h2>Les idées innovantes, notées pour un hackathon d'une journée</h2>
+      <p class="lede">Chaque idée a deux notes. <b>Effet jury</b> : est-ce qu'elle marque ? <b>Faisable le 21</b> : peut-on la coder et la montrer en 10 heures ? Les idées encadrées sont celles à mettre au centre de la démo.</p>
+    </div>
+    <div class="ideas">
+      <div class="idea star"><span class="axis">Gaspillage · IA</span><h3>Prévision contextuelle ivoirienne</h3><p>Elle estime le nombre de portions à préparer selon l'historique, le jour de paie (fin de mois), les matchs des Éléphants, la pluie, le Ramadan et les fêtes. Chaque prévision est expliquée en clair.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span></div></div>
+      <div class="idea star"><span class="axis">Commander · Paiement</span><h3>Addition « on cotise »</h3><p>L'addition est partagée à parts égales ou par plat, et chacun paie avec son mobile money. Les retardataires reçoivent un lien WhatsApp.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea star"><span class="axis">Commander · IA</span><h3>Commande par note vocale</h3><p>Une note vocale WhatsApp est transcrite puis transformée en panier structuré. L'IA gère les variations (« piment ++ », « sans oignon ») et les noms de plats locaux.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span></div></div>
+      <div class="idea star"><span class="axis">Gérer · IA</span><h3>Photo de l'ardoise vers le menu</h3><p>Un modèle de vision lit l'ardoise ou le menu papier et génère le menu numérique et les QR de table. C'est l'inscription la plus simple possible pour un maquis.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea star"><span class="axis">Accessibilité</span><h3>Mode sans lecture</h3><p>Menu en images, prix en billets, voix en dioula, baoulé et nouchi, et relecture de la commande avant envoi. Près d'un Ivoirien sur deux est concerné.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span></div></div>
+      <div class="idea star"><span class="axis">Reçus · Démo live</span><h3>Ticket thermique illustré</h3><p>Le ticket sort d'une vraie imprimante Bluetooth de 58 mm pendant le pitch, avec des pictos et le total en billets. Une version WhatsApp et une version audio suivent.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Gérer · Confiance</span><h3>Caisse anti-vol pour patron absent</h3><p>Tickets numérotés, annulations validées par le patron sur WhatsApp, rapport Z automatique et écart de caisse calculé. Ça répond à une vraie peur des patrons.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Gaspillage · Marché</span><h3>« Dernière louche »</h3><p>Les invendus sont vendus à -50 % en fin de service, avec une alerte aux clients proches. Le kilo sauvé sert de mesure d'impact.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Temps réel</span><h3>Écran cuisine multi-canal hors-ligne</h3><p>Il regroupe la salle, WhatsApp, Glovo et Yango sur un seul écran. Il garde les données en local et synchronise au retour du réseau, ce qui rassure face aux coupures.</p><div class="scores"><span class="score">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Fidéliser</span><h3>Tontine gourmande</h3><p>Un groupe d'amis cumule des points vers un objectif commun. Ça crée de la viralité et ça reprend un code culturel fort.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Gérer · IA</span><h3>Bilan vocal du soir</h3><p>Chaque soir, le patron reçoit un résumé audio de 30 secondes sur WhatsApp : chiffre du jour, plat star, rupture à prévoir. Il n'a pas besoin d'ouvrir de tableau de bord.</p><div class="scores"><span class="score">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Fidéliser · Qualité</span><h3>Avis vocal en 10 secondes</h3><p>Le client laisse un avis vocal après le repas. L'IA en tire le sentiment et les plaintes récurrentes (« trop salé », « attente »).</p><div class="scores"><span class="score">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Gérer · Achats</span><h3>Liste d'achats pour le marché</h3><p>La prévision devient une liste d'achats : kilos de poisson, régimes de banane plantain. Elle peut être envoyée au fournisseur ou au marché de Cocody.</p><div class="scores"><span class="score">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Hôtellerie · Vatel</span><h3>Room service et restaurant d'hôtel</h3><p>Le même moteur sert au QR en chambre et aux réservations de petit-déjeuner, avec une prévision des couverts selon le taux d'occupation. C'est un clin d'œil direct à Vatel.</p><div class="scores"><span class="score hi">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score ok">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i></span></span></div></div>
+      <div class="idea"><span class="axis">Inclusion</span><h3>Mode USSD / SMS</h3><p>La commande et le suivi passent aussi par SMS pour les clients sans data. On le présente comme une vision future, pas comme une démo.</p><div class="scores"><span class="score">Effet jury <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i><i data-lucide="star" class="ic off"></i></span></span><span class="score">Faisable <span class="stars"><i data-lucide="star" class="ic on"></i><i data-lucide="star" class="ic off"></i><i data-lucide="star" class="ic off"></i></span></span></div></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Choix à trancher en équipe</span>
+      <h2>Trois directions possibles</h2>
+      <p class="lede">Je recommande la première. Les deux autres restent valables si l'équipe préfère un projet plus ciblé.</p>
+    </div>
+    <div class="concepts">
+      <div class="concept rec"><h3>A · Dabali, plateforme complète</h3><p class="pitch">Elle couvre la boucle entière : QR, cotisation, écran cuisine, cockpit et prévision anti-gaspillage. On montre en profondeur 4 effets « waouh » : la cotisation avec le ticket imprimé en direct, le mode sans lecture, la prévision anti-gaspillage et la photo de l'ardoise. Le reste est présent mais plus simple : accueil personnalisé, livraison, statistiques comparées, campagnes et documents.</p><div class="verdict"><b>Recommandé</b><span>Il répond aux quatre problèmes de l'affiche, ce qui donne le meilleur score de pertinence. Le risque est de s'éparpiller : il faut un périmètre strict.</span></div></div>
+      <div class="concept"><h3>B · Maquis Connect, tout sur WhatsApp</h3><p class="pitch">Pas d'appli : tout passe par WhatsApp (menu, commande vocale, paiement Wave, bilan du soir). L'interface web ne sert qu'à la cuisine.</p><div class="verdict"><b>Très local</b><span>Il est très ancré dans le terrain et la démo est simple. Mais il dépend de l'API WhatsApp Business, qu'il faudra simuler le jour J.</span></div></div>
+      <div class="concept"><h3>C · Zéro Reste, anti-gaspillage pur</h3><p class="pitch">Il se concentre sur la prévision IA et la vente des invendus, avec un tableau d'impact en kg sauvés et en FCFA récupérés.</p><div class="verdict"><b>Le plus original</b><span>L'impact social est fort et il y a peu de concurrents. Mais il couvre moins le côté « expérience client » mis en avant par l'affiche.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two">
+    <div>
+      <div class="sec-head"><span class="eyebrow">Jour J · 21 novembre</span><h2>Planning de la journée</h2></div>
+      <ol class="timeline">
+        <li><span class="h">08:00</span><p>Accueil et annonce du sujet exact<small>On adapte le périmètre de Dabali au sujet en 30 minutes, sans tout réécrire.</small></p></li>
+        <li><span class="h">08:30</span><p>Gel du périmètre et répartition des tâches<small>3 effets « waouh », le reste simplifié. Un tableau de tâches partagé.</small></p></li>
+        <li><span class="h">09:00</span><p>Développement, bloc 1<small>Modèle de données, menu QR, écran cuisine en temps réel.</small></p></li>
+        <li><span class="h">12:30</span><p>Point d'étape, la démo de bout en bout doit tourner<small>Même si c'est moche : une commande va de la table jusqu'à la cuisine.</small></p></li>
+        <li><span class="h">13:00</span><p>Développement, bloc 2<small>Fonctions IA (prévision, photo de l'ardoise, voix) et cotisation.</small></p></li>
+        <li><span class="h">16:00</span><p>Gel du code, on ne fait plus que corriger et peaufiner<small>Données de démo réalistes, vidéo de secours enregistrée.</small></p></li>
+        <li><span class="h">16:30</span><p>Répétition du pitch, 3 fois<small>Chronométré, avec les questions probables du jury.</small></p></li>
+        <li><span class="h">18:00</span><p>Pitch devant le jury</p></li>
+      </ol>
+    </div>
+    <div>
+      <div class="sec-head"><span class="eyebrow">Pitch de 3 minutes</span><h2>Scénario de démo</h2></div>
+      <ol class="timeline">
+        <li><span class="h">0:00</span><p>Le problème, avec un chiffre<small>« Un maquis jette X kg par semaine et perd 25 % sur chaque commande Glovo. »</small></p></li>
+        <li><span class="h">0:30</span><p>Un juré scanne le QR sur scène<small>Il commande et voit le ticket arriver sur l'écran cuisine projeté.</small></p></li>
+        <li><span class="h">1:00</span><p>Cotisation à 2 téléphones, puis le ticket sort de l'imprimante<small>Paiement simulé de type Wave. On tend le ticket papier au jury.</small></p></li>
+        <li><span class="h">1:30</span><p>Mode sans lecture<small>On passe le menu en dioula et l'appli répète la commande à voix haute. « Près d'un Ivoirien sur deux peut enfin commander seul. »</small></p></li>
+        <li><span class="h">1:55</span><p>Note vocale WhatsApp transformée en ticket<small>Ou bien la photo de l'ardoise transformée en menu.</small></p></li>
+        <li><span class="h">2:15</span><p>Cockpit : prévision et alerte anti-gaspillage<small>« Demain, match des Éléphants : préparez 46 poissons. »</small></p></li>
+        <li><span class="h">2:40</span><p>Modèle économique et suite<small>Abonnement de 10 000 F par mois, 0 % de commission, pilote avec des restaurants Vatel.</small></p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Technique &amp; équipe</span><h2>Stack proposée et rôles</h2><p class="lede">L'objectif est d'aller vite et que la démo soit fiable. On choisit des outils que l'équipe maîtrise déjà. La stack ci-dessous est une proposition par défaut.</p></div>
+    <div class="scroll-x">
+      <table>
+        <thead><tr><th>Bloc</th><th>Choix</th><th>Pourquoi</th></tr></thead>
+        <tbody>
+          <tr><td>Front client et cuisine</td><td>Next.js (PWA) + Tailwind</td><td>Un seul code pour le menu QR, l'écran cuisine et le cockpit. La PWA fonctionne hors-ligne.</td></tr>
+          <tr><td>Back et temps réel</td><td>Supabase (Postgres, Auth, Realtime)</td><td>Le temps réel cuisine est prêt sans serveur à écrire, ce qui fait gagner des heures.</td></tr>
+          <tr><td>IA</td><td>API Claude (vision et texte) + transcription audio</td><td>Lecture de l'ardoise, panier depuis la voix, explication des prévisions.</td></tr>
+          <tr><td>Prévision</td><td>Régression simple sur un historique simulé + règles contextuelles</td><td>C'est explicable et ça tient en une journée. Pas besoin d'un modèle complexe.</td></tr>
+          <tr><td>Paiement</td><td>API marchand Wave / CinetPay en bac à sable, ou simulation</td><td>Écran de paiement crédible. Vérifier l'accès au bac à sable avant le 21.</td></tr>
+          <tr><td>WhatsApp</td><td>Simulateur web avec le look WhatsApp, l'API Business en option</td><td>Démo sans dépendre de la validation Meta.</td></tr>
+          <tr><td>Carte livreurs</td><td>Leaflet + OpenStreetMap, position GPS envoyée par l'appli livreur (PWA)</td><td>Gratuit, sans clé d'API. Le suivi se met à jour en direct grâce au temps réel Supabase.</td></tr>
+          <tr><td>Recherche</td><td>Recherche plein texte Postgres sur les clients, tickets et documents ; stockage des fichiers Supabase</td><td>Une seule barre de recherche, sans service à ajouter.</td></tr>
+          <tr><td>Impression</td><td>Imprimante thermique Bluetooth 58 mm, commandes ESC/POS via Web Bluetooth (Chrome Android)</td><td>Un vrai ticket qui sort pendant le pitch. Les pictos sont imprimés en image noir et blanc.</td></tr>
+          <tr><td>Voix locales</td><td>Clips enregistrés en dioula, baoulé et nouchi + synthèse vocale en français</td><td>Une trentaine de phrases suffisent pour la démo. Les voix sont enregistrées par des locuteurs natifs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="scroll-x" style="margin-top:24px">
+      <table>
+        <thead><tr><th>Rôle</th><th>Responsabilité</th></tr></thead>
+        <tbody>
+          <tr><td>Lead produit / pitch</td><td>Périmètre, scénario de démo, slides, prise de parole. C'est la personne qui parle le langage restauration au jury.</td></tr>
+          <tr><td>Front</td><td>Menu QR, cotisation, écran cuisine. C'est la qualité visuelle de la démo.</td></tr>
+          <tr><td>Back / données</td><td>Supabase, temps réel, données de démo réalistes, prévision.</td></tr>
+          <tr><td>IA</td><td>Photo de l'ardoise vers le menu, voix vers le panier, explication des prévisions.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Prochaines étapes</span><h2>À faire avant le 21</h2></div>
+    <ul class="todo">
+      <li><span class="due">avant le 10 nov.</span><div><b>Envoyer les candidatures</b> à admissions@vatel.ci ou via le formulaire : portfolio de chaque membre (GitHub et projets), Bac+2, 25 ans maximum.</div></li>
+      <li><span class="due">avant le 10 nov.</span><div><b>Choisir la direction (A, B ou C)</b> et valider le nom avec l'équipe.</div></li>
+      <li><span class="due later">semaine du 10</span><div><b>Lire le règlement</b> : peut-on préparer du code ou un squelette avant ? Le sujet sera-t-il imposé le jour J ? Quels sont les critères du jury ?</div></li>
+      <li><span class="due later">semaine du 10</span><div><b>Aller parler à 3 restaurateurs ou gérants de maquis</b> (Angré, Riviera, Cocody). Une citation réelle dans le pitch pèse plus que n'importe quelle stat.</div></li>
+      <li><span class="due later">semaine du 10</span><div><b>Trouver une imprimante thermique Bluetooth 58 mm</b> et un rouleau, puis tester l'impression depuis le navigateur.</div></li>
+      <li><span class="due later">semaine du 10</span><div><b>Enregistrer les voix</b> : une trentaine de phrases (noms des plats, prix, « c'est bon ? ») en dioula et en baoulé, avec des locuteurs natifs.</div></li>
+      <li><span class="due later">semaine du 17</span><div><b>Préparer les données de démo</b> (menu, historique de ventes simulé), l'identité visuelle et un modèle de slides. Tester l'accès aux API.</div></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap" style="display:grid;gap:12px">
+    <b style="color:var(--ink)">Sources de la recherche</b>
+    <ul class="sources">
+      <li><a href="https://news.abidjan.net/articles/716941/restauration-le-service-yango-deli-desormais-disponible-a-abidjan">Abidjan.net · Yango Deli disponible à Abidjan</a></li>
+      <li><a href="https://news.abidjan.net/articles/729660/cote-divoire-industrie-de-livraison-de-repas-yango-deli-etend-sa-portee-aux-quartiers-dabobo-adjame-et-port-bouet">Abidjan.net · Yango Deli s'étend à Abobo, Adjamé et Port-Bouët</a></li>
+      <li><a href="https://kolonell.com/fr/blog/application-restaurant-commande-en-ligne-abidjan-2026">Kolonell · Commande en ligne pour restaurants à Abidjan, 2026 (commissions estimées)</a></li>
+      <li><a href="https://www.osiris.sn/katier-bamba-wave-cote-d-ivoire-la-digitalisation-des-paiements-est-l-avenir-du.html">Osiris · Wave CI : de 600 à 300 000 marchands</a></li>
+      <li><a href="https://africa24tv.com/?p=142561">Africa24 · Mobile money et inclusion financière en Côte d'Ivoire</a></li>
+      <li><a href="https://restolabs.com/blog/restaurant-technology-trends">Restolabs · Tendances tech restaurant</a> · <a href="https://flipdish.com/resources/blog/emerging-restaurant-technologies">Flipdish · Technologies émergentes 2026</a> · <a href="https://www.servmeco.com/resources/restaurant-technology-trends">Servme · 12 tendances 2026</a></li>
+      <li><a href="https://orderingstack.com/blog/the-future-of-restaurant-technology-trends-shaping-2026-and-beyond">Ordering Stack · L'avenir de la tech restaurant</a></li>
+      <li><a href="https://fr.allafrica.com/stories/202604140570.html">AllAfrica · Analphabétisme : 46,5 % de la population (ESACI 2025)</a></li>
+      <li><a href="https://finances.gouv.ci/actualites/65-contenu-dynamique/actualite/1137-la-digitalisation-au-service-de-l-amelioration-des-recettes-fiscales-la-dgi-lance-son-systeme-de-facture-normalisee-electronique">Ministère des Finances · La DGI lance la facture normalisée électronique</a> · <a href="https://fr.apanews.net/cote-divoire/la-rci-lance-la-facturation-normalisee-electronique/">APA News · FNE</a> · <a href="https://digitalmag.ci/cote-divoire-facture-normalisee-electronique-fne-pourquoi-les-commercants-demandent-la-suspension-des-controles/?amp=1">Digitalmag · FNE et commerçants</a></li>
+    </ul>
+    <p>Les chiffres de commissions et de frais viennent de blogs commerciaux et restent à vérifier. Le restaurant « Le Baobab » et toutes les données des maquettes sont fictifs. Les QR codes et codes-barres sont décoratifs.</p>
+  </div>
+</footer>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script>try{lucide.createIcons()}catch(e){}</script>
+<script>
+(function(){
+  function rng(seed){return function(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff}}
+  var ink='#1F1F1F',paper='#FBFBF7';
+  document.querySelectorAll('canvas.qr').forEach(function(c,i){
+    var n=25,s=4,ctx=c.getContext('2d'),r=rng(42+i);
+    c.width=c.height=n*s;ctx.fillStyle=paper;ctx.fillRect(0,0,n*s,n*s);ctx.fillStyle=ink;
+    for(var y=0;y<n;y++)for(var x=0;x<n;x++){var f=(x<8&&y<8)||(x>n-9&&y<8)||(x<8&&y>n-9);if(!f&&r()>0.52)ctx.fillRect(x*s,y*s,s,s)}
+    [[0,0],[n-7,0],[0,n-7]].forEach(function(p){ctx.fillStyle=ink;ctx.fillRect(p[0]*s,p[1]*s,7*s,7*s);ctx.fillStyle=paper;ctx.fillRect((p[0]+1)*s,(p[1]+1)*s,5*s,5*s);ctx.fillStyle=ink;ctx.fillRect((p[0]+2)*s,(p[1]+2)*s,3*s,3*s)});
+  });
+  document.querySelectorAll('.barcode').forEach(function(b,i){
+    var r=rng(7+i),h='';for(var k=0;k<44;k++){h+='<i style="width:'+(1+Math.floor(r()*3))+'px;margin-right:'+(1+Math.floor(r()*2))+'px"></i>'}b.innerHTML=h;
+  });
+})();
+</script>

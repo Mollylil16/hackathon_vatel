@@ -1,0 +1,21 @@
+# Dépendances et builds
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets : ne jamais pousser de clés
+.env
+.env.*
+!.env.example
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# Système
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C02 · Bienvenue habitué</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .content { gap: 10px; padding-top: var(--s-1); }
+  .hero { padding: var(--s-4) var(--s-5); gap: var(--s-3); border-radius: var(--r-xl); }
+  .hero__place { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); font-weight: 700; color: var(--c-accent-soft); }
+  .hero__place img { width: 28px; height: 28px; border-radius: var(--r-sm); }
+  .hero h1 { font-size: 26px; color: var(--c-accent-ink); }
+  .voice { display: grid; grid-template-columns: 48px 1fr; gap: var(--s-3); align-items: center; padding: var(--s-2) var(--s-3) var(--s-2) var(--s-2);
+    border-radius: var(--r-lg); background: var(--c-surface); color: var(--c-ink); }
+  .voice__play { width: 48px; height: 48px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink); display: grid; place-items: center; }
+  .voice__play .ic { fill: var(--c-accent-ink); }
+  .voice__who { font-size: var(--fs-xs); font-weight: 700; color: var(--c-muted); display: flex; justify-content: space-between; }
+  .wave { display: flex; align-items: center; justify-content: space-between; height: 24px; margin-top: 2px; }
+  .wave i { width: 4px; border-radius: var(--r-pill); background: var(--c-line); }
+  .wave i.on { background: var(--c-accent); }
+  .quote { font-size: var(--fs-sm); line-height: var(--lh-normal); color: var(--c-accent-soft); font-style: italic; }
+  .usual { gap: var(--s-3); box-shadow: inset 0 0 0 2px var(--c-accent), var(--sh-2); }
+  .usual__row { display: grid; grid-template-columns: 56px 1fr auto; gap: var(--s-3); align-items: center; }
+  .usual .photo { width: 56px; height: 56px; background: linear-gradient(135deg, var(--b-coin), var(--c-accent-dark)); }
+  .usual__name { font-weight: 800; font-size: var(--fs-md); }
+  .usual__price { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-xl); }
+  .tonight { gap: var(--s-2); }
+  .info { display: flex; align-items: center; gap: var(--s-3); font-size: var(--fs-sm); min-height: 32px; }
+  .info__ic { width: 32px; height: 32px; border-radius: var(--r-sm); background: var(--c-accent-soft); color: var(--c-accent-dark); display: grid; place-items: center; flex: none; }
+  .info__ic .ic { width: 18px; height: 18px; }
+  .info b { font-weight: 700; }
+  .server { grid-template-columns: auto 1fr auto; align-items: center; padding: var(--s-3); font-size: var(--fs-sm); }
+  .server .call { padding: 0 var(--s-3); }
+  .tonight { padding: var(--s-3) var(--s-4); gap: 6px; }
+  .server .t-caption { display: block; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C02">
+    <div class="statusbar"><span>19:38</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <div class="content">
+      <section class="card card--warm hero">
+        <span class="hero__place"><img src="../../logo/dabali-mark.svg" alt="">Le Baobab · Table 7</span>
+        <h1 class="t-display">Bonne arrivée Yannick !<br>Content de te revoir.</h1>
+        <div class="voice">
+          <span class="voice__play"><i data-lucide="play" class="ic"></i></span>
+          <div>
+            <div class="voice__who"><span>Message de Tantie Awa</span><span class="t-num">0:06</span></div>
+            <div class="wave" aria-hidden="true">
+              <i class="on" style="height:8px"></i><i class="on" style="height:14px"></i><i class="on" style="height:20px"></i><i class="on" style="height:12px"></i><i class="on" style="height:18px"></i><i style="height:24px"></i><i style="height:10px"></i><i style="height:16px"></i><i style="height:22px"></i><i style="height:12px"></i><i style="height:8px"></i><i style="height:18px"></i><i style="height:14px"></i><i style="height:20px"></i><i style="height:10px"></i><i style="height:16px"></i><i style="height:6px"></i><i style="height:12px"></i><i style="height:18px"></i><i style="height:8px"></i><i style="height:14px"></i><i style="height:10px"></i><i style="height:6px"></i>
+            </div>
+          </div>
+        </div>
+        <p class="quote">« Installe-toi bien, le poisson est tout frais&nbsp;! »</p>
+      </section>
+
+      <section class="card usual">
+        <div class="row"><h2 class="t-h3">Comme d'habitude ?</h2><span class="chip"><i data-lucide="heart" class="ic"></i>Ton préféré</span></div>
+        <div class="usual__row">
+          <div class="photo"><i data-lucide="banana" class="ic ic--lg"></i></div>
+          <div><div class="usual__name">Alloco poulet + bissap</div><div class="t-caption">Tes 5 dernières visites</div></div>
+          <span class="usual__price t-num">3 000 F</span>
+        </div>
+        <a href="C05b-panier-habitude.html" data-link="C05b" class="btn btn--primary btn--lg btn--block"><i data-lucide="check" class="ic"></i>Oui, comme d'habitude</a>
+      </section>
+
+      <section class="card tonight">
+        <h2 class="t-eyebrow">Ce soir chez nous</h2>
+        <div class="info"><span class="info__ic"><i data-lucide="fish" class="ic"></i></span><span><b>Plat du jour :</b> poisson braisé, 5&nbsp;000&nbsp;F</span></div>
+        <div class="info"><span class="info__ic"><i data-lucide="tv" class="ic"></i></span><span><b>Match à 20h30</b> sur le grand écran</span></div>
+        <div class="info"><span class="info__ic"><i data-lucide="wifi" class="ic"></i></span><span><b>Wi-Fi :</b> Baobab-Invites · <span class="t-mono">baobab2026</span></span></div>
+      </section>
+
+      <section class="card server">
+        <span class="avatar avatar--green">FA</span>
+        <div><b>Fanta</b> te sert ce soir<span class="t-caption">Un toucher, elle arrive</span></div>
+        <span class="btn btn--secondary call"><i data-lucide="bell-ring" class="ic"></i>Appeler</span>
+      </section>
+    </div>
+
+    <div class="actionbar">
+      <a href="C03-menu.html" data-link="C03" class="btn btn--secondary btn--lg btn--block">Voir le menu<i data-lucide="arrow-right" class="ic"></i></a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M05 · Alerte annulation</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .alert { display: flex; align-items: center; gap: var(--s-3); background: var(--c-red-soft); color: var(--c-red); border-radius: var(--r-lg); padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4); }
+  .alert__ic { width: 44px; height: 44px; border-radius: var(--r-pill); background: var(--c-red); color: var(--c-surface); display: grid; place-items: center; flex: none; }
+  .alert__ic .ic { width: 24px; height: 24px; }
+  .alert__t { flex: 1; display: grid; gap: 2px; }
+  .alert__t b { font-size: var(--fs-md); }
+  .alert__t span { font-size: var(--fs-xs); color: var(--c-muted); font-weight: 600; }
+  .speak { width: 48px; height: 48px; border-radius: var(--r-pill); background: var(--c-surface); color: var(--c-red); display: grid; place-items: center; flex: none; }
+
+  .req { gap: var(--s-4); }
+  .who { display: flex; align-items: center; gap: var(--s-3); }
+  .who .avatar { width: 48px; height: 48px; font-size: var(--fs-lg); }
+  .what { display: grid; grid-template-columns: 112px 1fr; gap: var(--s-4); align-items: center; }
+  .what__tile { position: relative; height: 112px; border-radius: var(--r-xl); display: grid; place-items: center; background: var(--c-accent-soft); color: var(--c-accent-dark); }
+  .what__tile .ic { width: 56px; height: 56px; stroke-width: 1.7; }
+  .what__x { position: absolute; top: -8px; right: -8px; min-width: 44px; height: 44px; padding: 0 8px; border-radius: var(--r-pill); background: var(--c-ink); color: var(--c-surface); font-weight: 800; font-size: var(--fs-xl); display: grid; place-items: center; }
+  .what__amt { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-3xl); line-height: 1; color: var(--c-red); font-variant-numeric: tabular-nums; }
+  .coins { display: flex; align-items: center; gap: var(--s-1); }
+  .coin--off { position: relative; }
+  .coin--off::after { content: ""; position: absolute; left: -3px; right: -3px; top: 50%; height: 3px; border-radius: 2px; background: var(--c-red); transform: rotate(-35deg); }
+
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  .fact { display: flex; align-items: center; gap: var(--s-2); background: var(--c-bg); border-radius: var(--r-md); padding: var(--s-2) var(--s-3); font-size: var(--fs-sm); font-weight: 700; min-height: 44px; }
+  .fact .ic { width: 18px; height: 18px; color: var(--c-muted); }
+  .reason { display: flex; align-items: center; gap: var(--s-3); background: var(--c-bg); border-radius: var(--r-md); padding: var(--s-2) var(--s-2) var(--s-2) var(--s-3); }
+  .reason__t { flex: 1; display: grid; }
+  .reason__t b { font-size: var(--fs-md); }
+  .play { display: inline-flex; align-items: center; gap: var(--s-2); height: 48px; padding: 0 var(--s-3); border-radius: var(--r-pill); background: var(--c-ink); color: var(--c-on-dark); font-weight: 700; font-size: var(--fs-sm); font-family: var(--f-mono); }
+
+  .decide { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+  .decide .btn { min-height: 88px; flex-direction: column; gap: 4px; font-size: var(--fs-xl); border-radius: var(--r-xl); }
+  .decide .ic { width: 34px; height: 34px; stroke-width: 2.8; }
+
+  .hist { gap: 0; padding: var(--s-2) var(--s-4); }
+  .hist__row { display: grid; grid-template-columns: 44px 1fr auto; gap: var(--s-3); align-items: center; min-height: 60px; border-bottom: 1px solid var(--c-line); }
+  .hist__row:last-child { border-bottom: 0; }
+  .hist__h { font-family: var(--f-mono); font-size: var(--fs-xs); color: var(--c-muted); }
+  .hist__icons { display: flex; gap: 6px; color: var(--c-muted); }
+  .hist__icons .ic { width: 18px; height: 18px; }
+  .hist__amt { text-align: right; display: grid; gap: 4px; justify-items: end; font-weight: 800; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="M05">
+    <div class="statusbar"><span>21:02</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <div class="content" style="gap: var(--s-3); padding-top: var(--s-2)">
+      <div class="alert" role="alert">
+        <span class="alert__ic"><i data-lucide="shield-alert" class="ic"></i></span>
+        <div class="alert__t"><b>Demande d'annulation</b><span>Le Baobab · il y a 1 min</span></div>
+        <a class="speak" href="#" aria-label="Écouter la demande"><i data-lucide="volume-2" class="ic"></i></a>
+      </div>
+
+      <div class="card req">
+        <div class="who">
+          <span class="avatar avatar--dark">F</span>
+          <h1 class="t-h2">Fanta veut annuler</h1>
+        </div>
+
+        <div class="what">
+          <span class="what__tile" aria-label="2 bissaps"><i data-lucide="cup-soda" class="ic"></i><span class="what__x">×2</span></span>
+          <div class="stack" style="gap: var(--s-3)">
+            <span class="t-h3">2 bissaps</span>
+            <span class="what__amt">−1 000 F</span>
+            <span class="coins money--lg" aria-label="2 pièces de 500"><span class="coin coin--off">500</span><span class="coin coin--off">500</span></span>
+          </div>
+        </div>
+
+        <div class="facts">
+          <span class="fact"><i data-lucide="receipt-text" class="ic"></i>Ticket 000476</span>
+          <span class="fact"><i data-lucide="clock" class="ic"></i>Table 4 · 20:55</span>
+        </div>
+        <div class="reason">
+          <i data-lucide="user-x" class="ic ic--lg" style="color: var(--c-muted)"></i>
+          <div class="reason__t"><span class="t-caption">Raison</span><b>Client parti</b></div>
+          <span class="play"><i data-lucide="play" class="ic ic--sm"></i>0:04</span>
+        </div>
+      </div>
+
+      <div class="decide">
+        <a class="btn btn--danger" href="#"><i data-lucide="x" class="ic"></i>Refuser</a>
+        <a class="btn btn--success" href="../patron/P06-caisse.html" data-link="P06"><i data-lucide="check" class="ic"></i>Valider</a>
+      </div>
+
+      <div class="row" style="padding: var(--s-1) var(--s-1) 0">
+        <span class="t-h3" style="display:flex;align-items:center;gap:var(--s-2)"><i data-lucide="history" class="ic"></i>Annulations du jour</span>
+        <span class="t-small">1 validée</span>
+      </div>
+      <div class="card hist">
+        <div class="hist__row">
+          <span class="hist__h">19:52</span>
+          <div class="stack" style="gap: 4px"><b>Ticket 000451 · Fanta</b><span class="hist__icons"><i data-lucide="fish" class="ic"></i><i data-lucide="cup-soda" class="ic"></i><i data-lucide="cup-soda" class="ic"></i><i data-lucide="cup-soda" class="ic"></i></span></div>
+          <span class="hist__amt">−6 500 F<span class="chip chip--green"><i data-lucide="check" class="ic"></i>Validée</span></span>
+        </div>
+        <div class="hist__row">
+          <span class="hist__h">21:01</span>
+          <div class="stack" style="gap: 4px"><b>Ticket 000476 · Fanta</b><span class="hist__icons"><i data-lucide="cup-soda" class="ic"></i><i data-lucide="cup-soda" class="ic"></i></span></div>
+          <span class="hist__amt">−1 000 F<span class="chip chip--yellow"><i data-lucide="hourglass" class="ic"></i>À décider</span></span>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

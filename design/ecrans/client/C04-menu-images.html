@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C04 · Menu en images</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .top { display: flex; gap: var(--s-2); padding: var(--s-2) var(--s-4) var(--s-3); flex: none; }
+  .langs { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px; border-radius: var(--r-lg);
+    background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-line); }
+  .lang { min-height: 56px; border-radius: var(--r-md); display: grid; place-items: center; align-content: center; gap: 2px;
+    font-size: var(--fs-xs); font-weight: 700; color: var(--c-muted); }
+  .lang .ic { width: 18px; height: 18px; }
+  .lang--on { background: var(--c-accent); color: var(--c-accent-ink); }
+  .bell { width: var(--tap-xl); height: var(--tap-xl); border-radius: var(--r-lg); background: var(--c-ink); color: var(--c-on-dark);
+    display: grid; place-items: center; flex: none; }
+  .content { padding-top: 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+  .tile { padding: var(--s-2) var(--s-2) var(--s-3); gap: var(--s-2); }
+  .tile .bill { min-width: 50px; height: 28px; font-size: 12px; }
+  .tile .coin { width: 28px; height: 28px; }
+  .tile__photo { aspect-ratio: 4/3; display: grid; place-items: center; gap: 2px; align-content: center; }
+  .tile__photo .ic { width: 40px; height: 40px; stroke-width: 1.6; }
+  .tile__speak { width: 48px; height: 48px; top: 6px; right: 6px; color: var(--c-ink); }
+  .tile__count { top: 6px; left: 6px; min-width: 40px; height: 40px; font-size: var(--fs-xl); box-shadow: 0 0 0 3px var(--c-surface); }
+  .tile__name { font-size: var(--fs-xs); font-weight: 600; color: var(--c-muted); }
+  .tile--selected .tile__name { color: var(--c-accent-dark); }
+  .ph-fish { background: linear-gradient(135deg, var(--c-accent), var(--c-warm)); }
+  .ph-kedj { background: linear-gradient(135deg, var(--b-1000), var(--c-warm)); }
+  .ph-alloco { background: linear-gradient(135deg, var(--b-coin), var(--c-accent-dark)); }
+  .ph-garba { background: linear-gradient(135deg, var(--b-coin), var(--b-1000)); }
+  .ph-foutou { background: linear-gradient(135deg, var(--b-5000), var(--c-ink-2)); }
+  .ph-bissap { background: linear-gradient(135deg, var(--c-red), var(--c-warm)); }
+  .tile__photo { color: var(--c-accent-ink); }
+  .bar { flex: none; display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4) var(--s-6); background: var(--c-surface); box-shadow: 0 -1px 0 var(--c-line); }
+  .basket { position: relative; width: var(--tap-xl); height: var(--tap-xl); border-radius: var(--r-lg); background: var(--c-accent-soft); color: var(--c-accent-dark); display: grid; place-items: center; flex: none; }
+  .basket .ic { width: 30px; height: 30px; }
+  .basket b { position: absolute; top: -6px; right: -6px; min-width: 28px; height: 28px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink);
+    display: grid; place-items: center; font-size: var(--fs-sm); box-shadow: 0 0 0 3px var(--c-surface); }
+  .bar .money { flex: 1; }
+  .money--lg .bill { min-width: 58px; }
+  .go { width: 88px; height: var(--tap-xl); border-radius: var(--r-lg); background: var(--c-green); color: var(--c-accent-ink); display: grid; place-items: center; flex: none; text-decoration: none; }
+  .go .ic { width: 36px; height: 36px; stroke-width: 3; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C04">
+    <div class="statusbar"><span>19:44</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <div class="top">
+      <div class="langs" role="radiogroup" aria-label="Langue">
+        <span class="lang"><i data-lucide="volume-2" class="ic"></i>Français</span>
+        <span class="lang lang--on" aria-checked="true"><i data-lucide="volume-2" class="ic"></i>Dioula</span>
+        <span class="lang"><i data-lucide="volume-2" class="ic"></i>Baoulé</span>
+        <span class="lang"><i data-lucide="volume-2" class="ic"></i>Nouchi</span>
+      </div>
+      <span class="bell" aria-label="Appeler la serveuse"><i data-lucide="bell-ring" class="ic ic--lg"></i></span>
+    </div>
+
+    <div class="content">
+      <div class="grid">
+        <div class="tile tile--selected">
+          <span class="tile__count">1</span>
+          <span class="tile__speak" aria-label="Écouter"><i data-lucide="volume-2" class="ic"></i></span>
+          <div class="tile__photo ph-fish"><i data-lucide="fish" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <span class="money"><span class="bill bill--5000">5000</span></span>
+          <span class="tile__name">Poisson braisé</span>
+        </div>
+        <div class="tile">
+          <span class="tile__speak" aria-label="Écouter"><i data-lucide="volume-2" class="ic"></i></span>
+          <div class="tile__photo ph-kedj"><i data-lucide="drumstick" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <span class="money"><span class="bill bill--2000">2000</span><span class="bill bill--2000">2000</span><span class="coin">500</span></span>
+          <span class="tile__name">Kédjénou</span>
+        </div>
+        <div class="tile tile--selected">
+          <span class="tile__count">1</span>
+          <span class="tile__speak" aria-label="Écouter"><i data-lucide="volume-2" class="ic"></i></span>
+          <div class="tile__photo ph-alloco"><i data-lucide="banana" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <span class="money"><span class="bill bill--2000">2000</span><span class="coin">500</span></span>
+          <span class="tile__name">Alloco poulet</span>
+        </div>
+        <div class="tile">
+          <span class="tile__speak" aria-label="Écouter"><i data-lucide="volume-2" class="ic"></i></span>
+          <div class="tile__photo ph-garba"><i data-lucide="wheat" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <span class="money"><span class="bill bill--1000">1000</span></span>
+          <span class="tile__name">Garba</span>
+        </div>
+        <div class="tile">
+          <span class="tile__speak" aria-label="Écouter"><i data-lucide="volume-2" class="ic"></i></span>
+          <div class="tile__photo ph-foutou"><i data-lucide="soup" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <span class="money"><span class="bill bill--2000">2000</span><span class="bill bill--1000">1000</span><span class="coin">500</span></span>
+          <span class="tile__name">Foutou sauce graine</span>
+        </div>
+        <div class="tile">
+          <span class="tile__speak" aria-label="Écouter"><i data-lucide="volume-2" class="ic"></i></span>
+          <div class="tile__photo ph-bissap"><i data-lucide="cup-soda" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <span class="money"><span class="coin">500</span></span>
+          <span class="tile__name">Bissap glacé</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bar">
+      <span class="basket" aria-label="Mon panier : 2 plats"><i data-lucide="shopping-basket" class="ic"></i><b>2</b></span>
+      <span class="money money--lg" aria-label="Total 7 500 F"><span class="bill bill--5000">5000</span><span class="bill bill--2000">2000</span><span class="coin">500</span></span>
+      <a href="C06-relecture-vocale.html" data-link="C06" class="go" aria-label="Valider ma commande"><i data-lucide="check" class="ic"></i></a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

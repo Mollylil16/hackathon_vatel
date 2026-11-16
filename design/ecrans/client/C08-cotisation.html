@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C08 · Cotisation</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .iconbtn--48 { width: 48px; height: 48px; }
+  .content { gap: var(--s-3); }
+  .tot { gap: var(--s-2); }
+  .tot__amount { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-3xl); line-height: var(--lh-tight); }
+  .progress { height: 12px; }
+  .tot .t-caption b { color: var(--c-green); }
+  .split { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; gap: 4px; border-radius: var(--r-md); background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-line); }
+  .split span { min-height: 44px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; gap: var(--s-2); font-weight: 700; font-size: var(--fs-sm); color: var(--c-muted); }
+  .split .on { background: var(--c-ink); color: var(--c-on-dark); }
+  .split .ic { width: 16px; height: 16px; }
+  .people { gap: 0; padding: var(--s-1) var(--s-4); }
+  .person { display: grid; grid-template-columns: 40px 1fr auto; gap: var(--s-3); align-items: center; padding: var(--s-3) 0; border-bottom: 1px solid var(--c-line); }
+  .person:last-child { border-bottom: 0; }
+  .person__name { font-weight: 700; font-size: var(--fs-md); }
+  .person__sub { font-size: var(--fs-xs); color: var(--c-muted); }
+  .person__right { display: grid; justify-items: end; gap: 4px; }
+  .person__amt { font-weight: 800; font-variant-numeric: tabular-nums; }
+  .person--me { margin: 0 calc(-1 * var(--s-4)); padding-left: var(--s-4); padding-right: var(--s-4); background: var(--c-accent-soft); }
+  .me { gap: var(--s-2); grid-template-columns: 1fr auto; align-items: center; padding: var(--s-3) var(--s-4); box-shadow: inset 0 0 0 2px var(--c-accent); }
+  .me__amt { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-2xl); }
+  .me .money { justify-content: flex-end; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C08">
+    <div class="statusbar"><span>21:15</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <header class="appbar">
+      <span class="iconbtn iconbtn--48" aria-label="Retour"><i data-lucide="arrow-left" class="ic"></i></span>
+      <div class="appbar__title">
+        <span class="t-caption">Table 7 · 4 personnes</span>
+        <h1 class="t-h2">On cotise ?</h1>
+      </div>
+      <span class="iconbtn iconbtn--48" aria-label="Partager sur WhatsApp"><i data-lucide="share-2" class="ic"></i></span>
+    </header>
+
+    <div class="content">
+      <section class="card tot">
+        <div class="row"><span class="t-small">Total de la table</span><span class="chip chip--neutral"><i data-lucide="receipt" class="ic"></i>Remise fidélité incluse</span></div>
+        <span class="tot__amount t-num">24 000 F</span>
+        <div class="progress" role="progressbar" aria-valuenow="15000" aria-valuemin="0" aria-valuemax="24000"><i style="width:62.5%"></i></div>
+        <div class="row t-caption"><span><b>15 000 F</b> déjà payés</span><span>Reste 9 000 F</span></div>
+      </section>
+
+      <div class="split" role="radiogroup" aria-label="Comment on partage ?">
+        <span><i data-lucide="equal" class="ic"></i>Parts égales</span>
+        <span class="on" aria-checked="true"><i data-lucide="utensils" class="ic"></i>Chacun ses plats</span>
+      </div>
+
+      <section class="card people">
+        <div class="person">
+          <span class="avatar avatar--green">KO</span>
+          <div><div class="person__name">Koffi</div><div class="person__sub">Wave</div></div>
+          <div class="person__right"><span class="person__amt">6 000 F</span><span class="chip chip--green"><i data-lucide="circle-check" class="ic"></i>Payé</span></div>
+        </div>
+        <div class="person">
+          <span class="avatar avatar--green">AÏ</span>
+          <div><div class="person__name">Aïcha</div><div class="person__sub">Orange Money</div></div>
+          <div class="person__right"><span class="person__amt">9 000 F</span><span class="chip chip--green"><i data-lucide="circle-check" class="ic"></i>Payé</span></div>
+        </div>
+        <div class="person person--me">
+          <span class="avatar">YA</span>
+          <div><div class="person__name">Yannick (toi)</div><div class="person__sub">Alloco poulet + bissap</div></div>
+          <div class="person__right"><span class="person__amt">3 000 F</span><span class="chip"><i data-lucide="clock" class="ic"></i>À payer</span></div>
+        </div>
+        <div class="person">
+          <span class="avatar avatar--grey">MA</span>
+          <div><div class="person__name">Mariam</div><div class="person__sub">Wave</div></div>
+          <div class="person__right"><span class="person__amt">6 000 F</span><span class="chip chip--yellow"><i data-lucide="send" class="ic"></i>Lien envoyé</span></div>
+        </div>
+      </section>
+
+      <section class="card me">
+        <div><span class="t-eyebrow">Ta part</span><div class="me__amt t-num">3 000 F</div></div>
+        <span class="money money--lg" aria-label="Un billet de 2 000 et un billet de 1 000"><span class="bill bill--2000">2000</span><span class="bill bill--1000">1000</span></span>
+      </section>
+    </div>
+
+    <div class="actionbar">
+      <a href="C09-paiement.html" data-link="C09" class="btn btn--wave btn--lg btn--block btn--split">
+        <span style="display:inline-flex;align-items:center;gap:8px"><i data-lucide="smartphone" class="ic"></i>Payer ma part avec Wave</span>
+        <span class="t-num">3 000 F</span>
+      </a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

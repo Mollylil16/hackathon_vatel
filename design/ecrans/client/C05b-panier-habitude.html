@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C05b · Panier habitude</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .iconbtn--48 { width: 48px; height: 48px; }
+  .content { gap: var(--s-3); }
+  .lines { gap: 0; padding: var(--s-1) var(--s-4); }
+  .line { display: grid; grid-template-columns: 52px 1fr auto; gap: var(--s-3); align-items: center; padding: var(--s-3) 0; border-bottom: 1px solid var(--c-line); }
+  .line .photo { width: 52px; height: 52px; border-radius: var(--r-sm); }
+  .line__name { font-weight: 700; font-size: var(--fs-md); line-height: var(--lh-tight); }
+  .line__unit { font-size: var(--fs-xs); color: var(--c-muted); margin-top: 2px; }
+  .line__right { display: grid; justify-items: end; gap: var(--s-1); }
+  .line__total { font-weight: 800; font-variant-numeric: tabular-nums; }
+  .qty { padding: 3px; }
+  .qty span { width: 36px; height: 36px; }
+  .qty span.minus { background: var(--c-surface); color: var(--c-accent-dark); box-shadow: inset 0 0 0 1px var(--c-accent); }
+  .more { display: flex; align-items: center; gap: var(--s-2); min-height: var(--tap); color: var(--c-accent-dark); font-weight: 700; font-size: var(--fs-sm); }
+  .ph-fish { background: linear-gradient(135deg, var(--c-accent), var(--c-warm)); }
+  .ph-bissap { background: linear-gradient(135deg, var(--c-red), var(--c-warm)); }
+  .usual-hint { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); color: var(--c-accent-dark); font-weight: 600; }
+  .usual-hint .ic { width: 18px; height: 18px; }
+  .ph-alloco { background: linear-gradient(135deg, var(--b-coin), var(--c-accent-dark)); }
+  .lbl { font-weight: 700; font-size: var(--fs-sm); display: flex; align-items: center; gap: var(--s-2); }
+  .lbl .ic { width: 18px; height: 18px; color: var(--c-accent); }
+  .note { color: var(--c-ink); font-weight: 600; }
+  .note .ic { color: var(--c-accent); }
+  .note__hint { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; font-size: var(--fs-xs); color: var(--c-subtle); font-weight: 500; }
+  .mode { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  .opt { min-height: 52px; border-radius: var(--r-md); background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-line); display: flex; align-items: center; justify-content: center; gap: var(--s-2); font-weight: 700; color: var(--c-muted); }
+  .opt--on { background: var(--c-accent-soft); color: var(--c-accent-dark); box-shadow: inset 0 0 0 2px var(--c-accent); }
+  .sum { gap: var(--s-2); }
+  .sum .row { font-size: var(--fs-sm); color: var(--c-muted); }
+  .sum .total { color: var(--c-ink); font-size: var(--fs-md); font-weight: 700; }
+  .sum .total b { font-family: var(--f-display); font-size: var(--fs-2xl); font-weight: 800; }
+  .reassure { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4); border-radius: var(--r-lg); background: var(--c-green-soft); color: var(--c-ink); font-size: var(--fs-sm); }
+  .reassure .ic { color: var(--c-green); }
+  .reassure b { color: var(--c-green); display: block; font-size: var(--fs-md); }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C05b">
+    <div class="statusbar"><span>19:39</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <header class="appbar">
+      <span class="iconbtn iconbtn--48" aria-label="Retour au menu"><i data-lucide="arrow-left" class="ic"></i></span>
+      <div class="appbar__title">
+        <span class="t-caption">Table 7 · Le Baobab</span>
+        <h1 class="t-h2">Ma commande</h1>
+      </div>
+      <span class="chip chip--neutral">2 articles</span>
+    </header>
+
+    <div class="content">
+      <section class="card lines">
+        <div class="line">
+          <div class="photo ph-alloco"><i data-lucide="banana" class="ic"></i></div>
+          <div><div class="line__name">Alloco poulet</div><div class="line__unit">2 500 F l'unité</div></div>
+          <div class="line__right"><span class="line__total">2 500 F</span>
+            <span class="qty"><span class="minus"><i data-lucide="trash-2" class="ic ic--sm"></i></span><b>1</b><span><i data-lucide="plus" class="ic ic--sm"></i></span></span></div>
+        </div>
+        <div class="line">
+          <div class="photo ph-bissap"><i data-lucide="cup-soda" class="ic"></i></div>
+          <div><div class="line__name">Bissap glacé 50 cl</div><div class="line__unit">500 F l'unité</div></div>
+          <div class="line__right"><span class="line__total">500 F</span>
+            <span class="qty"><span class="minus"><i data-lucide="trash-2" class="ic ic--sm"></i></span><b>1</b><span><i data-lucide="plus" class="ic ic--sm"></i></span></span></div>
+        </div>
+        <span class="more"><i data-lucide="plus" class="ic"></i>Ajouter autre chose</span>
+      </section>
+
+      <section class="stack">
+        <span class="usual-hint"><i data-lucide="heart" class="ic"></i>Comme d'habitude, avec le piment à part ?</span>
+        <div class="field field--focus note"><i data-lucide="flame" class="ic"></i>piment à part<span class="note__hint"><i data-lucide="pencil" class="ic ic--sm"></i> modifier</span></div>
+        <div class="chips"><span class="chip chip--neutral"><i data-lucide="plus" class="ic"></i>Sans oignon</span><span class="chip chip--neutral"><i data-lucide="plus" class="ic"></i>Bien cuit</span><span class="chip chip--neutral"><i data-lucide="plus" class="ic"></i>Bien frais</span></div>
+      </section>
+
+      <section class="stack">
+      <span class="lbl"><i data-lucide="map-pin" class="ic"></i>Tu manges où ?</span>
+      <div class="mode" role="radiogroup" aria-label="Tu manges où ?">
+        <span class="opt opt--on" aria-checked="true"><i data-lucide="utensils" class="ic"></i>Sur place</span>
+        <span class="opt"><i data-lucide="shopping-bag" class="ic"></i>À emporter</span>
+      </div>
+      </section>
+
+      <section class="card sum">
+        <div class="row"><span>Sous-total · 2 articles</span><span class="t-num">3 000 F</span></div>
+        <div class="divider"></div>
+        <div class="row total"><span>Total</span><b class="t-num">3 000 F</b></div>
+      </section>
+
+      <section class="reassure">
+        <i data-lucide="hand-coins" class="ic ic--lg"></i>
+        <div><b>Tu paies à la fin, comme d'habitude</b>Rien à régler maintenant.</div>
+      </section>
+    </div>
+
+    <div class="actionbar">
+      <a href="C07b-commande-habitude-en-cuisine.html" data-link="C07b" class="btn btn--primary btn--lg btn--block btn--split">
+        <span style="display:inline-flex;align-items:center;gap:8px"><i data-lucide="chef-hat" class="ic"></i>Envoyer en cuisine</span>
+        <span class="t-num">3 000 F</span>
+      </a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P01 · Aujourd'hui</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* --- Communs back-office patron (local, var() uniquement) --- */
+  .sidenav { gap: 2px; }
+  .sidenav__brand { display: flex; align-items: center; gap: var(--s-3); }
+  .sidenav__brand img { width: 36px; height: 36px; display: block; }
+  .sidenav__brand b { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-xl); color: var(--c-surface); letter-spacing: -.01em; line-height: 1; }
+  .sidenav__brand small { display: block; font-size: var(--fs-xs); color: var(--c-on-dark-muted); font-weight: 600; margin-top: 3px; }
+  .sidenav a { min-height: 44px; }
+  .sidenav__label { padding: var(--s-2) var(--s-3) var(--s-1); font-size: var(--fs-2xs); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-on-dark-muted); }
+  .sidenav__foot { margin-top: auto; display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3); border-top: 1px solid var(--c-ink-3); }
+  .sidenav__foot b { display: block; font-size: var(--fs-sm); color: var(--c-surface); }
+  .sidenav__foot small { font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-3); font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync .ic { width: 14px; height: 14px; color: var(--c-green-soft); }
+  .bo__main { gap: var(--s-4); }
+  .bo__head h1 { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-2xl); line-height: var(--lh-tight); }
+  .bo__head p { font-size: var(--fs-sm); color: var(--c-muted); margin-top: 2px; }
+  .bo__actions { display: flex; align-items: center; gap: var(--s-2); }
+  .kpi { padding: var(--s-3) var(--s-4); }
+  .kpi__delta { display: inline-flex; align-items: center; gap: 4px; }
+  .kpi__delta .ic { width: 14px; height: 14px; }
+  .kpi__delta--muted { color: var(--c-muted); }
+  .panel__title .ic { color: var(--c-accent-dark); }
+  .panel__title .chip { margin-left: auto; }
+  .panel__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+  .note { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-xs); color: var(--c-muted); }
+  .note .ic { width: 14px; height: 14px; }
+  .table td { padding: 9px 8px; }
+  .table tr:last-child td { border-bottom: 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .table th.num { text-align: right; }
+  .strong { font-weight: 700; }
+  .muted { color: var(--c-muted); }
+  a.btn { color: inherit; }
+  a.btn--primary { color: var(--c-accent-ink); }
+  a.btn--dark { color: var(--c-on-dark); }
+
+  /* --- Propre à P01 --- */
+.p01 { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.35fr 1fr; gap: var(--s-4); }
+  .col { display: flex; flex-direction: column; gap: var(--s-4); min-height: 0; }
+  .chart > svg { display: block; width: 100%; height: auto; }
+  .chart .axis { font-family: var(--f-body); font-size: 11px; fill: var(--c-muted); }
+  .chart .lbl { font-family: var(--f-body); font-size: 12px; font-weight: 700; fill: var(--c-ink); }
+  .chart .lbl2 { font-family: var(--f-body); font-size: 11px; fill: var(--c-muted); }
+  .legend { display: flex; gap: var(--s-4); font-size: var(--fs-xs); color: var(--c-muted); font-weight: 600; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 22px; height: 0; border-top: 2px solid var(--c-accent); }
+  .sw--cmp { border-top: 2px dashed var(--c-blue); }
+  .alert { background: var(--c-accent-soft); box-shadow: inset 0 0 0 1px var(--c-accent); }
+  .alert p { font-size: var(--fs-sm); line-height: var(--lh-normal); }
+  .alert .row { justify-content: flex-start; }
+  .alert__meta { display: flex; gap: var(--s-4); font-size: var(--fs-xs); color: var(--c-muted); }
+  .alert__meta span { display: inline-flex; align-items: center; gap: 4px; }
+  .alert__meta .ic { width: 14px; height: 14px; }
+  .why { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .why .chip { height: 30px; font-size: var(--fs-xs); }
+  .prev { display: grid; grid-template-columns: 28px 1fr 120px 64px; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); }
+  .prev .ic { color: var(--c-muted); width: 18px; height: 18px; }
+  .prev .bar { height: 10px; border-radius: var(--r-pill); background: var(--c-bg); overflow: hidden; box-shadow: inset 0 0 0 1px var(--c-line); }
+  .prev .bar i { display: block; height: 100%; background: var(--c-accent); border-radius: var(--r-pill); }
+  .prev b { text-align: right; font-variant-numeric: tabular-nums; }
+  .prev small { color: var(--c-muted); font-size: var(--fs-xs); }
+  .shop { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  .shop div { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-3); border-radius: var(--r-sm); background: var(--c-bg); font-size: var(--fs-sm); }
+  .shop div b { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .shop .ic { width: 16px; height: 16px; color: var(--c-muted); }
+  .now { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-2); }
+  .now a, .now div { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-3); border-radius: var(--r-sm); background: var(--c-bg); font-size: var(--fs-sm); color: var(--c-ink); text-decoration: none; min-height: 48px; }
+  .now b { font-family: var(--f-display); font-size: var(--fs-lg); }
+  .now .ic { width: 18px; height: 18px; color: var(--c-muted); }
+  .now .late { color: var(--c-red); font-weight: 700; font-size: var(--fs-xs); display: inline-flex; align-items: center; gap: 3px; }
+  .now .late .ic { width: 13px; height: 13px; color: var(--c-red); }
+  .confid { white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-size: var(--fs-xs); color: var(--c-muted); font-weight: 600; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--tablet" data-screen="P01">
+  <div class="bo">
+    <nav class="sidenav" aria-label="Navigation du back-office">
+      <div class="sidenav__brand"><img src="../../logo/dabali-mark.svg" alt=""><div><b>dabali</b><small>Le Baobab · Angré</small></div></div>
+      <a href="P01-aujourdhui.html" data-link="P01" class="on" aria-current="page"><i data-lucide="house" class="ic"></i>Aujourd'hui</a>
+      <a href="P02-livraisons.html" data-link="P02"><i data-lucide="bike" class="ic"></i>Livraisons</a>
+      <a href="P03-statistiques.html" data-link="P03"><i data-lucide="chart-line" class="ic"></i>Statistiques</a>
+      <a href="P04-clients-campagnes.html" data-link="P04"><i data-lucide="megaphone" class="ic"></i>Clients &amp; campagnes</a>
+      <a href="P06-caisse.html" data-link="P06"><i data-lucide="wallet" class="ic"></i>Caisse</a>
+      <a href="P05-recherche-documents.html" data-link="P05"><i data-lucide="search" class="ic"></i>Recherche &amp; documents</a>
+      <div class="sidenav__sync"><i data-lucide="refresh-cw" class="ic"></i>Synchronisé il y a 1 min</div>
+      <div class="sidenav__foot"><span class="avatar">TA</span><div><b>Tantie Awa</b><small>Patronne</small></div></div>
+    </nav>
+    <section class="bo__main">
+<header class="bo__head">
+        <div><h1>Bonjour Tantie Awa</h1><p>Samedi 21 novembre 2026 · ouvert de 10h30 à minuit</p></div>
+        <div class="bo__actions">
+          <span class="seg"><span class="on">Aujourd'hui</span><span>Hier</span><span>7 jours</span></span>
+          <span class="btn btn--secondary btn--sm"><i data-lucide="mic" class="ic ic--sm"></i>Demander à la voix</span>
+        </div>
+      </header>
+
+      <div class="kpis">
+        <div class="kpi"><span class="kpi__label">Chiffre du jour</span><span class="kpi__value">486 500 F</span><span class="kpi__delta up"><i data-lucide="trending-up" class="ic"></i>+12 % vs samedi dernier</span></div>
+        <div class="kpi"><span class="kpi__label">Couverts</span><span class="kpi__value">118</span><span class="kpi__delta up"><i data-lucide="trending-up" class="ic"></i>+9 vs samedi dernier</span></div>
+        <div class="kpi"><span class="kpi__label">Attente moyenne</span><span class="kpi__value">14 min</span><span class="kpi__delta up"><i data-lucide="trending-down" class="ic"></i>6 min de moins</span></div>
+        <div class="kpi"><span class="kpi__label">Gaspillage estimé</span><span class="kpi__value">3,1 kg</span><span class="kpi__delta up"><i data-lucide="trending-down" class="ic"></i>−41 % ce mois</span></div>
+      </div>
+
+      <div class="p01">
+        <div class="col">
+          <div class="panel chart">
+            <div class="panel__head">
+              <span class="panel__title"><i data-lucide="chart-line" class="ic"></i>Ventes de la journée, par heure</span>
+              <div class="legend"><span><i class="sw"></i>Aujourd'hui</span><span><i class="sw sw--cmp"></i>Samedi dernier</span></div>
+            </div>
+            <svg viewBox="0 0 528 190" role="img" aria-label="Ventes par heure, en milliers de francs. Deux pics : 61 000 F à 13h et 76 000 F à 20h. Aujourd'hui est au-dessus de samedi dernier à chaque heure.">
+              <g stroke="var(--c-line)" stroke-width="1">
+                <line x1="36" y1="10" x2="508" y2="10"/><line x1="36" y1="47.5" x2="508" y2="47.5"/><line x1="36" y1="85" x2="508" y2="85"/><line x1="36" y1="122.5" x2="508" y2="122.5"/>
+              </g>
+              <line x1="36" y1="160" x2="508" y2="160" stroke="var(--c-subtle)" stroke-width="1"/>
+              <g class="axis" text-anchor="end"><text x="28" y="164">0</text><text x="28" y="126.5">20 k</text><text x="28" y="89">40 k</text><text x="28" y="51.5">60 k</text><text x="28" y="14">80 k</text></g>
+              <g class="axis" text-anchor="middle"><text x="36" y="180">11h</text><text x="114.7" y="180">13h</text><text x="193.3" y="180">15h</text><text x="272" y="180">17h</text><text x="350.7" y="180">19h</text><text x="429.3" y="180">21h</text><text x="508" y="180">23h</text></g>
+              <polyline points="36.0,146.9 75.3,86.9 114.7,56.9 154.0,94.4 193.3,135.6 232.7,141.2 272.0,130.0 311.3,105.6 350.7,62.5 390.0,32.5 429.3,43.8 468.7,96.2 508.0,133.0" fill="none" stroke="var(--c-blue)" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>
+              <polyline points="36.0,145.0 75.3,81.2 114.7,45.6 154.0,88.8 193.3,133.8 232.7,139.4 272.0,124.4 311.3,98.1 350.7,51.2 390.0,17.5 429.3,26.9 468.7,86.9 508.0,129.1" fill="none" stroke="var(--c-accent)" stroke-width="2" stroke-linejoin="round"/>
+              <circle cx="114.7" cy="45.6" r="4" fill="var(--c-accent)" stroke="var(--c-surface)" stroke-width="2"/>
+              <circle cx="390" cy="17.5" r="4" fill="var(--c-accent)" stroke="var(--c-surface)" stroke-width="2"/>
+              <text class="lbl" x="114.7" y="34" text-anchor="middle">61 k · midi</text>
+              <text class="lbl" x="390" y="8" text-anchor="end" dx="-10" dy="10">76 k · 20h</text>
+              <circle cx="508" cy="129.1" r="5" fill="var(--c-accent)" stroke="var(--c-surface)" stroke-width="2"/>
+            </svg>
+            <span class="note"><i data-lucide="info" class="ic"></i>En milliers de francs. Total du jour 486 500 F, contre 434 400 F samedi dernier.</span>
+          </div>
+
+          <div class="panel alert">
+            <span class="panel__title"><i data-lucide="leaf" class="ic"></i>Anti-gaspi · à publier vers 21h30<span class="chip"><i data-lucide="clock" class="ic"></i>Conseil de l'IA</span></span>
+            <p>Il restera environ <b>6 portions de kédjénou</b> à la fermeture. Tu les mets en « Dernière louche » à <b>2 250 F</b> au lieu de 4 500 F ? <b>214 clients</b> à moins de 2 km seront prévenus.</p>
+            <div class="row">
+              <span class="btn btn--primary btn--sm"><i data-lucide="send" class="ic ic--sm"></i>Publier l'offre</span>
+              <span class="btn btn--secondary btn--sm">Pas ce soir</span>
+              <span class="alert__meta" style="margin-left:auto"><span><i data-lucide="hand-coins" class="ic"></i>+13 500 F récupérés</span><span><i data-lucide="leaf" class="ic"></i>2,1 kg sauvés</span></span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <span class="panel__title"><i data-lucide="radio" class="ic"></i>En ce moment</span>
+            <div class="now">
+              <div><i data-lucide="armchair" class="ic"></i><span><b>9</b> tables sur 12</span></div>
+              <div><i data-lucide="chef-hat" class="ic"></i><span><b>8</b> en cuisine <span class="late"><i data-lucide="alarm-clock" class="ic"></i>1 en retard</span></span></div>
+              <a href="P02-livraisons.html" data-link="P02"><i data-lucide="bike" class="ic"></i><span><b>5</b> livraisons</span><i data-lucide="chevron-right" class="ic" style="margin-left:auto"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__head">
+            <span class="panel__title"><i data-lucide="sparkles" class="ic"></i>Prévision IA · demain dimanche</span>
+            <span class="confid"><i data-lucide="shield-check" class="ic ic--sm"></i>Fiabilité 86 %</span>
+          </div>
+          <div class="stack">
+            <span class="t-eyebrow">Pourquoi plus de monde que d'habitude</span>
+            <div class="why">
+              <span class="chip"><i data-lucide="banknote" class="ic"></i>Fin de mois, paie le 30</span>
+              <span class="chip"><i data-lucide="trophy" class="ic"></i>Match des Éléphants à 17h</span>
+              <span class="chip chip--green"><i data-lucide="sun" class="ic"></i>Pas de pluie</span>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <span class="t-eyebrow">Portions à préparer</span>
+          <div class="stack" style="gap:10px">
+            <div class="prev"><i data-lucide="fish" class="ic"></i><span>Poisson braisé</span><span class="bar"><i style="width:100%"></i></span><b>46 <small>port.</small></b></div>
+            <div class="prev"><i data-lucide="banana" class="ic"></i><span>Alloco poulet</span><span class="bar"><i style="width:84.8%"></i></span><b>39 <small>port.</small></b></div>
+            <div class="prev"><i data-lucide="wheat" class="ic"></i><span>Garba</span><span class="bar"><i style="width:76.1%"></i></span><b>35 <small>port.</small></b></div>
+            <div class="prev"><i data-lucide="drumstick" class="ic"></i><span>Kédjénou</span><span class="bar"><i style="width:39.1%"></i></span><b>18 <small>port.</small></b></div>
+            <div class="prev"><i data-lucide="soup" class="ic"></i><span>Foutou graine</span><span class="bar"><i style="width:26.1%"></i></span><b>12 <small>port.</small></b></div>
+          </div>
+          <div class="divider"></div>
+          <div class="panel__head"><span class="t-eyebrow">Liste d'achats générée pour le marché</span><span class="btn btn--secondary btn--sm"><i data-lucide="message-circle" class="ic ic--sm"></i>Envoyer au fournisseur</span></div>
+          <div class="shop">
+            <div><i data-lucide="fish" class="ic"></i>Carpe<b>14 kg</b></div>
+            <div><i data-lucide="drumstick" class="ic"></i>Poulet<b>9 kg</b></div>
+            <div><i data-lucide="banana" class="ic"></i>Banane plantain<b>30 régimes</b></div>
+            <div><i data-lucide="wheat" class="ic"></i>Attiéké<b>12 boules</b></div>
+          </div>
+          <span class="note"><i data-lucide="info" class="ic"></i>Estimation calculée sur ton historique : à toi de valider.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

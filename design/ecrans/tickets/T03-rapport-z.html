@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T03 · Rapport Z</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* Rapport Z de clôture, 58 mm */
+  .receipt .rname { font-size: 26px; font-weight: 700; letter-spacing: .16em; line-height: 1.2; }
+  .receipt .lbl { font-weight: 700; letter-spacing: .08em; margin-bottom: 2px; }
+  .receipt .tot { font-size: 22px; font-weight: 700; }
+  .receipt .ln { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; column-gap: 8px; align-items: center; margin: 2px 0; }
+  .receipt .sub { padding-left: 2ch; font-size: 13px; }
+  .receipt .small { font-size: 13px; }
+  .receipt .ok { display: inline-flex; align-items: center; gap: 4px; }
+  .receipt .ok .ic { width: 14px; height: 14px; }
+  .receipt .pct { display: inline-block; min-width: 5ch; text-align: right; margin-right: 2ch; font-size: 13px; }
+  .receipt .amt { display: inline-block; min-width: 7ch; text-align: right; }
+  .receipt .barcode { display: block; margin: 10px auto 4px; color: var(--c-paper-ink); }
+  .receipt .sign { margin-top: 14px; display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
+  .receipt .sign span:last-child { flex: 1; border-bottom: 1px solid var(--c-paper-ink); height: 22px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame" style="width:384px;height:auto;background:transparent" data-screen="T03">
+    <div class="receipt">
+      <div class="c"><div class="rname">LE BAOBAB</div>Angré 8e tranche, Cocody<br>RAPPORT Z · FIN DE JOURNEE</div>
+      <div class="inv">CLOTURE N° 0142</div>
+      <div class="r"><span>SAMEDI 21/11/2026</span><span>23:47</span></div>
+      <div class="r"><span>OUVERTURE 10:30</span><span>CAISSE 01</span></div>
+      <div class="r"><span>Caissière : FANTA</span><span>Z par : AWA</span></div>
+      <div class="sep"></div>
+
+      <div class="r"><span>TICKETS</span><span>64</span></div>
+      <div class="r"><span>COUVERTS</span><span>118</span></div>
+      <div class="r"><span>PANIER MOYEN / TICKET</span><span>7 602</span></div>
+      <div class="r"><span>MOYENNE / COUVERT</span><span>4 123</span></div>
+      <div class="sep"></div>
+
+      <div class="lbl">CHIFFRE D'AFFAIRES</div>
+      <div class="r"><span>VENTES BRUTES</span><span>503 200</span></div>
+      <div class="r"><span>ANNULATIONS (2)</span><span>-7 500</span></div>
+      <div class="r"><span>REMISES FIDELITE</span><span>-9 200</span></div>
+      <div class="dbl"></div>
+      <div class="r tot"><span>TOTAL TTC</span><span>486 500 F</span></div>
+      <div class="dbl"></div>
+      <div class="r"><span>TOTAL HT</span><span>412 288</span></div>
+      <div class="r"><span>DONT TVA 18 %</span><span>74 212</span></div>
+      <div class="sep"></div>
+
+      <div class="lbl">VENTES PAR MODE</div>
+      <div class="r"><span>ESPECES</span><span><span class="pct">23 %</span><span class="amt">112 000</span></span></div>
+      <div class="r"><span>WAVE</span><span><span class="pct">50 %</span><span class="amt">241 500</span></span></div>
+      <div class="r"><span>ORANGE MONEY</span><span><span class="pct">20 %</span><span class="amt">98 000</span></span></div>
+      <div class="r"><span>MTN MOMO</span><span><span class="pct">7 %</span><span class="amt">35 000</span></span></div>
+      <div class="r" style="font-weight:700;margin-top:2px"><span>TOTAL</span><span>486 500</span></div>
+      <div class="sub">dont mobile money : 374 500 (77 %)</div>
+      <div class="sep"></div>
+
+      <div class="lbl">CONTROLE CAISSE</div>
+      <div class="r"><span>ESPECES ATTENDUES</span><span>112 000</span></div>
+      <div class="r"><span>ESPECES COMPTEES</span><span>112 000</span></div>
+      <div class="r" style="font-weight:700"><span>ECART</span><span class="ok">0 F <i data-lucide="check" class="ic"></i></span></div>
+      <div class="r" style="margin-top:4px"><span>ANNULATIONS</span><span>2 / -7 500</span></div>
+      <div class="sub ok">validées par la patronne (2 sur 2) <i data-lucide="check" class="ic"></i></div>
+      <div class="sep"></div>
+
+      <div class="lbl">ANTI-GASPI · DERNIERE LOUCHE</div>
+      <div class="r"><span>PORTIONS SAUVEES</span><span>11</span></div>
+      <div class="r"><span>RECUPERE</span><span>24 750</span></div>
+      <div class="r"><span>NOURRITURE SAUVEE</span><span>4,6 KG</span></div>
+      <div class="sep"></div>
+
+      <div class="lbl">TOP 3 DU JOUR</div>
+      <div class="ln"><i data-lucide="fish" class="ic"></i><span>POISSON BRAISE</span><span>x41</span></div>
+      <div class="ln"><i data-lucide="banana" class="ic"></i><span>ALLOCO POULET</span><span>x37</span></div>
+      <div class="ln"><i data-lucide="wheat" class="ic"></i><span>GARBA</span><span>x33</span></div>
+      <div class="sep"></div>
+
+      <div class="c">DEMAIN (PREVISION IA) :<br>46 POISSONS · MATCH A 17H</div>
+      <div class="sign"><span>VISA PATRONNE</span><span></span></div>
+      <svg class="barcode" data-decoratif="true" viewBox="0 0 174 44" width="278" height="44" preserveAspectRatio="none" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M0 0h3v44h-3z M5 0h2v44h-2z M8 0h1v44h-1z M11 0h2v44h-2z M14 0h3v44h-3z M19 0h3v44h-3z M24 0h1v44h-1z M27 0h1v44h-1z M30 0h3v44h-3z M35 0h1v44h-1z M37 0h2v44h-2z M40 0h1v44h-1z M42 0h3v44h-3z M47 0h3v44h-3z M52 0h1v44h-1z M55 0h2v44h-2z M58 0h3v44h-3z M62 0h3v44h-3z M66 0h1v44h-1z M69 0h2v44h-2z M72 0h1v44h-1z M74 0h1v44h-1z M76 0h1v44h-1z M79 0h3v44h-3z M84 0h3v44h-3z M89 0h3v44h-3z M93 0h1v44h-1z M95 0h1v44h-1z M97 0h3v44h-3z M101 0h2v44h-2z M104 0h3v44h-3z M108 0h1v44h-1z M111 0h2v44h-2z M115 0h2v44h-2z M119 0h1v44h-1z M122 0h1v44h-1z M124 0h2v44h-2z M127 0h2v44h-2z M130 0h3v44h-3z M135 0h2v44h-2z M139 0h2v44h-2z M142 0h2v44h-2z M145 0h2v44h-2z M148 0h3v44h-3z M153 0h3v44h-3z M158 0h3v44h-3z M163 0h1v44h-1z M165 0h2v44h-2z M169 0h2v44h-2z M172 0h1v44h-1z"/></svg>
+      <div class="c small">Z-0142-21112026 · CTRL 2B9E-04D1</div>
+      <div class="c small ok" style="display:flex;justify-content:center;margin-top:4px">Envoyé à la patronne sur WhatsApp <i data-lucide="check" class="ic"></i> 23:48</div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

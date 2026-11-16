@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C07 · Commande en cuisine</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .content { gap: var(--s-3); padding-top: var(--s-2); }
+  .hero { justify-items: center; text-align: center; gap: var(--s-2); padding: var(--s-2) var(--s-4) var(--s-1); }
+  .hero__ic { width: 72px; height: 72px; border-radius: var(--r-pill); background: var(--c-green); color: var(--c-accent-ink); display: grid; place-items: center;
+    box-shadow: 0 0 0 8px var(--c-green-soft); margin-bottom: var(--s-2); }
+  .hero__ic .ic { width: 38px; height: 38px; stroke-width: 3; }
+  .eta { display: inline-flex; align-items: center; gap: var(--s-2); font-size: var(--fs-md); color: var(--c-ink); }
+  .eta b { font-family: var(--f-display); font-size: var(--fs-xl); font-weight: 800; color: var(--c-accent-dark); }
+  .steps { gap: 0; padding: var(--s-4); }
+  .step { display: grid; grid-template-columns: 36px 1fr auto; gap: var(--s-3); align-items: center; position: relative; min-height: 52px; }
+  .step + .step::before { content: ""; position: absolute; left: 17px; top: -18px; height: 22px; width: 2px; background: var(--c-line); }
+  .step--done + .step::before { background: var(--c-green); }
+  .dot { width: 36px; height: 36px; border-radius: var(--r-pill); display: grid; place-items: center; background: var(--c-bg); color: var(--c-subtle); box-shadow: inset 0 0 0 2px var(--c-line); position: relative; z-index: 1; }
+  .dot .ic { width: 18px; height: 18px; }
+  .step--done .dot { background: var(--c-green); color: var(--c-accent-ink); box-shadow: none; }
+  .step--now .dot { background: var(--c-yellow-soft); color: var(--c-yellow); box-shadow: inset 0 0 0 2px var(--c-yellow); }
+  .step__name { font-weight: 700; font-size: var(--fs-md); }
+  .step__sub { font-size: var(--fs-xs); color: var(--c-muted); }
+  .step--todo .step__name { color: var(--c-muted); font-weight: 600; }
+  .step__time { font-size: var(--fs-sm); color: var(--c-muted); font-variant-numeric: tabular-nums; }
+  .recap { gap: var(--s-2); }
+  .recap__line { display: flex; align-items: center; gap: var(--s-3); font-size: var(--fs-sm); }
+  .recap__line .ic { color: var(--c-accent); }
+  .recap__line b { min-width: 24px; }
+  .recap__line .amt { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--c-muted); }
+  .note { display: inline-flex; align-items: center; gap: 4px; }
+  .acts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  .acts .btn { padding: 0 var(--s-3); }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C07">
+    <div class="statusbar"><span>19:46</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <div class="content">
+      <section class="hero stack">
+        <span class="hero__ic"><i data-lucide="check" class="ic"></i></span>
+        <h1 class="t-h1">C'est parti en cuisine !</h1>
+        <p class="eta"><i data-lucide="clock" class="ic"></i>Fanta t'apporte ça vers <b class="t-num">19:58</b></p>
+        <span class="t-caption">Table 7 · envoyée à 19:46</span>
+      </section>
+
+      <section class="card steps" aria-label="Suivi de la commande">
+        <div class="step step--done">
+          <span class="dot"><i data-lucide="check" class="ic"></i></span>
+          <div><div class="step__name">Commande reçue</div><div class="step__sub">La cuisine a bien ton bon</div></div>
+          <span class="step__time">19:46</span>
+        </div>
+        <div class="step step--now">
+          <span class="dot"><i data-lucide="chef-hat" class="ic"></i></span>
+          <div><div class="step__name">En préparation</div><div class="step__sub">Le poisson est sur la braise</div></div>
+          <span class="chip chip--yellow"><i data-lucide="loader" class="ic"></i>En cours</span>
+        </div>
+        <div class="step step--todo">
+          <span class="dot"><i data-lucide="hand-platter" class="ic"></i></span>
+          <div><div class="step__name">Prête</div><div class="step__sub">Fanta passe la prendre</div></div>
+          <span class="step__time">vers 19:56</span>
+        </div>
+        <div class="step step--todo">
+          <span class="dot"><i data-lucide="utensils" class="ic"></i></span>
+          <div><div class="step__name">Servie</div><div class="step__sub">Bon appétit !</div></div>
+          <span class="step__time">vers 19:58</span>
+        </div>
+      </section>
+
+      <section class="card recap">
+        <div class="row"><h2 class="t-eyebrow">Ce que tu as commandé</h2><span class="chip chip--neutral"><i data-lucide="utensils" class="ic"></i>Sur place</span></div>
+        <div class="recap__line"><i data-lucide="fish" class="ic"></i><b>2 ×</b><span>Poisson braisé + attiéké</span><span class="amt">10 000 F</span></div>
+        <div class="recap__line"><i data-lucide="banana" class="ic"></i><b>1 ×</b><span>Alloco poulet</span><span class="amt">2 500 F</span></div>
+        <div class="recap__line"><i data-lucide="flame" class="ic"></i><span class="note"><b>Note :</b>&nbsp;piment ++</span></div>
+      </section>
+
+      <div class="acts">
+        <span class="btn btn--secondary"><i data-lucide="plus" class="ic"></i>Ajouter un plat</span>
+        <span class="btn btn--secondary"><i data-lucide="bell-ring" class="ic"></i>Appeler Fanta</span>
+      </div>
+    </div>
+
+    <div class="actionbar">
+      <a href="C08-cotisation.html" data-link="C08" class="btn btn--dark btn--lg btn--block"><i data-lucide="receipt" class="ic"></i>Demander l'addition</a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

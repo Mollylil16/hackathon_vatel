@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P06 · Caisse</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  /* --- Communs back-office patron (local, var() uniquement) --- */
+  .sidenav { gap: 2px; }
+  .sidenav__brand { display: flex; align-items: center; gap: var(--s-3); }
+  .sidenav__brand img { width: 36px; height: 36px; display: block; }
+  .sidenav__brand b { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-xl); color: var(--c-surface); letter-spacing: -.01em; line-height: 1; }
+  .sidenav__brand small { display: block; font-size: var(--fs-xs); color: var(--c-on-dark-muted); font-weight: 600; margin-top: 3px; }
+  .sidenav a { min-height: 44px; }
+  .sidenav__label { padding: var(--s-2) var(--s-3) var(--s-1); font-size: var(--fs-2xs); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-on-dark-muted); }
+  .sidenav__foot { margin-top: auto; display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3); border-top: 1px solid var(--c-ink-3); }
+  .sidenav__foot b { display: block; font-size: var(--fs-sm); color: var(--c-surface); }
+  .sidenav__foot small { font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-3); font-size: var(--fs-xs); color: var(--c-on-dark-muted); }
+  .sidenav__sync .ic { width: 14px; height: 14px; color: var(--c-green-soft); }
+  .bo__main { gap: var(--s-4); }
+  .bo__head h1 { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-2xl); line-height: var(--lh-tight); }
+  .bo__head p { font-size: var(--fs-sm); color: var(--c-muted); margin-top: 2px; }
+  .bo__actions { display: flex; align-items: center; gap: var(--s-2); }
+  .kpi { padding: var(--s-3) var(--s-4); }
+  .kpi__delta { display: inline-flex; align-items: center; gap: 4px; }
+  .kpi__delta .ic { width: 14px; height: 14px; }
+  .kpi__delta--muted { color: var(--c-muted); }
+  .panel__title .ic { color: var(--c-accent-dark); }
+  .panel__title .chip { margin-left: auto; }
+  .panel__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+  .note { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-xs); color: var(--c-muted); }
+  .note .ic { width: 14px; height: 14px; }
+  .table td { padding: 9px 8px; }
+  .table tr:last-child td { border-bottom: 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .table th.num { text-align: right; }
+  .strong { font-weight: 700; }
+  .muted { color: var(--c-muted); }
+  a.btn { color: inherit; }
+  a.btn--primary { color: var(--c-accent-ink); }
+  a.btn--dark { color: var(--c-on-dark); }
+
+  /* --- Propre à P06 --- */
+.p06 { display: grid; grid-template-columns: 1.6fr 1fr; gap: var(--s-4); flex: 1; min-height: 0; }
+  .col { display: flex; flex-direction: column; gap: var(--s-4); min-height: 0; }
+  .p06 .table { font-size: 13px; }
+  .p06 .table td { padding: 6px 6px; white-space: nowrap; }
+  .p06 .table th { padding: 8px 6px; white-space: nowrap; }
+  .p06 .panel { overflow: hidden; }
+  .st { display: inline-flex; align-items: center; gap: 4px; font-size: var(--fs-xs); font-weight: 700; }
+  .st .ic { width: 14px; height: 14px; }
+  .st--ok { color: var(--c-green); } .st--wait { color: var(--c-yellow); } .st--cancel { color: var(--c-red); }
+  .pm { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: var(--r-pill); background: var(--c-subtle); flex: none; }
+  .dot--wave { background: var(--c-wave); } .dot--om { background: var(--c-orange-money); } .dot--cash { background: var(--b-5000); } .dot--mtn { background: var(--b-coin); } .dot--app { background: var(--c-ink); }
+  .cancel { display: grid; grid-template-columns: 1fr auto; gap: 2px var(--s-3); padding: var(--s-2) 0; border-bottom: 1px solid var(--c-line); font-size: var(--fs-sm); }
+  .cancel:last-of-type { border-bottom: 0; }
+  .cancel b.amt { color: var(--c-red); font-variant-numeric: tabular-nums; }
+  .cancel small { grid-column: 1 / -1; font-size: var(--fs-xs); color: var(--c-muted); display: flex; gap: var(--s-3); flex-wrap: wrap; }
+  .cancel small span { display: inline-flex; align-items: center; gap: 4px; }
+  .cancel small .ic { width: 13px; height: 13px; }
+  .cancel .ok { color: var(--c-green); font-weight: 700; }
+  .pay { display: grid; grid-template-columns: 120px 1fr 78px 44px; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); }
+  .pay .bar { height: 10px; border-radius: var(--r-pill); background: var(--c-bg); box-shadow: inset 0 0 0 1px var(--c-line); overflow: hidden; }
+  .pay .bar i { display: block; height: 100%; background: var(--c-ink); border-radius: var(--r-pill); }
+  .pay b { text-align: right; font-variant-numeric: tabular-nums; }
+  .pay small { text-align: right; color: var(--c-muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
+  .z { background: var(--c-paper); color: var(--c-paper-ink); font-family: var(--f-receipt); font-size: 13px; line-height: 1.45; padding: var(--s-3) var(--s-4); border-radius: var(--r-sm); box-shadow: inset 0 0 0 1px var(--c-line); }
+  .z .r { display: flex; justify-content: space-between; gap: var(--s-2); }
+  .z .c { text-align: center; font-weight: 700; }
+  .z .sep { border-top: 1px dashed var(--c-paper-ink); margin: 6px 0; }
+  .z .tot { font-weight: 700; font-size: 15px; }
+  .z .ic { width: 13px; height: 13px; stroke-width: 2.4; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--tablet" data-screen="P06">
+  <div class="bo">
+    <nav class="sidenav" aria-label="Navigation du back-office">
+      <div class="sidenav__brand"><img src="../../logo/dabali-mark.svg" alt=""><div><b>dabali</b><small>Le Baobab · Angré</small></div></div>
+      <a href="P01-aujourdhui.html" data-link="P01"><i data-lucide="house" class="ic"></i>Aujourd'hui</a>
+      <a href="P02-livraisons.html" data-link="P02"><i data-lucide="bike" class="ic"></i>Livraisons</a>
+      <a href="P03-statistiques.html" data-link="P03"><i data-lucide="chart-line" class="ic"></i>Statistiques</a>
+      <a href="P04-clients-campagnes.html" data-link="P04"><i data-lucide="megaphone" class="ic"></i>Clients &amp; campagnes</a>
+      <a href="P06-caisse.html" data-link="P06" class="on" aria-current="page"><i data-lucide="wallet" class="ic"></i>Caisse</a>
+      <a href="P05-recherche-documents.html" data-link="P05"><i data-lucide="search" class="ic"></i>Recherche &amp; documents</a>
+      <div class="sidenav__sync"><i data-lucide="refresh-cw" class="ic"></i>Synchronisé il y a 1 min</div>
+      <div class="sidenav__foot"><span class="avatar">TA</span><div><b>Tantie Awa</b><small>Patronne</small></div></div>
+    </nav>
+    <section class="bo__main">
+<header class="bo__head">
+        <div><h1>Caisse du jour</h1><p>Samedi 21 novembre 2026 · caisse 01 · ouverte à 10h30</p></div>
+        <div class="bo__actions">
+          <span class="btn btn--dark btn--sm"><i data-lucide="lock" class="ic ic--sm"></i>Clôturer la journée</span>
+          <a class="btn btn--primary btn--sm" href="../tickets/T03-rapport-z.html" data-link="T03"><i data-lucide="printer" class="ic ic--sm"></i>Imprimer le Z</a>
+        </div>
+      </header>
+
+      <div class="kpis">
+        <div class="kpi"><span class="kpi__label">Total encaissé</span><span class="kpi__value">486 500 F</span><span class="kpi__delta up"><i data-lucide="trending-up" class="ic"></i>+12 % vs samedi dernier</span></div>
+        <div class="kpi"><span class="kpi__label">Tickets</span><span class="kpi__value">64</span><span class="kpi__delta kpi__delta--muted"><i data-lucide="users" class="ic"></i>118 couverts · panier 7 602 F</span></div>
+        <div class="kpi"><span class="kpi__label">Annulations</span><span class="kpi__value">2</span><span class="kpi__delta kpi__delta--muted"><i data-lucide="shield-check" class="ic"></i>−7 500 F, toutes validées</span></div>
+        <div class="kpi"><span class="kpi__label">Écart de caisse</span><span class="kpi__value">0 F</span><span class="kpi__delta up"><i data-lucide="circle-check" class="ic"></i>espèces comptées : 112 000 F</span></div>
+      </div>
+
+      <div class="p06">
+        <div class="col">
+          <div class="panel" style="flex:1;min-height:0">
+            <div class="panel__head"><span class="panel__title"><i data-lucide="receipt" class="ic"></i>Tickets du jour</span><span class="note">Les 9 derniers sur 64</span></div>
+            <table class="table">
+              <thead><tr><th>N°</th><th>Heure</th><th>Table ou canal</th><th class="num">Montant</th><th>Moyen</th><th>Statut</th></tr></thead>
+              <tbody>
+                <tr><td class="t-mono">000491</td><td>23:12</td><td>Table 2</td><td class="num strong">6 000 F</td><td><span class="pm"><i class="dot dot--wave"></i>Wave</span></td><td><span class="st st--ok"><i data-lucide="check" class="ic"></i>Payé</span></td></tr>
+                <tr><td class="t-mono">000490</td><td>22:58</td><td>Yango #Y-0461</td><td class="num strong">4 500 F</td><td><span class="pm"><i class="dot dot--app"></i>Yango</span></td><td><span class="st st--ok"><i data-lucide="check" class="ic"></i>Payé</span></td></tr>
+                <tr><td class="t-mono">000489</td><td>22:41</td><td>Table 9</td><td class="num strong">11 000 F</td><td><span class="pm"><i class="dot dot--cash"></i>Espèces</span></td><td><span class="st st--ok"><i data-lucide="check" class="ic"></i>Payé</span></td></tr>
+                <tr><td class="t-mono">000488</td><td>22:06</td><td>WhatsApp retrait</td><td class="num strong">2 500 F</td><td><span class="pm"><i class="dot dot--mtn"></i>MTN MoMo</span></td><td><span class="st st--ok"><i data-lucide="check" class="ic"></i>Payé</span></td></tr>
+                <tr><td class="t-mono">000487</td><td>21:18</td><td>Table 7 · cotisation</td><td class="num strong">24 000 F</td><td><span class="pm"><i class="dot dot--wave"></i>Wave + OM</span></td><td><span class="st st--ok"><i data-lucide="check" class="ic"></i>Payé</span></td></tr>
+                <tr><td class="t-mono">000486</td><td>21:10</td><td>Livraison D-0316</td><td class="num strong">12 500 F</td><td><span class="pm"><i class="dot dot--cash"></i>Espèces</span></td><td><span class="st st--wait"><i data-lucide="hourglass" class="ic"></i>Chez Serge</span></td></tr>
+                <tr><td class="t-mono">000485</td><td>21:02</td><td>Glovo #G-2291</td><td class="num strong">5 500 F</td><td><span class="pm"><i class="dot dot--app"></i>Glovo</span></td><td><span class="st st--ok"><i data-lucide="check" class="ic"></i>Payé</span></td></tr>
+                <tr><td class="t-mono">000484</td><td>20:55</td><td>Table 3</td><td class="num strong">12 500 F</td><td><span class="pm"><i class="dot dot--cash"></i>Espèces</span></td><td><span class="st st--ok"><i data-lucide="check" class="ic"></i>Payé</span></td></tr>
+                <tr><td class="t-mono">000476</td><td>20:31</td><td>Table 4</td><td class="num strong">3 500 F</td><td><span class="pm"><i class="dot dot--om"></i>Orange M.</span></td><td><span class="st st--cancel"><i data-lucide="undo-2" class="ic"></i>Corrigé</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="panel__head"><span class="panel__title"><i data-lucide="shield-check" class="ic"></i>Annulations du jour</span><span class="chip chip--green"><i data-lucide="check" class="ic"></i>2 sur 2 validées par toi</span></div>
+            <div>
+              <div class="cancel"><span><b>Ticket 000476</b> · 2 bissaps</span><b class="amt">−1 000 F</b><small><span><i data-lucide="user" class="ic"></i>Demandé par Fanta à 20:34</span><span><i data-lucide="message-circle" class="ic"></i>« Client parti »</span><span class="ok"><i data-lucide="circle-check" class="ic"></i>Validé par Tantie Awa à 20:35</span></small></div>
+              <div class="cancel"><span><b>Ticket 000451</b> · 1 poisson braisé, 3 bissaps</span><b class="amt">−6 500 F</b><small><span><i data-lucide="user" class="ic"></i>Demandé par Fanta à 19:52</span><span><i data-lucide="message-circle" class="ic"></i>« Commande en double »</span><span class="ok"><i data-lucide="circle-check" class="ic"></i>Validé par Tantie Awa à 19:53</span></small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="panel">
+            <span class="panel__title"><i data-lucide="wallet" class="ic"></i>Répartition par moyen de paiement</span>
+            <div class="stack" style="gap:10px">
+              <div class="pay"><span class="pm"><i class="dot dot--wave"></i>Wave</span><span class="bar"><i style="width:100%"></i></span><b>241 500</b><small>50 %</small></div>
+              <div class="pay"><span class="pm"><i class="dot dot--cash"></i>Espèces</span><span class="bar"><i style="width:46.4%"></i></span><b>112 000</b><small>23 %</small></div>
+              <div class="pay"><span class="pm"><i class="dot dot--om"></i>Orange Money</span><span class="bar"><i style="width:40.6%"></i></span><b>98 000</b><small>20 %</small></div>
+              <div class="pay"><span class="pm"><i class="dot dot--mtn"></i>MTN MoMo</span><span class="bar"><i style="width:14.5%"></i></span><b>35 000</b><small>7 %</small></div>
+            </div>
+          </div>
+
+          <div class="panel" style="flex:1;min-height:0">
+            <div class="panel__head"><span class="panel__title"><i data-lucide="scroll-text" class="ic"></i>Aperçu du rapport Z</span><span class="chip chip--yellow"><i data-lucide="hourglass" class="ic"></i>Pas encore clôturé</span></div>
+            <div class="z">
+              <div class="c">LE BAOBAB · RAPPORT Z N° 0142</div>
+              <div class="r"><span>21/11/2026</span><span>CAISSE 01</span></div>
+              <div class="sep"></div>
+              <div class="r"><span>TICKETS</span><span>64</span></div>
+              <div class="r"><span>COUVERTS</span><span>118</span></div>
+              <div class="r"><span>ESPECES</span><span>112 000</span></div>
+              <div class="r"><span>WAVE</span><span>241 500</span></div>
+              <div class="r"><span>ORANGE MONEY</span><span>98 000</span></div>
+              <div class="r"><span>MTN MOMO</span><span>35 000</span></div>
+              <div class="sep"></div>
+              <div class="r"><span>ANNULATIONS (2)</span><span>-7 500</span></div>
+              <div class="sep"></div>
+              <div class="r tot"><span>TOTAL TTC</span><span>486 500</span></div>
+              <div class="r"><span>ECART DE CAISSE</span><span>0 F <i data-lucide="check" class="ic"></i></span></div>
+            </div>
+            <span class="note"><i data-lucide="info" class="ic"></i>À la clôture, le Z part aussi sur ton WhatsApp et dans tes documents.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

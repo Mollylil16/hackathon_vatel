@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="64" viewBox="0 0 220 64" role="img" aria-label="Dabali">
+  <!-- Marque : un bol vu de face (calebasse) dans un carré arrondi orange, avec trois volutes de vapeur -->
+  <rect x="0" y="0" width="64" height="64" rx="16" fill="#E36A0A"/>
+  <path d="M12 32 H52 A20 20 0 0 1 12 32 Z" fill="#FFFFFF"/>
+  <rect x="22" y="50" width="20" height="4" rx="2" fill="#FFFFFF"/>
+  <path d="M24 26 c-3 -4 3 -6 0 -11 M32 26 c-3 -4 3 -6 0 -11 M40 26 c-3 -4 3 -6 0 -11" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Logotype -->
+  <text x="78" y="44" font-family="Bricolage Grotesque, Segoe UI, sans-serif" font-weight="800" font-size="38" letter-spacing="-0.5" fill="#0F1B2D">dabali</text>
+  <circle cx="203" cy="40" r="4.5" fill="#E36A0A"/>
+</svg>

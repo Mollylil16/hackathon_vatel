@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C13 · Suivi livraison</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .eta { display: grid; gap: 2px; }
+  .eta .t-h1 { font-size: var(--fs-2xl); }
+  .eta .t-h1 b { color: var(--c-accent-dark); }
+
+  .map { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-1); flex: none; }
+  .map svg { display: block; width: 100%; height: auto; }
+  .m-land { fill: var(--c-bg); }
+  .m-block { fill: var(--c-line); opacity: .55; }
+  .m-water { fill: var(--c-blue); opacity: .28; }
+  .m-road { stroke: var(--c-surface); stroke-width: 9; fill: none; stroke-linecap: round; }
+  .m-road--main { stroke-width: 13; }
+  .m-route-done { stroke: var(--c-accent); stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .m-route-todo { stroke: var(--c-accent); stroke-width: 3; fill: none; stroke-dasharray: 2 7; stroke-linecap: round; stroke-linejoin: round; }
+  .m-label { font-family: var(--f-body); font-size: 10px; font-weight: 700; fill: var(--c-muted); }
+  .m-water-label { font-family: var(--f-body); font-size: 10px; font-style: italic; fill: var(--c-blue); }
+  .m-pin-resto { fill: var(--c-ink); }
+  .m-pin-client { fill: var(--c-green); }
+  .m-rider { fill: var(--c-accent); stroke: var(--c-surface); stroke-width: 3; }
+  .m-halo { fill: var(--c-accent); opacity: .18; }
+  .m-white { fill: var(--c-surface); }
+  .m-tag { fill: var(--c-surface); stroke: var(--c-line); stroke-width: 1; }
+  .m-tag-t { font-family: var(--f-body); font-size: 10px; font-weight: 800; fill: var(--c-ink); }
+
+  .rider { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--s-3); padding: var(--s-3); }
+  .rider b { display: block; }
+  .rider .t-caption { display: inline-flex; align-items: center; gap: 4px; }
+  .callbtn { width: var(--tap); height: var(--tap); border-radius: var(--r-pill); background: var(--c-green); color: var(--c-surface); display: grid; place-items: center; }
+
+  .timeline { display: grid; gap: 0; padding: 0 var(--s-1); }
+  .tl { display: grid; grid-template-columns: 24px 1fr auto; gap: var(--s-3); align-items: start; position: relative; padding-bottom: 10px; font-size: var(--fs-sm); }
+  .tl::before { content: ""; position: absolute; left: 11px; top: 24px; bottom: 0; width: 2px; background: var(--c-green); }
+  .tl:last-child::before { display: none; }
+  .tl--now::before { background: var(--c-line); }
+  .tl__dot { width: 24px; height: 24px; border-radius: var(--r-pill); display: grid; place-items: center; background: var(--c-green); color: var(--c-surface); }
+  .tl__dot .ic { width: 14px; height: 14px; stroke-width: 3; }
+  .tl--now .tl__dot { background: var(--c-accent); }
+  .tl--next .tl__dot { background: var(--c-surface); box-shadow: inset 0 0 0 2px var(--c-line); color: var(--c-subtle); }
+  .tl--now span { font-weight: 700; }
+  .tl--next span { color: var(--c-muted); }
+  .tl time { font-family: var(--f-mono); font-size: var(--fs-xs); color: var(--c-muted); }
+  .tl--now time { color: var(--c-accent-dark); font-weight: 600; }
+
+  .order { display: grid; grid-template-columns: 36px 1fr; gap: 4px var(--s-3); align-items: center; padding: var(--s-3); border-radius: var(--r-md); background: var(--c-surface); box-shadow: var(--sh-1); font-size: var(--fs-sm); }
+  .order b { display: block; }
+  .order__ic { width: 36px; height: 36px; border-radius: var(--r-pill); background: var(--c-accent-soft); color: var(--c-accent-dark); display: grid; place-items: center; grid-row: span 2; }
+  .order .chip { justify-self: start; }
+  .code { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4); border-radius: var(--r-md); background: var(--c-ink); color: var(--c-on-dark); }
+  .code b { display: block; font-size: var(--fs-sm); color: var(--c-surface); }
+  .code .t-caption { color: var(--c-on-dark-muted); }
+  .code__num { font-family: var(--f-mono); font-weight: 600; font-size: var(--fs-2xl); letter-spacing: .18em; color: var(--c-surface); background: var(--c-ink-3); border-radius: var(--r-sm); padding: 4px 10px 4px 14px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C13">
+    <div class="statusbar"><span>19:27</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <header class="appbar">
+      <span class="iconbtn" aria-label="Retour"><i data-lucide="arrow-left" class="ic"></i></span>
+      <div class="appbar__title">
+        <span class="t-caption">Commande #D-0315 · livraison à Riviera 2</span>
+        <h1 class="t-h2">Moussa arrive dans <span style="color:var(--c-accent-dark)">6 min</span></h1>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="map">
+        <svg viewBox="0 0 358 210" role="img" aria-label="Carte : Moussa est à mi-chemin entre Le Baobab, à Angré, et chez toi, à Riviera 2">
+          <rect class="m-land" width="358" height="210"/>
+          <rect class="m-block" x="14" y="14" width="70" height="40" rx="6"/>
+          <rect class="m-block" x="110" y="14" width="96" height="40" rx="6"/>
+          <rect class="m-block" x="232" y="14" width="112" height="56" rx="6"/>
+          <rect class="m-block" x="14" y="80" width="70" height="56" rx="6"/>
+          <rect class="m-block" x="110" y="80" width="96" height="48" rx="6"/>
+          <rect class="m-block" x="232" y="96" width="60" height="40" rx="6"/>
+          <path class="m-water" d="M0,170 C60,150 110,182 170,166 S290,146 358,160 L358,210 L0,210 Z"/>
+          <text class="m-water-label" x="232" y="196">Lagune Ébrié</text>
+          <path class="m-road m-road--main" d="M0,68 L358,82"/>
+          <path class="m-road" d="M96,0 L100,160"/>
+          <path class="m-road" d="M220,0 L218,150"/>
+          <path class="m-road" d="M0,146 C80,140 200,150 300,142 L358,140"/>
+          <path class="m-road" d="M300,82 L306,142"/>
+          <text class="m-label" x="16" y="30">ANGRÉ</text>
+          <text class="m-label" x="114" y="30">II PLATEAUX</text>
+          <text class="m-label" x="240" y="30">RIVIERA 2</text>
+          <!-- trajet -->
+          <path class="m-route-done" d="M60,66 L98,68 L99,96 L170,98"/>
+          <path class="m-route-todo" d="M170,98 L219,100 L218,80 L300,84 L304,118"/>
+          <!-- restaurant -->
+          <g transform="translate(60 66)">
+            <circle class="m-pin-resto" r="11"/>
+            <path class="m-white" d="M-5,-2 h10 v6 h-10z M-6,-4 h12 l-2,-3 h-8z"/>
+          </g>
+          <g transform="translate(36 98)"><rect class="m-tag" x="-2" y="-12" width="66" height="18" rx="9"/><text class="m-tag-t" x="8" y="1">Le Baobab</text></g>
+          <!-- livreur -->
+          <circle class="m-halo" cx="170" cy="98" r="22"/>
+          <circle class="m-rider" cx="170" cy="98" r="13"/>
+          <text x="170" y="102" text-anchor="middle" font-size="11" font-weight="800" class="m-white" style="font-family:var(--f-body)">M</text>
+          <!-- client -->
+          <g transform="translate(304 118)">
+            <path class="m-pin-client" d="M0,10 C-10,-2 -11,-6 -11,-10 A11,11 0 1 1 11,-10 C11,-6 10,-2 0,10 Z"/>
+            <circle class="m-white" cx="0" cy="-10" r="4"/>
+          </g>
+          <g transform="translate(266 140)"><rect class="m-tag" x="0" y="-12" width="76" height="18" rx="9"/><text class="m-tag-t" x="10" y="1">Toi · Riv. 2</text></g>
+        </svg>
+      </div>
+
+      <div class="card rider">
+        <span class="avatar">MK</span>
+        <div>
+          <b>Moussa K. · moto</b>
+          <span class="t-caption"><i data-lucide="star" class="ic ic--sm" style="width:12px;height:12px;color:var(--c-accent)"></i>4,9 · 1 240 livraisons</span>
+        </div>
+        <span class="callbtn" aria-label="Appeler Moussa"><i data-lucide="phone" class="ic"></i></span>
+      </div>
+
+      <div class="timeline" aria-label="Étapes de la livraison">
+        <div class="tl"><span class="tl__dot"><i data-lucide="check" class="ic"></i></span><span>Commande reçue</span><time>19:02</time></div>
+        <div class="tl"><span class="tl__dot"><i data-lucide="check" class="ic"></i></span><span>Préparée en cuisine</span><time>19:18</time></div>
+        <div class="tl"><span class="tl__dot"><i data-lucide="check" class="ic"></i></span><span>Récupérée par Moussa</span><time>19:21</time></div>
+        <div class="tl tl--now"><span class="tl__dot"><i data-lucide="navigation" class="ic"></i></span><span>En route vers toi</span><time>≈ 19:33</time></div>
+        <div class="tl tl--next"><span class="tl__dot"><i data-lucide="house" class="ic"></i></span><span>Livrée</span><time>à venir</time></div>
+      </div>
+
+      <div class="order">
+        <span class="order__ic"><i data-lucide="shopping-bag" class="ic"></i></span>
+        <div><b>1 poisson braisé · 1 alloco poulet · 2 bissaps</b><span class="t-caption">Le Baobab · livraison 1 000 F incluse</span></div>
+        <span class="chip chip--green"><i data-lucide="check" class="ic"></i>9 500 F payés</span>
+      </div>
+
+      <div class="code">
+        <div><b>Ton code de livraison</b><span class="t-caption">Donne-le à Moussa à l'arrivée, pas avant.</span></div>
+        <span class="code__num" aria-label="Code 4 8 2 1">4821</span>
+      </div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

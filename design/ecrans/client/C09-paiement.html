@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C09 · Paiement</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .steps-mini { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-xs); font-weight: 700; color: var(--c-subtle); }
+  .steps-mini .st { display: inline-flex; align-items: center; gap: 6px; }
+  .steps-mini .dot { width: 22px; height: 22px; border-radius: var(--r-pill); display: grid; place-items: center; font-size: 11px; background: var(--c-line); color: var(--c-muted); }
+  .steps-mini .done { color: var(--c-green); }
+  .steps-mini .done .dot { background: var(--c-green); color: var(--c-surface); }
+  .steps-mini .now { color: var(--c-ink); }
+  .steps-mini .now .dot { background: var(--c-ink); color: var(--c-surface); }
+  .steps-mini .bar { flex: 1; height: 2px; background: var(--c-line); border-radius: var(--r-pill); }
+  .steps-mini .bar--done { background: var(--c-green); }
+  .steps-mini .ic { width: 12px; height: 12px; stroke-width: 3; }
+
+  .amount { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: var(--s-2) var(--s-3); }
+  .amount__value { font-family: var(--f-display); font-weight: 800; font-size: var(--fs-4xl); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  .amount__value small { font-size: var(--fs-xl); font-weight: 700; margin-left: 2px; }
+  .amount__detail { grid-column: 1 / -1; display: flex; gap: var(--s-3); font-size: var(--fs-xs); color: var(--c-muted); padding-top: var(--s-2); border-top: 1px solid var(--c-line); }
+  .amount__detail span { display: inline-flex; align-items: center; gap: 4px; }
+  .amount__detail .ic { width: 14px; height: 14px; }
+
+  .methods { display: grid; gap: var(--s-2); }
+  .method { display: grid; grid-template-columns: 32px 1fr auto; align-items: center; gap: var(--s-3); min-height: 54px; padding: 0 var(--s-3) 0 var(--s-3); border-radius: var(--r-md); background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-line); }
+  .method__name { font-weight: 700; font-size: var(--fs-md); line-height: 1.2; }
+  .method__sub { display: block; font-weight: 500; font-size: var(--fs-xs); color: var(--c-muted); }
+  .method--on { box-shadow: inset 0 0 0 2px var(--c-accent); background: var(--c-accent-soft); }
+  .method--on .method__sub { color: var(--c-accent-dark); }
+  .pastille { width: 32px; height: 32px; border-radius: var(--r-sm); display: grid; place-items: center; }
+  .pastille--wave { background: var(--c-wave); }
+  .pastille--om { background: var(--c-orange-money); }
+  .pastille--mtn { background: var(--b-coin); }
+  .pastille--moov { background: var(--c-blue); }
+  .pastille--cash { background: var(--c-bg); box-shadow: inset 0 0 0 1px var(--c-line); color: var(--c-green); }
+  .radio { width: 22px; height: 22px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 2px var(--c-subtle); display: grid; place-items: center; }
+  .radio--on { background: var(--c-accent); box-shadow: none; color: var(--c-accent-ink); }
+  .radio--on .ic { width: 14px; height: 14px; stroke-width: 3.2; }
+
+  .confirm { display: grid; grid-template-columns: auto 1fr; gap: var(--s-3); align-items: start; padding: var(--s-3); border-radius: var(--r-md); background: var(--c-surface); box-shadow: var(--sh-1); font-size: var(--fs-sm); line-height: var(--lh-normal); }
+  .confirm__ic { width: 36px; height: 36px; border-radius: var(--r-pill); background: var(--c-green-soft); color: var(--c-green); display: grid; place-items: center; }
+  .confirm b { display: block; font-size: var(--fs-sm); }
+  .confirm span { color: var(--c-muted); }
+  .actionbar .note { display: flex; justify-content: center; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--c-muted); }
+  .actionbar .note .ic { width: 14px; height: 14px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C09">
+    <div class="statusbar"><span>21:17</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <header class="appbar">
+      <span class="iconbtn" aria-label="Retour"><i data-lucide="arrow-left" class="ic"></i></span>
+      <div class="appbar__title">
+        <h1 class="t-h2">Payer ma part</h1>
+        <span class="t-caption">Table 7 · Le Baobab · ticket N° 000487</span>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="steps-mini" aria-label="Étape 2 sur 3 : choisir et confirmer">
+        <span class="st done"><span class="dot"><i data-lucide="check" class="ic"></i></span>Ma part</span>
+        <span class="bar bar--done"></span>
+        <span class="st now"><span class="dot">2</span>Je confirme</span>
+        <span class="bar"></span>
+        <span class="st"><span class="dot">3</span>Payé</span>
+      </div>
+
+      <section class="card amount" aria-label="Montant à payer">
+        <div class="stack" style="gap:4px">
+          <span class="t-eyebrow">Ta part à payer</span>
+          <span class="amount__value">3 000<small>F</small></span>
+        </div>
+        <span class="money money--lg" aria-label="En billets : 2 000 et 1 000"><span class="bill bill--2000">2000</span><span class="bill bill--1000">1000</span></span>
+        <div class="amount__detail">
+          <span><i data-lucide="banana" class="ic"></i>Alloco poulet · 2 500</span>
+          <span><i data-lucide="cup-soda" class="ic"></i>Bissap glacé · 500</span>
+        </div>
+      </section>
+
+      <section class="stack" aria-label="Moyen de paiement">
+        <h2 class="t-h3">Comment tu paies ?</h2>
+        <div class="methods" role="radiogroup">
+          <div class="method method--on" role="radio" aria-checked="true">
+            <span class="pastille pastille--wave" aria-hidden="true"></span>
+            <span class="method__name">Wave<span class="method__sub">Sur ton numéro 07 •• •• 21 · sans frais</span></span>
+            <span class="radio radio--on"><i data-lucide="check" class="ic"></i></span>
+          </div>
+          <div class="method" role="radio" aria-checked="false">
+            <span class="pastille pastille--om" aria-hidden="true"></span>
+            <span class="method__name">Orange Money</span>
+            <span class="radio"></span>
+          </div>
+          <div class="method" role="radio" aria-checked="false">
+            <span class="pastille pastille--mtn" aria-hidden="true"></span>
+            <span class="method__name">MTN MoMo</span>
+            <span class="radio"></span>
+          </div>
+          <div class="method" role="radio" aria-checked="false">
+            <span class="pastille pastille--moov" aria-hidden="true"></span>
+            <span class="method__name">Moov Money</span>
+            <span class="radio"></span>
+          </div>
+          <div class="method" role="radio" aria-checked="false">
+            <span class="pastille pastille--cash" aria-hidden="true"><i data-lucide="banknote" class="ic"></i></span>
+            <span class="method__name">Espèces<span class="method__sub">Fanta passe à ta table</span></span>
+            <span class="radio"></span>
+          </div>
+        </div>
+      </section>
+
+      <div class="confirm">
+        <span class="confirm__ic"><i data-lucide="smartphone" class="ic"></i></span>
+        <p><b>Ensuite, tu valides dans Wave</b><span>Tape ton code secret dans Wave. Il ne passe jamais par Dabali.</span></p>
+      </div>
+    </div>
+
+    <div class="actionbar">
+      <a href="C10-paiement-reussi.html" data-link="C10" class="btn btn--wave btn--lg btn--block btn--split">
+        <span style="display:inline-flex;align-items:center;gap:8px"><i data-lucide="lock" class="ic"></i>Confirmer</span><span class="t-num">3 000 F</span>
+      </a>
+      <span class="note"><i data-lucide="shield-check" class="ic"></i>Paiement sécurisé · ticket envoyé tout de suite</span>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C12 · Dernière louche</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+  .impact { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4); border-radius: var(--r-md); background: var(--c-green-soft); color: var(--c-green); }
+  .impact__k { display: grid; text-align: center; line-height: 1.1; }
+  .impact__k b { font-family: var(--f-display); font-size: var(--fs-xl); font-weight: 800; font-variant-numeric: tabular-nums; }
+  .impact__k span { font-size: var(--fs-2xs); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .impact p { font-size: var(--fs-sm); font-weight: 700; color: var(--c-ink); }
+
+  .offers { display: grid; gap: var(--s-3); }
+  .offer { display: grid; grid-template-columns: 76px 1fr; gap: var(--s-3); padding: var(--s-3); border-radius: var(--r-lg); background: var(--c-surface); box-shadow: var(--sh-1); }
+  .offer .photo { width: 76px; height: 76px; position: relative; }
+  .offer .photo .ic { width: 26px; height: 26px; }
+  .offer__off { position: absolute; left: 4px; bottom: 4px; height: 20px; padding: 0 6px; border-radius: var(--r-pill); background: var(--c-red); color: var(--c-surface); font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+  .offer__body { display: grid; gap: 4px; min-width: 0; }
+  .offer__name { font-weight: 700; font-size: var(--fs-md); line-height: 1.2; }
+  .offer__where { font-size: var(--fs-xs); color: var(--c-muted); }
+  .offer__meta { display: flex; flex-wrap: wrap; gap: 4px var(--s-3); font-size: var(--fs-xs); color: var(--c-muted); }
+  .offer__meta span { display: inline-flex; align-items: center; gap: 3px; }
+  .offer__meta .ic { width: 13px; height: 13px; }
+  .offer__meta .low { color: var(--c-red); font-weight: 700; }
+  .offer__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); margin-top: 2px; }
+  .price { display: flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; }
+  .price b { font-family: var(--f-display); font-size: var(--fs-xl); font-weight: 800; }
+  .price s { font-size: var(--fs-sm); color: var(--c-subtle); }
+  .offer__head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s-2); }
+  .offer__head .chip { height: 22px; padding: 0 7px; }
+  .price { white-space: nowrap; }
+  .offer .btn { min-height: 40px; }
+  .offer--cut { margin-bottom: -60px; }
+  .tabbar .ic { width: 22px; height: 22px; }
+</style>
+</head>
+<body class="screen">
+  <main class="frame frame--phone" data-screen="C12">
+    <div class="statusbar"><span>21:31</span><span class="icons"><i data-lucide="signal" class="ic"></i><i data-lucide="wifi" class="ic"></i><i data-lucide="battery-full" class="ic"></i></span></div>
+
+    <header class="appbar">
+      <div class="appbar__title">
+        <h1 class="t-h1">Dernière louche</h1>
+        <span class="t-caption"><i data-lucide="map-pin" class="ic ic--sm" style="width:12px;height:12px"></i> Près de toi · Angré, Riviera</span>
+      </div>
+      <span class="iconbtn" aria-label="Rechercher"><i data-lucide="search" class="ic"></i></span>
+    </header>
+
+    <div class="content">
+      <div class="impact" aria-label="Ton impact">
+        <i data-lucide="leaf" class="ic ic--lg"></i>
+        <p>Ton impact<br><span class="t-caption" style="color:var(--c-green)">depuis septembre</span></p>
+        <span class="impact__k"><b>7</b><span>repas sauvés</span></span>
+        <span class="impact__k"><b>4,2 kg</b><span>de nourriture</span></span>
+      </div>
+
+      <div class="stack" style="gap:var(--s-1)">
+        <h2 class="t-h3">Bons plats, petits prix, zéro gâchis</h2>
+        <span class="t-small">Ce soir, 9 maquis près de toi écoulent leurs invendus.</span>
+      </div>
+
+      <div class="chips">
+        <span class="chip chip--dark">Tout</span>
+        <span class="chip chip--neutral">Plats</span>
+        <span class="chip chip--neutral">Paniers surprise</span>
+        <span class="chip chip--neutral">Moins de 1 km</span>
+      </div>
+
+      <div class="offers">
+        <article class="offer">
+          <div class="photo" style="background:linear-gradient(135deg, var(--c-accent), var(--c-warm))"><i data-lucide="drumstick" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <div class="offer__body">
+            <span class="offer__head"><span class="offer__name">Kédjénou de poulet</span><span class="chip chip--red">−50 %</span></span>
+            <span class="offer__where">Le Baobab · Angré 8e tranche</span>
+            <div class="offer__meta"><span class="low"><i data-lucide="package" class="ic"></i>6 restants</span><span><i data-lucide="map-pin" class="ic"></i>650 m</span><span><i data-lucide="clock" class="ic"></i>jusqu'à 22h30</span></div>
+            <div class="offer__foot">
+              <span class="price"><b>2 250 F</b><s>4 500 F</s></span>
+              <a href="#" class="btn btn--primary btn--sm">Réserver</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="offer">
+          <div class="photo" style="background:linear-gradient(135deg, var(--b-coin), var(--c-accent-dark))"><i data-lucide="fish" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <div class="offer__body">
+            <span class="offer__head"><span class="offer__name">Poisson braisé + attiéké</span><span class="chip chip--red">−40 %</span></span>
+            <span class="offer__where">Chez Ambroise · Riviera 2</span>
+            <div class="offer__meta"><span class="low"><i data-lucide="package" class="ic"></i>2 restants</span><span><i data-lucide="map-pin" class="ic"></i>1,4 km</span><span><i data-lucide="clock" class="ic"></i>jusqu'à 22h00</span></div>
+            <div class="offer__foot">
+              <span class="price"><b>3 000 F</b><s>5 000 F</s></span>
+              <span class="btn btn--secondary btn--sm">Réserver</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="offer">
+          <div class="photo" style="background:linear-gradient(135deg, var(--c-blue), var(--c-ink-3))"><i data-lucide="shopping-bag" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <div class="offer__body">
+            <span class="offer__name">Panier surprise</span>
+            <span class="offer__where">Pâtisserie Les Palmiers · Riviera 3</span>
+            <div class="offer__meta"><span><i data-lucide="package" class="ic"></i>5 restants</span><span><i data-lucide="map-pin" class="ic"></i>1,8 km</span><span><i data-lucide="clock" class="ic"></i>jusqu'à 21h45</span></div>
+            <div class="offer__foot">
+              <span class="price"><b>1 500 F</b><s>≈ 3 500 F</s></span>
+              <span class="btn btn--secondary btn--sm">Réserver</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="offer" aria-hidden="true">
+          <div class="photo" style="background:linear-gradient(135deg, var(--c-warm), var(--c-ink-3))"><i data-lucide="wheat" class="ic"></i><span class="photo-label">photo du plat</span></div>
+          <div class="offer__body">
+            <span class="offer__name">Garba</span>
+            <span class="offer__where">Garbadrome du carrefour · Angré</span>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <nav class="tabbar" aria-label="Navigation">
+      <a><i data-lucide="house" class="ic"></i>Accueil</a>
+      <a><i data-lucide="utensils" class="ic"></i>Menu</a>
+      <a class="on" aria-current="page"><i data-lucide="leaf" class="ic"></i>Dernière louche</a>
+      <a><i data-lucide="star" class="ic"></i>Fidélité</a>
+    </nav>
+  </main>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body></html>

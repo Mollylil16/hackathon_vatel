@@ -1,0 +1,86 @@
+/* =========================================================
+   DABALI — Design tokens v1
+   Source unique des couleurs, typos, espacements et rayons.
+   Tous les écrans importent ce fichier puis components.css.
+   ========================================================= */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Courier+Prime:wght@400;700&display=swap");
+
+:root {
+  /* --- Neutres (biais bleu nuit) --- */
+  --c-ink: #0F1B2D;          /* texte principal, fonds sombres */
+  --c-ink-2: #1B2738;        /* surfaces sombres secondaires (cuisine) */
+  --c-ink-3: #2A3A52;        /* boutons sur fond sombre */
+  --c-muted: #5A6577;        /* texte secondaire */
+  --c-subtle: #8A94A6;       /* texte tertiaire, placeholders */
+  --c-line: #E3E7ED;         /* séparateurs, bordures */
+  --c-bg: #F5F6F8;           /* fond d'application */
+  --c-surface: #FFFFFF;      /* cartes, feuilles */
+  --c-on-dark: #E8ECF2;      /* texte sur fond sombre */
+  --c-on-dark-muted: #AEB8C8;
+
+  /* --- Marque --- */
+  --c-accent: #E36A0A;       /* orange Dabali : actions principales */
+  --c-accent-dark: #B4520A;  /* pressé / texte orange sur clair */
+  --c-accent-soft: #FFF1E5;  /* fond de sélection */
+  --c-accent-ink: #FFFFFF;   /* texte sur orange */
+  --c-warm: #7E3B22;         /* dégradé d'accueil (terre cuite) */
+
+  /* --- Sémantique (réservée aux états, jamais décorative) --- */
+  --c-green: #0E8A5C;  --c-green-soft: #E3F5EC;   /* ok, payé, prêt */
+  --c-yellow: #A86A00; --c-yellow-soft: #FFF4D6;  /* en cours, attention */
+  --c-red: #C8332B;    --c-red-soft: #FCE7E5;     /* retard, erreur, chute */
+  --c-amber: #F2B233;                             /* « bientôt en retard » sur fond sombre (cuisine) */
+  --c-blue: #3D6FB0;                             /* série de comparaison (année N-1) */
+
+  /* --- Tiers (rendu fidèle aux services) --- */
+  --c-wave: #1DC8F2;  --c-wave-ink: #062433;
+  --c-orange-money: #FF7900;
+  --c-wa-header: #075E54; --c-wa-bubble-me: #E7FFDB; --c-wa-bg: #EFE7DE;
+
+  /* --- Ticket thermique --- */
+  --c-paper: #FBFBF7; --c-paper-ink: #1F1F1F;
+
+  /* --- Billets FCFA (stylisés, pas une reproduction) --- */
+  --b-10000: #6B4FA0; --b-5000: #2F7D4F; --b-2000: #2D63A8; --b-1000: #A0522D;
+  --b-coin: #C9A24A;  --b-coin-ink: #3A2A00;
+
+  /* --- Typographie --- */
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif; /* titres, gros chiffres */
+  --f-body: "Figtree", "Segoe UI", system-ui, sans-serif;                /* interface */
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;          /* codes, minuteurs */
+  --f-receipt: "Courier Prime", "Courier New", monospace;                 /* tickets de caisse */
+
+  --fs-2xs: 10px;
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;   /* texte courant mobile */
+  --fs-lg: 18px;
+  --fs-xl: 22px;
+  --fs-2xl: 28px;
+  --fs-3xl: 36px;
+  --fs-4xl: 48px;
+
+  --lh-tight: 1.15;
+  --lh-normal: 1.45;
+
+  /* --- Espacements (base 4) --- */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px;
+  --s-6: 24px; --s-7: 32px; --s-8: 40px; --s-9: 48px;
+
+  /* --- Rayons --- */
+  --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px; --r-pill: 999px;
+
+  /* --- Ombres --- */
+  --sh-1: 0 1px 2px rgba(15, 27, 45, .06), 0 1px 1px rgba(15, 27, 45, .04);
+  --sh-2: 0 8px 24px -8px rgba(15, 27, 45, .18);
+  --sh-3: 0 20px 40px -12px rgba(15, 27, 45, .28);
+
+  /* --- Accessibilité --- */
+  --tap: 48px;        /* cible tactile minimale */
+  --tap-xl: 64px;     /* cible du mode sans lecture */
+
+  /* --- Formats d'écran (Figma) --- */
+  --phone-w: 390px;  --phone-h: 844px;
+  --tablet-w: 1280px; --tablet-h: 800px;
+  --ticket-w: 384px; /* 58 mm à 203 dpi */
+}
