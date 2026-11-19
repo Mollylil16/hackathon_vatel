@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Dabali · Présentation du projet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+@page { size: A4; margin: 15mm 14mm 16mm; }
+:root { --ink:#0F1B2D; --muted:#5A6577; --line:#DDE1E8; --accent:#E36A0A; --soft:#FFF1E5; --green:#0E8A5C; --greensoft:#E3F5EC; --bg:#F5F6F8; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Figtree", "Segoe UI", sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+h1, h2, h3 { font-family: "Bricolage Grotesque", "Segoe UI", sans-serif; line-height: 1.15; margin: 0; }
+h2 { font-size: 19pt; font-weight: 800; margin: 0 0 6px; break-after: avoid; }
+h2 .n { color: var(--accent); margin-right: 6px; }
+h3 { font-size: 12.5pt; font-weight: 700; margin: 12px 0 4px; break-after: avoid; }
+p { margin: 0 0 8px; }
+.lede { font-size: 11.5pt; color: var(--muted); max-width: 165mm; margin-bottom: 12px; }
+ul { margin: 0 0 8px; padding-left: 18px; } li { margin: 3px 0; }
+section { margin-bottom: 16px; }
+.break { break-before: page; }
+.eyebrow { font-size: 8pt; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+
+/* Couverture */
+.cover { height: 262mm; display: flex; flex-direction: column; justify-content: space-between; }
+.cover .brand { display: flex; align-items: center; gap: 12px; }
+.cover .brand img { height: 44px; }
+.cover .brand span { font-size: 9pt; color: var(--muted); }
+.cover h1 { font-size: 42pt; font-weight: 800; letter-spacing: -.015em; }
+.cover h1 em { font-style: normal; color: var(--accent); }
+.cover .tag { font-size: 14pt; color: var(--muted); margin-top: 10px; max-width: 150mm; }
+.cover .shots { display: flex; gap: 6mm; align-items: flex-end; }
+.cover .shots img { width: 40mm; border-radius: 6mm; box-shadow: 0 6mm 10mm -6mm rgba(15,27,45,.35); }
+.cover .shots img.mid { width: 46mm; }
+.cover .foot { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.cover .foot div { background: #fff; padding: 9px 12px; }
+.cover .foot small { display: block; font-size: 7.5pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.cover .foot b { font-family: "Bricolage Grotesque", sans-serif; font-size: 11pt; }
+
+/* Chiffres */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 12px; }
+.stat { background: var(--bg); border-radius: 8px; padding: 10px 12px; break-inside: avoid; }
+.stat b { display: block; font-family: "Bricolage Grotesque", sans-serif; font-size: 20pt; color: var(--accent); line-height: 1.05; }
+.stat span { font-size: 8.8pt; color: var(--muted); }
+.note { font-size: 8pt; color: var(--muted); }
+
+/* Boucle */
+.loop { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 8px 0 12px; }
+.loop div { border-top: 3px solid var(--ink); padding-top: 8px; break-inside: avoid; }
+.loop div.ia { border-top-color: var(--accent); }
+.loop small { font-size: 8pt; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.loop b { display: block; font-family: "Bricolage Grotesque", sans-serif; font-size: 11.5pt; margin: 2px 0; }
+.loop p { font-size: 9.2pt; color: var(--muted); margin: 0; }
+
+/* Différences */
+.diffs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+.diff { border-left: 3px solid var(--accent); padding: 2px 0 2px 10px; break-inside: avoid; }
+.diff b { font-family: "Bricolage Grotesque", sans-serif; font-size: 11pt; display: block; }
+.diff p { font-size: 9.4pt; color: var(--muted); margin: 0; }
+
+/* Captures */
+.row { display: grid; gap: 7mm; margin: 6px 0 10px; break-inside: avoid; }
+.row--3 { grid-template-columns: repeat(3, 1fr); }
+.row--2 { grid-template-columns: repeat(2, 1fr); }
+.row--4 { grid-template-columns: repeat(4, 1fr); gap: 5mm; }
+figure { margin: 0; break-inside: avoid; }
+figure img { width: 100%; display: block; border-radius: 4mm; border: 1px solid var(--line); }
+figure.tab img { border-radius: 2.5mm; }
+figure.ticket img { border: 0; border-radius: 0; filter: drop-shadow(0 2mm 3mm rgba(15,27,45,.18)); }
+figcaption { font-size: 8.6pt; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+figcaption b { color: var(--ink); display: block; font-size: 9.2pt; }
+.story { background: var(--soft); border-radius: 8px; padding: 10px 12px; margin: 6px 0 10px; font-size: 10pt; break-inside: avoid; }
+.wide { margin: 6px 0 12px; }
+.keep { break-inside: avoid; }
+
+table { width: 100%; border-collapse: collapse; font-size: 9.6pt; margin: 6px 0 12px; }
+th { text-align: left; font-size: 7.8pt; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 6px 7px; border-bottom: 1.5px solid var(--ink); }
+td { padding: 7px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr { break-inside: avoid; }
+td:first-child { font-weight: 600; }
+.box { border-radius: 8px; padding: 10px 12px; margin: 8px 0; break-inside: avoid; }
+.box--green { background: var(--greensoft); }
+.box--soft { background: var(--soft); }
+.contact { display: flex; align-items: center; gap: 14px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 14px; }
+.contact img { height: 36px; }
+</style>
+</head>
+<body>
+
+<!-- COUVERTURE -->
+<div class="cover">
+  <div class="brand"><img src="../design/logo/dabali-logo.svg" alt="Dabali"><span>Un projet de l'équipe AFRIDIGITAL · Hackathon Restauration Vatel × Epitech</span></div>
+  <div>
+    <h1>Le restaurant<br>qui <em>parle à tout le monde</em>.</h1>
+    <p class="tag">Dabali équipe les maquis et les restaurants de Côte d'Ivoire pour commander sans attendre, gérer en temps réel, moins gaspiller et fidéliser. On l'utilise même sans savoir lire.</p>
+  </div>
+  <div class="shots">
+    <img src="captures/C02-bienvenue-habitue.png" alt="Accueil d'un client habitué">
+    <img class="mid" src="captures/C04-menu-images.png" alt="Menu en images">
+    <img src="captures/C08-cotisation.png" alt="Addition partagée">
+    <img src="captures/M04-patronne-vocal.png" alt="La patronne interroge l'appli à la voix">
+  </div>
+  <div class="foot">
+    <div><small>Nom du projet</small><b>Dabali (« manger » en nouchi)</b></div>
+    <div><small>Porté par</small><b>AFRIDIGITAL, Grand-Bassam</b></div>
+    <div><small>Version</small><b>Prototype, novembre 2026</b></div>
+  </div>
+</div>
+
+<!-- 1. LE PROBLÈME -->
+<section class="break">
+  <div class="eyebrow">Le constat</div>
+  <h2><span class="n">1</span>Pourquoi ce projet</h2>
+  <p class="lede">En Côte d'Ivoire, la restauration fait vivre des milliers de maquis et de restaurants. Pourtant, les outils numériques qu'on leur propose ne sont pas faits pour eux.</p>
+  <div class="stats">
+    <div class="stat"><b>46,5 %</b><span>des Ivoiriens ne savent pas lire (55,7 % des femmes). Une appli pleine de texte les exclut.</span></div>
+    <div class="stat"><b>22–28 %</b><span>de commission estimée sur chaque commande passée par les plateformes de livraison.</span></div>
+    <div class="stat"><b>300 000</b><span>commerçants acceptent déjà Wave par QR code. Le client paie avec son téléphone.</span></div>
+    <div class="stat"><b>0</b><span>outil simple pour suivre la caisse, le gaspillage et les clients fidèles d'un maquis.</span></div>
+  </div>
+  <p class="note">Sources : enquête ESACI 2025 sur l'alphabétisation ; Wave Côte d'Ivoire (2024) ; estimation des commissions issue d'articles spécialisés, à confirmer.</p>
+
+  <h3>Ce que vit une patronne de maquis aujourd'hui</h3>
+  <ul>
+    <li><b>Les clients attendent</b> pour commander, puis pour payer. Partager l'addition entre amis est un casse-tête.</li>
+    <li><b>Elle jette de la nourriture</b> chaque soir, parce qu'elle ne sait pas combien préparer.</li>
+    <li><b>Elle ne sait pas vraiment</b> ce que sa caisse a encaissé quand elle n'est pas là.</li>
+    <li><b>Elle paie cher</b> les plateformes de livraison et ne connaît pas ses propres clients.</li>
+    <li><b>Les applications existantes</b> supposent qu'on lit le français, qu'on a une bonne connexion et un gros budget.</li>
+  </ul>
+</section>
+
+<!-- 2. LA SOLUTION -->
+<section>
+  <div class="eyebrow">La réponse</div>
+  <h2><span class="n">2</span>Dabali en une phrase</h2>
+  <p class="lede">Une seule plateforme qui relie la salle, la cuisine, la caisse et les clients du restaurant. Chaque commande sert aussi à mieux préparer le lendemain.</p>
+  <div class="loop">
+    <div><small>Commander</small><b>Sans attendre</b><p>Le client scanne le QR de sa table, commande et paie depuis son téléphone. Il n'a rien à installer. Il peut aussi commander par WhatsApp, même en note vocale.</p></div>
+    <div><small>Gérer</small><b>En temps réel</b><p>La cuisine voit toutes les commandes sur un seul écran. La patronne suit sa caisse, ses livreurs et ses ventes depuis son téléphone.</p></div>
+    <div class="ia"><small>Réduire le gaspillage</small><b>Prévoir avec l'IA</b><p>Dabali prévoit les quantités du lendemain selon la fin du mois, les matchs et la météo, puis propose de vendre les invendus à prix réduit.</p></div>
+    <div><small>Fidéliser</small><b>Accueillir chacun</b><p>Le client est accueilli par son prénom. Il gagne des points à chaque paiement et reçoit des offres personnalisées.</p></div>
+  </div>
+
+  <h3>Ce qui rend Dabali différent</h3>
+  <div class="diffs">
+    <div class="diff"><b>Utilisable sans savoir lire</b><p>Menu en images, prix montrés en billets, voix en dioula, baoulé et nouchi, commande relue à voix haute avant l'envoi.</p></div>
+    <div class="diff"><b>Un vrai ticket de caisse</b><p>Comme au supermarché, avec des pictogrammes pour chaque plat. Il est aussi envoyé sur WhatsApp, avec une version audio.</p></div>
+    <div class="diff"><b>L'addition « on cotise »</b><p>Chacun paie sa part avec Wave ou Orange Money, à parts égales ou selon ce qu'il a mangé.</p></div>
+    <div class="diff"><b>Aucune commission</b><p>Un abonnement mensuel simple. Les commandes directes et la livraison maison ne coûtent rien de plus au restaurant.</p></div>
+    <div class="diff"><b>Une caisse anti-vol</b><p>Tickets numérotés, et chaque annulation doit être validée par la patronne sur son téléphone.</p></div>
+    <div class="diff"><b>Pensé pour le terrain</b><p>Fonctionne sur un téléphone d'entrée de gamme et continue de marcher quand internet coupe.</p></div>
+  </div>
+</section>
+
+<!-- 3. LE PARCOURS EN IMAGES -->
+<section class="break">
+  <div class="eyebrow">Le prototype en images</div>
+  <h2><span class="n">3</span>Une soirée au maquis Le Baobab</h2>
+  <p class="lede">Les écrans qui suivent viennent de notre prototype. Ils racontent une soirée au maquis <i>Le Baobab</i> à Angré, tenu par Tantie Awa. Le restaurant, les personnes et les chiffres sont des exemples.</p>
+
+  <h3>Le client arrive et commande</h3>
+  <div class="keep"><div class="story">Yannick arrive avec trois amis et scanne le QR de la table 7. L'appli le reconnaît, et il commande son plat habituel en un toucher. À la fin du repas, la table partage l'addition et chacun paie sa part.</div>
+  <div class="row row--3">
+    <figure><img src="captures/C02-bienvenue-habitue.png" alt=""><figcaption><b>Un accueil personnalisé</b>Message de la patronne, plat habituel en un toucher, nom de la serveuse.</figcaption></figure>
+    <figure><img src="captures/C03-menu.png" alt=""><figcaption><b>Le menu de la table</b>Photos, prix, délai de préparation en direct et plats presque épuisés.</figcaption></figure>
+    <figure><img src="captures/C07-commande-en-cuisine.png" alt=""><figcaption><b>Le suivi de la commande</b>Le client voit où en est son plat, sans appeler la serveuse.</figcaption></figure>
+  </div></div>
+  <div class="row row--3">
+    <figure><img src="captures/C08-cotisation.png" alt=""><figcaption><b>L'addition « on cotise »</b>Chacun voit sa part et qui a déjà payé.</figcaption></figure>
+    <figure><img src="captures/C09-paiement.png" alt=""><figcaption><b>Le paiement mobile money</b>Wave, Orange Money, MTN, Moov ou espèces.</figcaption></figure>
+    <figure><img src="captures/C10-paiement-reussi.png" alt=""><figcaption><b>Le paiement confirmé</b>Ticket, points fidélité et avis vocal en un toucher.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h3>Commander sans savoir lire</h3>
+  <div class="keep"><div class="story">Aïcha, une amie de Yannick, ne lit pas. Elle choisit sa langue, touche les images des plats et voit les prix en billets. Avant l'envoi, l'appli lui relit sa commande en dioula. Elle valide avec le gros bouton vert.</div>
+  <div class="row row--3">
+    <figure><img src="captures/C04-menu-images.png" alt=""><figcaption><b>Le menu en images</b>Chaque plat se touche et s'écoute. Le prix est montré en billets et en pièces.</figcaption></figure>
+    <figure><img src="captures/C06-relecture-vocale.png" alt=""><figcaption><b>La commande relue à voix haute</b>Deux gros boutons, vert pour valider, rouge pour changer. Rien à lire.</figcaption></figure>
+    <figure><img src="captures/M01-connexion-images.png" alt=""><figcaption><b>Le code secret en images</b>La patronne se connecte avec trois images, sans clavier.</figcaption></figure>
+  </div></div>
+
+  <h3>WhatsApp, livraison, fidélité et anti-gaspillage</h3>
+  <div class="row row--4">
+    <figure><img src="captures/C14-whatsapp-commande-vocale.png" alt=""><figcaption><b>Commande vocale sur WhatsApp</b>L'IA transforme la note vocale en commande et envoie le lien de paiement.</figcaption></figure>
+    <figure><img src="captures/C13-suivi-livraison.png" alt=""><figcaption><b>Suivi du livreur</b>Carte, heure d'arrivée et code de livraison.</figcaption></figure>
+    <figure><img src="captures/C11-fidelite.png" alt=""><figcaption><b>Fidélité sans carte</b>Points liés au numéro de téléphone, et « tontine gourmande » entre amis.</figcaption></figure>
+    <figure><img src="captures/C12-derniere-louche.png" alt=""><figcaption><b>« Dernière louche »</b>Les invendus du soir à prix réduit, et les kilos sauvés.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h3>En cuisine</h3>
+  <div class="keep"><div class="story">Toutes les commandes arrivent sur un seul écran, qu'elles viennent de la salle, de WhatsApp, de Glovo ou de Yango. Les couleurs et les libellés indiquent l'urgence. Si internet coupe, l'écran continue de fonctionner.</div>
+  <figure class="tab wide"><img src="captures/K01-ecran-cuisine.png" alt=""><figcaption><b>L'écran cuisine</b>Une simple tablette suffit.</figcaption></figure></div>
+
+  <h3>La patronne, depuis son téléphone</h3>
+  <div class="row row--4">
+    <figure><img src="captures/M02-photo-ardoise.png" alt=""><figcaption><b>Inscription en 30 secondes</b>Elle photographie l'ardoise du maquis et l'IA crée le menu.</figcaption></figure>
+    <figure><img src="captures/M05-alerte-annulation.png" alt=""><figcaption><b>Aucune annulation sans elle</b>Elle valide ou refuse à distance.</figcaption></figure>
+    <figure><img src="captures/M04-patronne-vocal.png" alt=""><figcaption><b>Elle demande à voix haute</b>« Combien j'ai gagné aujourd'hui ? », dans sa langue.</figcaption></figure>
+    <figure class="ticket"><img src="captures/T03-rapport-z.png" alt=""><figcaption><b>Le rapport de caisse du soir</b>Ventes, moyens de paiement, écart de caisse.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h3>Le tableau de bord du restaurant</h3>
+  <figure class="tab wide"><img src="captures/P01-aujourdhui.png" alt=""><figcaption><b>Aujourd'hui</b>Chiffre du jour, prévision de l'IA pour demain et alerte anti-gaspillage.</figcaption></figure>
+  <figure class="tab wide"><img src="captures/P03-statistiques.png" alt=""><figcaption><b>Statistiques</b>2026 comparé à 2025 : ce qui a marché, ce qui n'a pas marché, les chutes détectées et des conseils chiffrés pour grandir.</figcaption></figure>
+</section>
+
+<section>
+  <div class="row row--2">
+    <figure class="tab"><img src="captures/P02-livraisons.png" alt=""><figcaption><b>Livraisons</b>Les livreurs en direct sur la carte, les retards et l'argent encaissé.</figcaption></figure>
+    <figure class="tab"><img src="captures/P04-clients-campagnes.png" alt=""><figcaption><b>Clients et campagnes</b>Les clients classés par groupe, et des campagnes WhatsApp rédigées par l'IA.</figcaption></figure>
+  </div>
+  <figure class="tab wide"><img src="captures/P06-caisse.png" alt=""><figcaption><b>Caisse</b>Les tickets du jour, les annulations validées et la clôture de caisse.</figcaption></figure>
+
+  <h3>Le ticket de caisse</h3>
+  <div class="row" style="grid-template-columns: 62mm 1fr; align-items: start">
+    <figure class="ticket"><img src="captures/T01-ticket-client.png" alt=""></figure>
+    <div>
+      <p>Chaque paiement sort un <b>ticket thermique</b>, comme au supermarché, sur une petite imprimante Bluetooth.</p>
+      <ul>
+        <li>Les lignes, la TVA et la part payée par chaque personne.</li>
+        <li><b>Un pictogramme par plat et le total en billets</b>, pour ceux qui ne lisent pas.</li>
+        <li>Un QR code qui ouvre le reçu numérique et l'avis vocal.</li>
+        <li>Un code de contrôle contre la fraude.</li>
+      </ul>
+      <p>Le même ticket est envoyé sur le WhatsApp du client, avec une version audio dans sa langue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. COMMENT ÇA MARCHE -->
+<section class="break">
+  <div class="eyebrow">Sous le capot</div>
+  <h2><span class="n">4</span>Comment ça marche</h2>
+  <p class="lede">Une technologie solide et éprouvée, avec un plan B pour chaque brique.</p>
+  <table>
+    <tr><th>Brique</th><th>Ce qu'on utilise</th><th>À quoi ça sert</th></tr>
+    <tr><td>Application</td><td>React (interface) et Django (serveur)</td><td>Une seule application pour le client, la cuisine et la patronne, avec mise à jour en temps réel</td></tr>
+    <tr><td>Intelligence artificielle</td><td>Claude (Anthropic)</td><td>Comprendre les commandes WhatsApp, lire la photo de l'ardoise, rédiger les campagnes, expliquer les prévisions</td></tr>
+    <tr><td>Prévisions</td><td>Un modèle statistique simple</td><td>Estimer les quantités du lendemain selon l'historique, la fin du mois, les matchs et la météo</td></tr>
+    <tr><td>WhatsApp</td><td>API WhatsApp Business</td><td>Commandes, confirmations, reçus et campagnes. Dabali reste un assistant de commande, conformément aux règles de Meta.</td></tr>
+    <tr><td>Voix</td><td>Vraies voix enregistrées et modèles vocaux pour le dioula</td><td>Faire parler l'appli en dioula, baoulé et nouchi</td></tr>
+    <tr><td>Paiement</td><td>Agrégateur de mobile money</td><td>Wave, Orange Money, MTN et Moov au même endroit</td></tr>
+    <tr><td>Impression</td><td>Imprimante thermique Bluetooth de 58 mm</td><td>Le ticket de caisse, directement depuis le navigateur</td></tr>
+  </table>
+</section>
+
+<!-- 5. MODÈLE ÉCONOMIQUE -->
+<section>
+  <div class="eyebrow">Le modèle</div>
+  <h2><span class="n">5</span>Qui paie, et pourquoi</h2>
+  <table>
+    <tr><th>Piste</th><th>Principe</th></tr>
+    <tr><td>Abonnement mensuel</td><td>Le restaurant paie un forfait selon sa taille, <b>sans commission</b> sur ses commandes. Montant à valider avec les restaurateurs.</td></tr>
+    <tr><td>Installation et formation</td><td>QR codes des tables, tablette cuisine, imprimante, prise en main par l'équipe.</td></tr>
+    <tr><td>Options</td><td>Campagnes WhatsApp, livraison maison, voix personnalisées enregistrées avec la voix du restaurant.</td></tr>
+  </table>
+  <h3>Les premiers clients visés</h3>
+  <ul>
+    <li><b>Les maquis et restaurants d'Abidjan</b> qui veulent arrêter de perdre de l'argent en caisse et en gaspillage.</li>
+    <li><b>Les hôtels et restaurants de Grand-Bassam</b>, ville touristique où AFRIDIGITAL est installée.</li>
+    <li><b>Les restaurants d'application des écoles hôtelières</b>, comme lieu de pilote et de formation.</li>
+  </ul>
+</section>
+
+<!-- 6. OÙ EN EST LE PROJET -->
+<section>
+  <div class="eyebrow">Aujourd'hui</div>
+  <h2><span class="n">6</span>Où en est le projet</h2>
+  <table>
+    <tr><th>Étape</th><th>État</th></tr>
+    <tr><td>Recherche terrain et concept</td><td>Fait</td></tr>
+    <tr><td>Design complet (32 écrans) et design system</td><td>Fait</td></tr>
+    <tr><td>Architecture technique</td><td>Faite</td></tr>
+    <tr><td>Hackathon Restauration Vatel × Epitech</td><td>Samedi 21 novembre 2026</td></tr>
+    <tr><td>Entretiens avec des restaurateurs</td><td>À venir</td></tr>
+    <tr><td>Pilote dans un vrai restaurant</td><td>Recherche d'un restaurant partenaire</td></tr>
+  </table>
+  <div class="box box--soft"><b>Vous voulez nous aider ?</b> Nous cherchons des restaurateurs prêts à tester Dabali, des voix en dioula et en baoulé pour enregistrer les phrases de l'appli, et des partenaires pour le pilote.</div>
+  <div class="contact">
+    <img src="../design/logo/dabali-mark.svg" alt="">
+    <div><b>AFRIDIGITAL</b> · Grand-Bassam, Côte d'Ivoire<br><span class="note">afridigital.fr</span></div>
+  </div>
+</section>
+
+</body>
+</html>
